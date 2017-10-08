@@ -14,7 +14,7 @@ namespace ABPaint.Elements
         public Font fnt;
         public Color clr;
 
-        public override Bitmap ProcessImage(Graphics g, int x, int y)
+        public override Bitmap ProcessImage()
         {
             Bitmap toReturn = new Bitmap(Width, Height);
             Graphics g = Graphics.FromImage(toReturn);
