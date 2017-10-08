@@ -702,11 +702,8 @@ namespace ABPaint
                     }
 
                     Size widthHeight = Elements.Text.MeasureText(txtTText.Text, ((Text)currentDrawingElement).fnt);
-                    currentDrawingElement.Width = widthHeight.Width;
+                    currentDrawingElement.Width = Convert.ToInt32(Math.Ceiling(widthHeight.Width + ((Text)currentDrawingElement).fnt.Size));
                     currentDrawingElement.Height = widthHeight.Height;
-
-                    if (widthHeight.Width == 0) widthHeight.Width = 1;
-                    if (widthHeight.Height == 0) widthHeight.Height = 1;
                 }
 
                 MouseDownOnCanvas = true;
@@ -1013,6 +1010,7 @@ namespace ABPaint
 
         private void canvaspre_Paint(object sender, PaintEventArgs e)
         {
+            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
             // This is to preview what you are drawing!
 
             if (MouseDownOnCanvas)

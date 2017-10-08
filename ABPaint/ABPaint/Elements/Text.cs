@@ -19,6 +19,7 @@ namespace ABPaint.Elements
             Bitmap toReturn = new Bitmap(Width, Height);
             Graphics g = Graphics.FromImage(toReturn);
 
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
             g.DrawString(mainText, fnt, new SolidBrush(clr), 0, 0);
 
             return toReturn;
