@@ -1,0 +1,11 @@
+i:\Documents\Visual Studio 2017\Projects\ABPaint\ABPaint\bin\Debug\ABPaint.exe.config
+i:\Documents\Visual Studio 2017\Projects\ABPaint\ABPaint\bin\Debug\ABPaint.exe
+i:\Documents\Visual Studio 2017\Projects\ABPaint\ABPaint\bin\Debug\ABPaint.pdb
+i:\Documents\Visual Studio 2017\Projects\ABPaint\ABPaint\obj\Debug\ABPaint.Form1.resources
+i:\Documents\Visual Studio 2017\Projects\ABPaint\ABPaint\obj\Debug\ABPaint.Properties.Resources.resources
+i:\Documents\Visual Studio 2017\Projects\ABPaint\ABPaint\obj\Debug\ABPaint.csproj.GenerateResource.Cache
+i:\Documents\Visual Studio 2017\Projects\ABPaint\ABPaint\obj\Debug\ABPaint.exe
+i:\Documents\Visual Studio 2017\Projects\ABPaint\ABPaint\obj\Debug\ABPaint.pdb
+i:\Documents\Visual Studio 2017\Projects\ABPaint\ABPaint\obj\Debug\ABPaint.Sizer.resources
+i:\Documents\Visual Studio 2017\Projects\ABPaint\ABPaint\obj\Debug\ABPaint.csproj.CoreCompileInputs.cache
+i:\Documents\Visual Studio 2017\Projects\ABPaint\ABPaint\obj\Debug\ABPaint.csprojResolveAssemblyReference.cache
