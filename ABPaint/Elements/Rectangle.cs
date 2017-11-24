@@ -13,8 +13,6 @@ namespace ABPaint.Elements
         public Color borderColor;
         public int BorderSize;
         public bool IsFilled;
-        public int OriginalX;
-        public int OriginalY;
 
         public override Bitmap ProcessImage()
         {
@@ -28,23 +26,9 @@ namespace ABPaint.Elements
             //if (Width < 0) startPoint = new Point(Width, startPoint.Y);
             //if (Height < 0) startPoint = new Point(startPoint.X, Height);
 
-            int heightamount = 0;
-            int widthamount = 0;
-            if (Width < 0)
-                widthamount = Math.Abs(Width);
-            else
-                widthamount = 0;
-
-            if (Height < 0)
-                heightamount = Math.Abs(Height);
-            else
-                heightamount = 0;
-
             //if (width < 0) currentDrawingElement.Width = 1;
             //if (height < 0) currentDrawingElement.Height = 1;
 
-            X = OriginalX - widthamount;
-            Y = OriginalY - heightamount;
 
             if (IsFilled) g.FillRectangle(new SolidBrush(fillColor), 0, 0, Math.Abs(Width), Math.Abs(Height)); // Fill
 
@@ -58,6 +42,11 @@ namespace ABPaint.Elements
 
 
             return ret;
+        }
+
+        public override void Resize(int newWidth, int newHeight)
+        {
+            throw new NotImplementedException();
         }
     }
 }

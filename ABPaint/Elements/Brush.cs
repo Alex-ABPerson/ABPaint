@@ -32,5 +32,10 @@ namespace ABPaint.Elements
 
             return ret;
         }
+
+        public override void Resize(int newWidth, int newHeight)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -20,3 +20,14 @@ I:\Desktop\HistamcomVB\ABPaint\ABPaint\ABPaint\obj\Debug\ABPaint.csproj.Generate
 I:\Desktop\HistamcomVB\ABPaint\ABPaint\ABPaint\obj\Debug\ABPaint.csproj.CoreCompileInputs.cache
 I:\Desktop\HistamcomVB\ABPaint\ABPaint\ABPaint\obj\Debug\ABPaint.exe
 I:\Desktop\HistamcomVB\ABPaint\ABPaint\ABPaint\obj\Debug\ABPaint.pdb
+I:\Desktop\HistamcomVB\ABPaint\ABPaint\bin\Debug\ABPaint.exe.config
+I:\Desktop\HistamcomVB\ABPaint\ABPaint\bin\Debug\ABPaint.exe
+I:\Desktop\HistamcomVB\ABPaint\ABPaint\bin\Debug\ABPaint.pdb
+I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.csprojResolveAssemblyReference.cache
+I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.Form1.resources
+I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.Properties.Resources.resources
+I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.Sizer.resources
+I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.csproj.GenerateResource.Cache
+I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.csproj.CoreCompileInputs.cache
+I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.exe
+I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.pdb

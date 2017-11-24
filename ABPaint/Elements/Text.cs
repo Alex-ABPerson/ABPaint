@@ -37,5 +37,10 @@ namespace ABPaint.Elements
             Size sz2 = TextRenderer.MeasureText(Text + ".", Font, szProposed, flags);
             return new Size(sz2.Width - sz1.Width, sz2.Height);
         }
+
+        public override void Resize(int newWidth, int newHeight)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

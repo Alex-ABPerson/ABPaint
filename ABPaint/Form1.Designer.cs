@@ -78,6 +78,7 @@
             this.txtBThick = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtTText = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.pnlFont = new System.Windows.Forms.FlowLayoutPanel();
             this.cmbFont = new System.Windows.Forms.ComboBox();
             this.cmbSize = new System.Windows.Forms.ComboBox();
@@ -95,7 +96,6 @@
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.movingRefresh = new System.Windows.Forms.Timer(this.components);
             this.lblProcess = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
             this.toolbox.SuspendLayout();
             this.toolCursorN.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timgCursorN)).BeginInit();
@@ -672,6 +672,16 @@
             this.txtTText.Size = new System.Drawing.Size(100, 20);
             this.txtTText.TabIndex = 3;
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(305, 28);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(46, 20);
+            this.label10.TabIndex = 0;
+            this.label10.Text = "Font:";
+            // 
             // pnlFont
             // 
             this.pnlFont.BackColor = System.Drawing.Color.Gray;
@@ -861,16 +871,6 @@
             this.lblProcess.Text = "Processing...";
             this.lblProcess.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.lblProcess.Visible = false;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(305, 28);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(46, 20);
-            this.label10.TabIndex = 0;
-            this.label10.Text = "Font:";
             // 
             // Form1
             // 

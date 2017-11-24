@@ -19,6 +19,10 @@ namespace ABPaint
         public int selectedTool = 0;
         public int topZIndex = 0;
         public int selectedPalette = 1;
+        public Element currentDrawingElement;
+        public Graphics currentDrawingGraphics;
+        public bool MouseDownOnCanvas = false;
+        Task<Image> tskPP = null;
 
         public Point mousePoint = new Point(0, 0);
 
@@ -30,27 +34,32 @@ namespace ABPaint
         // Magnification level.
         public int MagnificationLevel = 1;
 
-        // All the things needed for pencil + brush + mouseup
-        public System.Drawing.Drawing2D.GraphicsPath grph = new System.Drawing.Drawing2D.GraphicsPath();
-        public Element currentDrawingElement;
-        public Graphics currentDrawingGraphics;
+        // All the things needed for pencil + brush
+        public System.Drawing.Drawing2D.GraphicsPath grph = new System.Drawing.Drawing2D.GraphicsPath();        
         public Point DrawingMin;
-        public Point DrawingMax;
-        public bool MouseDownOnCanvas = false;
+        public Point DrawingMax;       
         public Point lastMousePoint;
         public Point startPoint;
-        Task<Image> tskPP = null;
+       
         public int LastX;
         public int LastY;
 
         // Fill?
         Task<Bitmap> fill;
+
         // The Selection tool stuff
 
         public Element selectedElement;
         public Size IsMovingGap;
         public Point IsMovingOld;
         public bool IsMoving = false;
+        public bool IsOnSelection = false;
+
+        // Resizing 
+        public int CornerSelected = 0;
+        public Point BeforeResizePoint;
+        public Size BeforeResizeSize;
+        public bool Resized = false;
 
         public List<Element> imageElements = new List<Element>();
 
@@ -380,12 +389,7 @@ namespace ABPaint
 
             foreach (Element ele in imageElements)
             {
-                bool intersectsX = false;
-                bool intersectsY = false;
-
-                if (x > ele.X) if (x < ele.X + Math.Abs(ele.Width)) intersectsX = true;
-                if (y > ele.Y) if (y < ele.Y + Math.Abs(ele.Height)) intersectsY = true;
-                if (intersectsX && intersectsY)
+                if (new Rectangle(ele.X - 10, ele.Y - 10, ele.Width + 20, ele.Height + 20).Contains(new Point(x, y)))
                 {
                     // The mouse is in this element!
 
@@ -402,6 +406,7 @@ namespace ABPaint
 
         private void canvaspre_MouseMove(object sender, MouseEventArgs e)
         {
+            Point mouseLoc = e.Location;
             if (selectedTool == 0)
             {
                 if (selectedElement != null)
@@ -410,18 +415,56 @@ namespace ABPaint
                     {
                         selectedElement.X = e.Location.X - IsMovingGap.Width;
                         selectedElement.Y = e.Location.Y - IsMovingGap.Height;
-
-                        if (selectedElement is RectangleE)
+                    } else {
+                        if (CornerSelected == 0)
                         {
-                            ((RectangleE)selectedElement).OriginalX = e.Location.X - IsMovingGap.Width;
-                            ((RectangleE)selectedElement).OriginalY = e.Location.Y - IsMovingGap.Height;
+                            if (new Rectangle(selectedElement.X - 10, selectedElement.Y - 10, selectedElement.Width + 20, selectedElement.Height + 20).Contains(mouseLoc))
+                                IsOnSelection = true;
+                            else
+                                IsOnSelection = false;
+                        } else {
+                            switch (CornerSelected)
+                            {
+                                case 1: // Top-left corner
+                                    selectedElement.X = mouseLoc.X;
+                                    selectedElement.Y = mouseLoc.Y;
+
+                                    int proposedWidth = ((mouseLoc.X - BeforeResizePoint.X) * -1) + BeforeResizeSize.Width;
+                                    int proposedHeight = ((mouseLoc.Y - BeforeResizePoint.Y) * -1) + BeforeResizeSize.Height;
+                                    if (proposedWidth > 0) selectedElement.Width = proposedWidth;
+                                    if (proposedHeight > 0) selectedElement.Height = proposedHeight;
+                                    movingRefresh.Start();
+                                    break;
+                                case 2: // Top-right corner
+                                    selectedElement.Y = mouseLoc.Y;
+
+                                    int proposedWidth2 = ((mouseLoc.X - BeforeResizePoint.X)) + BeforeResizeSize.Width;
+                                    int proposedHeight2 = ((mouseLoc.Y - BeforeResizePoint.Y) * -1) + BeforeResizeSize.Height;
+                                    if (proposedWidth2 > 0) selectedElement.Width = proposedWidth2;
+                                    if (proposedHeight2 > 0) selectedElement.Height = proposedHeight2;
+                                    movingRefresh.Start();
+                                    break;
+                                case 3: // Bottom-left corner
+                                    selectedElement.X = mouseLoc.X;
+
+                                    int proposedWidth3 = ((mouseLoc.X - BeforeResizePoint.X) * -1) + BeforeResizeSize.Width;
+                                    int proposedHeight3 = ((mouseLoc.Y - BeforeResizePoint.Y)) + BeforeResizeSize.Height;
+                                    if (proposedWidth3 > 0) selectedElement.Width = proposedWidth3;
+                                    if (proposedHeight3 > 0) selectedElement.Height = proposedHeight3;
+                                    movingRefresh.Start();
+                                    break;
+                                case 4: // Bottom-right corner
+                                    int proposedWidth4 = ((mouseLoc.X - BeforeResizePoint.X)) + BeforeResizeSize.Width;
+                                    int proposedHeight4 = ((mouseLoc.Y - BeforeResizePoint.Y)) + BeforeResizeSize.Height;
+                                    if (proposedWidth4 > 0) selectedElement.Width = proposedWidth4;
+                                    if (proposedHeight4 > 0) selectedElement.Height = proposedHeight4;
+                                    movingRefresh.Start();
+                                    break;
+                            }
                         }
 
-                        if (selectedElement is Ellipse)
-                        {
-                            ((Ellipse)selectedElement).OriginalX = e.Location.X - IsMovingGap.Width;
-                            ((Ellipse)selectedElement).OriginalY = e.Location.Y - IsMovingGap.Height;
-                        }
+                        
+                        canvaspre.Invalidate();
                     }
                 }
             }
@@ -492,6 +535,7 @@ namespace ABPaint
 
         private async void canvaspre_MouseDown(object sender, MouseEventArgs e)
         {
+            Point mouseLoc = e.Location;
 
             if (e.Button == MouseButtons.Left)
             {
@@ -518,36 +562,49 @@ namespace ABPaint
 
                     if (selectedElement != null)
                     {
-                        bool intersectsX = false;
-                        bool intersectsY = false;
-
-                        if (e.X > selectedElement.X) if (e.X < selectedElement.X + Math.Abs(selectedElement.Width)) intersectsX = true;
-                        if (e.Y > selectedElement.Y) if (e.Y < selectedElement.Y + Math.Abs(selectedElement.Height)) intersectsY = true;
-                        if (intersectsX && intersectsY)
+                        if (new Rectangle(selectedElement.X - 10, selectedElement.Y - 10, selectedElement.Width + 20, selectedElement.Height + 20).Contains(mouseLoc))
                         {
                             // The mouse is in this element!
 
-                            // Move the element
 
-                            IsMovingOld = new Point(selectedElement.X, selectedElement.Y);
+                            // Check if the mouse is on the scaling points otherwise move the element.
 
-                            IsMovingGap.Width = e.X - selectedElement.X;
-                            IsMovingGap.Height = e.Y - selectedElement.Y;
+                            CornerSelected = 0;
 
-                            if (selectedElement is RectangleE)
+                            // Top left corner
+                            if (new Rectangle(selectedElement.X - 10, selectedElement.Y - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 1;
+
+                            // Top Right Corner
+                            if (new Rectangle(selectedElement.Right - 10, selectedElement.Y - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 2;
+
+                            // Bottom Left corner
+                            if (new Rectangle(selectedElement.X - 10, selectedElement.Bottom - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 3;
+
+                            // Bottom Right corner
+                            if (new Rectangle(selectedElement.Right - 10, selectedElement.Bottom - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 4;
+
+                            if (CornerSelected == 0)
                             {
-                                IsMovingGap.Width = e.X - ((RectangleE)selectedElement).OriginalX;
-                                IsMovingGap.Height = e.Y - ((RectangleE)selectedElement).OriginalY;
-                            }
+                                // Move the element
 
-                            if (selectedElement is Ellipse)
+                                IsMovingOld = new Point(selectedElement.X, selectedElement.Y);
+
+                                IsMovingGap.Width = e.X - selectedElement.X;
+                                IsMovingGap.Height = e.Y - selectedElement.Y;
+
+                                movingRefresh.Start();
+                                IsMoving = true;
+                            }
+                            else
                             {
-                                IsMovingGap.Width = e.X - ((Ellipse)selectedElement).OriginalX;
-                                IsMovingGap.Height = e.Y - ((Ellipse)selectedElement).OriginalY;
-                            }
+                                if (CornerSelected == 1) BeforeResizePoint = new Point(selectedElement.X, selectedElement.Y);
+                                else if (CornerSelected == 2) BeforeResizePoint = new Point(selectedElement.X + selectedElement.Width, selectedElement.Y);
+                                else if (CornerSelected == 3) BeforeResizePoint = new Point(selectedElement.X, selectedElement.Y + selectedElement.Height);
+                                else if (CornerSelected == 4) BeforeResizePoint = new Point(selectedElement.X + selectedElement.Width, selectedElement.Y + selectedElement.Height);
 
-                            movingRefresh.Start();
-                            IsMoving = true;
+                                BeforeResizeSize = new Size(selectedElement.Width, selectedElement.Height);
+                            }
+                            
                         }
                     }
                 }
@@ -598,6 +655,8 @@ namespace ABPaint
                     DrawingMin.X = e.X;
                     DrawingMin.Y = e.Y;
 
+                    startPoint = e.Location;
+
                     ((RectangleE)currentDrawingElement).IsFilled = true;
                     ((RectangleE)currentDrawingElement).borderColor = clrBord.BackColor;
                     ((RectangleE)currentDrawingElement).fillColor = clrFill.BackColor;
@@ -616,6 +675,8 @@ namespace ABPaint
                     DrawingMin.X = e.X;
                     DrawingMin.Y = e.Y;
 
+                    startPoint = e.Location;
+
                     ((Ellipse)currentDrawingElement).IsFilled = true;
                     ((Ellipse)currentDrawingElement).borderColor = clrBord.BackColor;
                     ((Ellipse)currentDrawingElement).fillColor = clrFill.BackColor;
@@ -633,6 +694,8 @@ namespace ABPaint
 
                     DrawingMin.X = e.X;
                     DrawingMin.Y = e.Y;
+
+                    startPoint = e.Location;
 
                     ((Line)currentDrawingElement).color = clrNorm.BackColor;
                     ((Line)currentDrawingElement).Thickness = Convert.ToInt32(txtBThick.Text);
@@ -716,12 +779,18 @@ namespace ABPaint
         {
             if (MouseDownOnCanvas)
             {
+                movingRefresh.Stop();
                 MouseDownOnCanvas = false;
 
                 if (selectedTool == 0)
                 {
                     IsMoving = false;
                     movingRefresh.Stop();
+
+                    if (CornerSelected != 0)
+                        CornerSelected = 0;
+                        //selectedElement.Width += BeforeResizeSize.Width;
+                        //selectedElement.Height += BeforeResizeSize.Height;
                     //if (IsMovingSelectionInPlace)
                     //{
                     //    selectedElement.X = NewMovingX;
@@ -752,28 +821,16 @@ namespace ABPaint
                     ((Elements.Brush)currentDrawingElement).brushColor = clrNorm.BackColor;
                 }
 
-                if (currentDrawingElement is RectangleE)
+                if (currentDrawingElement is RectangleE || currentDrawingElement is Ellipse)
                 {
                     currentDrawingElement.zindex = topZIndex++;
-                    ((RectangleE)currentDrawingElement).OriginalX = startPoint.X;
-                    ((RectangleE)currentDrawingElement).OriginalY = startPoint.Y;
-                    currentDrawingElement.X = startPoint.X;
-                    currentDrawingElement.Y = startPoint.Y;
-                    currentDrawingElement.Width = (mousePoint.X - startPoint.X);
-                    currentDrawingElement.Height = (mousePoint.Y - startPoint.Y);
 
-                    imageElements.Add(currentDrawingElement);
-                }
-
-                if (currentDrawingElement is Ellipse)
-                {
-                    currentDrawingElement.zindex = topZIndex++;
-                    ((Ellipse)currentDrawingElement).OriginalX = startPoint.X;
-                    ((Ellipse)currentDrawingElement).OriginalY = startPoint.Y;
-                    currentDrawingElement.X = startPoint.X;
-                    currentDrawingElement.Y = startPoint.Y;
-                    currentDrawingElement.Width = (mousePoint.X - startPoint.X) + (Convert.ToInt32(txtBThick.Text) * 2);
-                    currentDrawingElement.Height = (mousePoint.Y - startPoint.Y) + (Convert.ToInt32(txtBThick.Text) * 2);
+                    currentDrawingElement.Width = mousePoint.X - startPoint.X;
+                    currentDrawingElement.Height = mousePoint.Y - startPoint.Y;
+                    if (currentDrawingElement.Width < 0) currentDrawingElement.X = startPoint.X - Math.Abs(currentDrawingElement.Width); else currentDrawingElement.X = startPoint.X;
+                    if(currentDrawingElement.Height < 0) currentDrawingElement.Y = startPoint.Y - Math.Abs(currentDrawingElement.Height); else currentDrawingElement.Y = startPoint.Y;
+                    currentDrawingElement.Width = Math.Abs(currentDrawingElement.Width);
+                    currentDrawingElement.Height = Math.Abs(currentDrawingElement.Height);
 
                     imageElements.Add(currentDrawingElement);
                 }
@@ -1050,7 +1107,7 @@ namespace ABPaint
 
                     if (ele.IsFilled) e.Graphics.FillRectangle(new SolidBrush(ele.fillColor), startPoint.X - widthamount, startPoint.Y - heightamount, Math.Abs(width), Math.Abs(height)); // Fill
 
-                    e.Graphics.DrawRectangle(new Pen(ele.borderColor, Convert.ToInt32(txtBWidth.Text)), startPoint.X - widthamount, startPoint.Y - heightamount, Math.Abs(width), Math.Abs(height));
+                    e.Graphics.DrawRectangle(new Pen(ele.borderColor, Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text)), startPoint.X - widthamount, startPoint.Y - heightamount, Math.Abs(width), Math.Abs(height));
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, ele.BorderSize, height); // Left border
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, width, ele.BorderSize); // Top border
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), (ele.Width - ele.BorderSize) + DrawingMin.X, DrawingMin.Y, ele.BorderSize, Height); // Right border
@@ -1080,9 +1137,10 @@ namespace ABPaint
                     //if (width < 0) currentDrawingElement.Width = 1;
                     //if (height < 0) currentDrawingElement.Height = 1;
 
-                    if (ele.IsFilled) e.Graphics.FillEllipse(new SolidBrush(ele.fillColor), startPoint.X - widthamount, startPoint.Y - heightamount, Math.Abs(width) - (Convert.ToInt32(txtBWidth.Text) * 2), Math.Abs(height) - (Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text) * 2)); // Fill
+                    int borderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
+                    if (ele.IsFilled) e.Graphics.FillEllipse(new SolidBrush(ele.fillColor), startPoint.X - widthamount + borderSize, startPoint.Y - heightamount + borderSize, Math.Abs(width) - (borderSize * 2), Math.Abs(height) - (borderSize * 2)); // Fill
 
-                    e.Graphics.DrawEllipse(new Pen(ele.borderColor, Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text)), startPoint.X - widthamount, startPoint.Y - heightamount, Math.Abs(width) - (Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text) * 2), Math.Abs(height) - (Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text) * 2));
+                    e.Graphics.DrawEllipse(new Pen(ele.borderColor, borderSize), startPoint.X - widthamount + borderSize, startPoint.Y - heightamount + borderSize, Math.Abs(width) - (borderSize * 2), Math.Abs(height) - (borderSize * 2));
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, ele.BorderSize, height); // Left border
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, width, ele.BorderSize); // Top border
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), (ele.Width - ele.BorderSize) + DrawingMin.X, DrawingMin.Y, ele.BorderSize, Height); // Right border
@@ -1118,6 +1176,16 @@ namespace ABPaint
                         heightamount = 0;
 
                     e.Graphics.DrawRectangle(new Pen(Color.Gray), selectedElement.X - widthamount, selectedElement.Y - heightamount, width, height);
+
+                    // The points for scaling
+
+                    if (IsOnSelection)
+                    {
+                        if (CornerSelected == 1) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - widthamount - 10, selectedElement.Y - heightamount - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X - widthamount - 10, selectedElement.Y - heightamount - 10, 20, 20);                        
+                        if (CornerSelected == 2) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - 10, selectedElement.Y - heightamount - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - 10, selectedElement.Y - heightamount - 10, 20, 20);
+                        if (CornerSelected == 3) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - widthamount - 10, ((selectedElement.Y - heightamount) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X - widthamount - 10, ((selectedElement.Y - heightamount) + selectedElement.Height) - 10, 20, 20);
+                        if (CornerSelected == 4) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - 10, ((selectedElement.Y - heightamount) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - 10, ((selectedElement.Y - heightamount) + selectedElement.Height) - 10, 20, 20);
+                    }
                 }          
             }
         }
