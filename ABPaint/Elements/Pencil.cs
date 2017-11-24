@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Imaging;
+using ABPaint.Tools.Backend;
 
 namespace ABPaint.Elements
 {
@@ -49,7 +50,7 @@ namespace ABPaint.Elements
 
         public override void Resize(int newWidth, int newHeight)
         {
-            throw new NotImplementedException();
+            pencilPoints = ResizeImage.resizeImage(pencilPoints, new Size(newWidth, newHeight));
         }
     }
 }

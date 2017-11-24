@@ -433,7 +433,9 @@ namespace ABPaint
                                     int proposedHeight = ((mouseLoc.Y - BeforeResizePoint.Y) * -1) + BeforeResizeSize.Height;
                                     if (proposedWidth > 0) selectedElement.Width = proposedWidth;
                                     if (proposedHeight > 0) selectedElement.Height = proposedHeight;
+
                                     movingRefresh.Start();
+                                    selectedElement.Resize(selectedElement.Width, selectedElement.Height);
                                     break;
                                 case 2: // Top-right corner
                                     selectedElement.Y = mouseLoc.Y;
@@ -442,7 +444,9 @@ namespace ABPaint
                                     int proposedHeight2 = ((mouseLoc.Y - BeforeResizePoint.Y) * -1) + BeforeResizeSize.Height;
                                     if (proposedWidth2 > 0) selectedElement.Width = proposedWidth2;
                                     if (proposedHeight2 > 0) selectedElement.Height = proposedHeight2;
+                                    
                                     movingRefresh.Start();
+                                    selectedElement.Resize(selectedElement.Width, selectedElement.Height);
                                     break;
                                 case 3: // Bottom-left corner
                                     selectedElement.X = mouseLoc.X;
@@ -451,19 +455,22 @@ namespace ABPaint
                                     int proposedHeight3 = ((mouseLoc.Y - BeforeResizePoint.Y)) + BeforeResizeSize.Height;
                                     if (proposedWidth3 > 0) selectedElement.Width = proposedWidth3;
                                     if (proposedHeight3 > 0) selectedElement.Height = proposedHeight3;
+
                                     movingRefresh.Start();
+                                    selectedElement.Resize(selectedElement.Width, selectedElement.Height);
                                     break;
                                 case 4: // Bottom-right corner
                                     int proposedWidth4 = ((mouseLoc.X - BeforeResizePoint.X)) + BeforeResizeSize.Width;
                                     int proposedHeight4 = ((mouseLoc.Y - BeforeResizePoint.Y)) + BeforeResizeSize.Height;
                                     if (proposedWidth4 > 0) selectedElement.Width = proposedWidth4;
                                     if (proposedHeight4 > 0) selectedElement.Height = proposedHeight4;
+
                                     movingRefresh.Start();
+                                    selectedElement.Resize(selectedElement.Width, selectedElement.Height);
                                     break;
                             }
-                        }
+                        }                       
 
-                        
                         canvaspre.Invalidate();
                     }
                 }
@@ -824,7 +831,6 @@ namespace ABPaint
                 if (currentDrawingElement is RectangleE || currentDrawingElement is Ellipse)
                 {
                     currentDrawingElement.zindex = topZIndex++;
-
                     currentDrawingElement.Width = mousePoint.X - startPoint.X;
                     currentDrawingElement.Height = mousePoint.Y - startPoint.Y;
                     if (currentDrawingElement.Width < 0) currentDrawingElement.X = startPoint.X - Math.Abs(currentDrawingElement.Width); else currentDrawingElement.X = startPoint.X;
@@ -1105,9 +1111,11 @@ namespace ABPaint
                     //if (width < 0) currentDrawingElement.Width = 1;
                     //if (height < 0) currentDrawingElement.Height = 1;
 
+                    int borderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
+
                     if (ele.IsFilled) e.Graphics.FillRectangle(new SolidBrush(ele.fillColor), startPoint.X - widthamount, startPoint.Y - heightamount, Math.Abs(width), Math.Abs(height)); // Fill
 
-                    e.Graphics.DrawRectangle(new Pen(ele.borderColor, Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text)), startPoint.X - widthamount, startPoint.Y - heightamount, Math.Abs(width), Math.Abs(height));
+                    e.Graphics.DrawRectangle(new Pen(ele.borderColor, borderSize), startPoint.X - widthamount, startPoint.Y - heightamount, Math.Abs(width), Math.Abs(height));
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, ele.BorderSize, height); // Left border
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, width, ele.BorderSize); // Top border
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), (ele.Width - ele.BorderSize) + DrawingMin.X, DrawingMin.Y, ele.BorderSize, Height); // Right border

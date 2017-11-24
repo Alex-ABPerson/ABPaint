@@ -40,7 +40,7 @@ namespace ABPaint.Elements
 
         public override void Resize(int newWidth, int newHeight)
         {
-            throw new NotImplementedException();
+            fnt = new Font(fnt.FontFamily, Convert.ToSingle(Height / 2.5), fnt.Style);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ABPaint.Tools.Backend;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -33,7 +34,7 @@ namespace ABPaint.Elements
 
         public override void Resize(int newWidth, int newHeight)
         {
-            throw new NotImplementedException();
+            fillPoints = ResizeImage.resizeImage(fillPoints, new Size(newWidth, newHeight));
         }
     }
 }
