@@ -57,8 +57,8 @@
             this.picOpen = new System.Windows.Forms.PictureBox();
             this.barSave = new System.Windows.Forms.Panel();
             this.picSave = new System.Windows.Forms.PictureBox();
-            this.canvaspre = new System.Windows.Forms.PictureBox();
             this.appcenter = new System.Windows.Forms.Panel();
+            this.canvaspre = new System.Windows.Forms.PictureBox();
             this.welcomeScreen = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -82,16 +82,19 @@
             this.pnlFont = new System.Windows.Forms.FlowLayoutPanel();
             this.cmbFont = new System.Windows.Forms.ComboBox();
             this.cmbSize = new System.Windows.Forms.ComboBox();
+            this.btnBold = new System.Windows.Forms.Button();
+            this.btnItl = new System.Windows.Forms.Button();
+            this.btnUline = new System.Windows.Forms.Button();
             this.propertiesLbl = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.clR4 = new System.Windows.Forms.PictureBox();
-            this.clL4 = new System.Windows.Forms.PictureBox();
-            this.clR3 = new System.Windows.Forms.PictureBox();
-            this.clL3 = new System.Windows.Forms.PictureBox();
-            this.clR2 = new System.Windows.Forms.PictureBox();
-            this.clR1 = new System.Windows.Forms.PictureBox();
-            this.clL2 = new System.Windows.Forms.PictureBox();
-            this.clL1 = new System.Windows.Forms.PictureBox();
+            this.cl8 = new ABPaint.RightMenu.ColorBox();
+            this.cl4 = new ABPaint.RightMenu.ColorBox();
+            this.cl7 = new ABPaint.RightMenu.ColorBox();
+            this.cl3 = new ABPaint.RightMenu.ColorBox();
+            this.cl6 = new ABPaint.RightMenu.ColorBox();
+            this.cl5 = new ABPaint.RightMenu.ColorBox();
+            this.cl2 = new ABPaint.RightMenu.ColorBox();
+            this.cl1 = new ABPaint.RightMenu.ColorBox();
             this.label1 = new System.Windows.Forms.Label();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.movingRefresh = new System.Windows.Forms.Timer(this.components);
@@ -123,8 +126,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.picOpen)).BeginInit();
             this.barSave.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSave)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).BeginInit();
             this.appcenter.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).BeginInit();
             this.welcomeScreen.SuspendLayout();
             this.panel2.SuspendLayout();
             this.properties.SuspendLayout();
@@ -134,14 +137,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.clrNorm)).BeginInit();
             this.pnlFont.SuspendLayout();
             this.panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.clR4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clL4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clR3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clL3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clR2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clR1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clL2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clL1)).BeginInit();
             this.SuspendLayout();
             // 
             // toolbox
@@ -160,7 +155,7 @@
             this.toolbox.Dock = System.Windows.Forms.DockStyle.Left;
             this.toolbox.Location = new System.Drawing.Point(0, 41);
             this.toolbox.Name = "toolbox";
-            this.toolbox.Size = new System.Drawing.Size(60, 494);
+            this.toolbox.Size = new System.Drawing.Size(60, 471);
             this.toolbox.TabIndex = 0;
             // 
             // toolCursorN
@@ -444,6 +439,19 @@
             this.picSave.TabIndex = 2;
             this.picSave.TabStop = false;
             // 
+            // appcenter
+            // 
+            this.appcenter.AutoScroll = true;
+            this.appcenter.AutoSize = true;
+            this.appcenter.Controls.Add(this.canvaspre);
+            this.appcenter.Controls.Add(this.welcomeScreen);
+            this.appcenter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.appcenter.Location = new System.Drawing.Point(60, 41);
+            this.appcenter.Name = "appcenter";
+            this.appcenter.Size = new System.Drawing.Size(724, 471);
+            this.appcenter.TabIndex = 3;
+            this.appcenter.Click += new System.EventHandler(this.CanvasAnywhereClick);
+            // 
             // canvaspre
             // 
             this.canvaspre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -457,19 +465,6 @@
             this.canvaspre.MouseDown += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseDown);
             this.canvaspre.MouseMove += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseMove);
             this.canvaspre.MouseUp += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseUp);
-            // 
-            // appcenter
-            // 
-            this.appcenter.AutoScroll = true;
-            this.appcenter.AutoSize = true;
-            this.appcenter.Controls.Add(this.canvaspre);
-            this.appcenter.Controls.Add(this.welcomeScreen);
-            this.appcenter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.appcenter.Location = new System.Drawing.Point(60, 41);
-            this.appcenter.Name = "appcenter";
-            this.appcenter.Size = new System.Drawing.Size(724, 494);
-            this.appcenter.TabIndex = 3;
-            this.appcenter.Click += new System.EventHandler(this.CanvasAnywhereClick);
             // 
             // welcomeScreen
             // 
@@ -515,9 +510,9 @@
             this.panel2.Controls.Add(this.properties);
             this.panel2.Controls.Add(this.panel3);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 535);
+            this.panel2.Location = new System.Drawing.Point(0, 512);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(784, 94);
+            this.panel2.Size = new System.Drawing.Size(784, 117);
             this.panel2.TabIndex = 2;
             // 
             // properties
@@ -527,7 +522,7 @@
             this.properties.Dock = System.Windows.Forms.DockStyle.Fill;
             this.properties.Location = new System.Drawing.Point(0, 0);
             this.properties.Name = "properties";
-            this.properties.Size = new System.Drawing.Size(574, 94);
+            this.properties.Size = new System.Drawing.Size(645, 117);
             this.properties.TabIndex = 1;
             // 
             // propertiesProps
@@ -549,7 +544,7 @@
             this.propertiesProps.Dock = System.Windows.Forms.DockStyle.Fill;
             this.propertiesProps.Location = new System.Drawing.Point(0, 23);
             this.propertiesProps.Name = "propertiesProps";
-            this.propertiesProps.Size = new System.Drawing.Size(574, 71);
+            this.propertiesProps.Size = new System.Drawing.Size(645, 94);
             this.propertiesProps.TabIndex = 1;
             // 
             // label4
@@ -639,7 +634,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(3, 28);
+            this.label8.Location = new System.Drawing.Point(495, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(84, 20);
             this.label8.TabIndex = 0;
@@ -647,7 +642,7 @@
             // 
             // txtBThick
             // 
-            this.txtBThick.Location = new System.Drawing.Point(93, 31);
+            this.txtBThick.Location = new System.Drawing.Point(585, 3);
             this.txtBThick.Name = "txtBThick";
             this.txtBThick.Size = new System.Drawing.Size(51, 20);
             this.txtBThick.TabIndex = 2;
@@ -659,7 +654,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(150, 28);
+            this.label2.Location = new System.Drawing.Point(3, 28);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(43, 20);
             this.label2.TabIndex = 0;
@@ -667,16 +662,17 @@
             // 
             // txtTText
             // 
-            this.txtTText.Location = new System.Drawing.Point(199, 31);
+            this.txtTText.Location = new System.Drawing.Point(52, 31);
             this.txtTText.Name = "txtTText";
             this.txtTText.Size = new System.Drawing.Size(100, 20);
             this.txtTText.TabIndex = 3;
+            this.txtTText.TextChanged += new System.EventHandler(this.txtTText_TextChanged);
             // 
             // label10
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(305, 28);
+            this.label10.Location = new System.Drawing.Point(158, 28);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(46, 20);
             this.label10.TabIndex = 0;
@@ -688,10 +684,13 @@
             this.pnlFont.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlFont.Controls.Add(this.cmbFont);
             this.pnlFont.Controls.Add(this.cmbSize);
+            this.pnlFont.Controls.Add(this.btnBold);
+            this.pnlFont.Controls.Add(this.btnItl);
+            this.pnlFont.Controls.Add(this.btnUline);
             this.pnlFont.ForeColor = System.Drawing.Color.Black;
-            this.pnlFont.Location = new System.Drawing.Point(357, 31);
+            this.pnlFont.Location = new System.Drawing.Point(210, 31);
             this.pnlFont.Name = "pnlFont";
-            this.pnlFont.Size = new System.Drawing.Size(200, 37);
+            this.pnlFont.Size = new System.Drawing.Size(200, 58);
             this.pnlFont.TabIndex = 4;
             // 
             // cmbFont
@@ -702,6 +701,7 @@
             this.cmbFont.Size = new System.Drawing.Size(121, 21);
             this.cmbFont.TabIndex = 0;
             this.cmbFont.Text = "Microsoft Sans Serif";
+            this.cmbFont.SelectedIndexChanged += new System.EventHandler(this.cmbFont_SelectedIndexChanged);
             // 
             // cmbSize
             // 
@@ -728,6 +728,37 @@
             this.cmbSize.Size = new System.Drawing.Size(47, 21);
             this.cmbSize.TabIndex = 0;
             this.cmbSize.Text = "12";
+            this.cmbSize.SelectedIndexChanged += new System.EventHandler(this.cmbSize_SelectedIndexChanged);
+            // 
+            // btnBold
+            // 
+            this.btnBold.Image = global::ABPaint.Properties.Resources.bold;
+            this.btnBold.Location = new System.Drawing.Point(3, 30);
+            this.btnBold.Name = "btnBold";
+            this.btnBold.Size = new System.Drawing.Size(30, 23);
+            this.btnBold.TabIndex = 1;
+            this.btnBold.UseVisualStyleBackColor = true;
+            this.btnBold.Click += new System.EventHandler(this.btnBold_Click);
+            // 
+            // btnItl
+            // 
+            this.btnItl.Image = global::ABPaint.Properties.Resources.italic;
+            this.btnItl.Location = new System.Drawing.Point(39, 30);
+            this.btnItl.Name = "btnItl";
+            this.btnItl.Size = new System.Drawing.Size(30, 23);
+            this.btnItl.TabIndex = 1;
+            this.btnItl.UseVisualStyleBackColor = true;
+            this.btnItl.Click += new System.EventHandler(this.btnItl_Click);
+            // 
+            // btnUline
+            // 
+            this.btnUline.Image = global::ABPaint.Properties.Resources.underline;
+            this.btnUline.Location = new System.Drawing.Point(75, 30);
+            this.btnUline.Name = "btnUline";
+            this.btnUline.Size = new System.Drawing.Size(30, 23);
+            this.btnUline.TabIndex = 1;
+            this.btnUline.UseVisualStyleBackColor = true;
+            this.btnUline.Click += new System.EventHandler(this.btnUline_Click);
             // 
             // propertiesLbl
             // 
@@ -735,121 +766,105 @@
             this.propertiesLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.propertiesLbl.Location = new System.Drawing.Point(0, 0);
             this.propertiesLbl.Name = "propertiesLbl";
-            this.propertiesLbl.Size = new System.Drawing.Size(574, 23);
+            this.propertiesLbl.Size = new System.Drawing.Size(645, 23);
             this.propertiesLbl.TabIndex = 0;
             this.propertiesLbl.Text = "<ERROR>";
             this.propertiesLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panel3
             // 
-            this.panel3.Controls.Add(this.clR4);
-            this.panel3.Controls.Add(this.clL4);
-            this.panel3.Controls.Add(this.clR3);
-            this.panel3.Controls.Add(this.clL3);
-            this.panel3.Controls.Add(this.clR2);
-            this.panel3.Controls.Add(this.clR1);
-            this.panel3.Controls.Add(this.clL2);
-            this.panel3.Controls.Add(this.clL1);
+            this.panel3.Controls.Add(this.cl8);
+            this.panel3.Controls.Add(this.cl4);
+            this.panel3.Controls.Add(this.cl7);
+            this.panel3.Controls.Add(this.cl3);
+            this.panel3.Controls.Add(this.cl6);
+            this.panel3.Controls.Add(this.cl5);
+            this.panel3.Controls.Add(this.cl2);
+            this.panel3.Controls.Add(this.cl1);
             this.panel3.Controls.Add(this.label1);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel3.Location = new System.Drawing.Point(574, 0);
+            this.panel3.Location = new System.Drawing.Point(645, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(210, 94);
+            this.panel3.Size = new System.Drawing.Size(139, 117);
             this.panel3.TabIndex = 0;
             // 
-            // clR4
+            // cl8
             // 
-            this.clR4.BackColor = System.Drawing.Color.Orange;
-            this.clR4.Location = new System.Drawing.Point(150, 51);
-            this.clR4.Name = "clR4";
-            this.clR4.Size = new System.Drawing.Size(24, 20);
-            this.clR4.TabIndex = 1;
-            this.clR4.TabStop = false;
-            this.clR4.Paint += new System.Windows.Forms.PaintEventHandler(this.clR4_Paint);
-            this.clR4.MouseClick += new System.Windows.Forms.MouseEventHandler(this.clR4_MouseClick);
+            this.cl8.BackColor = System.Drawing.Color.Black;
+            this.cl8.Location = new System.Drawing.Point(104, 51);
+            this.cl8.Name = "cl8";
+            this.cl8.Size = new System.Drawing.Size(24, 20);
+            this.cl8.TabIndex = 2;
+            this.cl8.ToSelect = 8;
             // 
-            // clL4
+            // cl4
             // 
-            this.clL4.BackColor = System.Drawing.Color.Black;
-            this.clL4.Location = new System.Drawing.Point(150, 28);
-            this.clL4.Name = "clL4";
-            this.clL4.Size = new System.Drawing.Size(24, 20);
-            this.clL4.TabIndex = 1;
-            this.clL4.TabStop = false;
-            this.clL4.Paint += new System.Windows.Forms.PaintEventHandler(this.clL4_Paint);
-            this.clL4.MouseClick += new System.Windows.Forms.MouseEventHandler(this.clL4_MouseClick);
+            this.cl4.BackColor = System.Drawing.Color.Black;
+            this.cl4.Location = new System.Drawing.Point(104, 26);
+            this.cl4.Name = "cl4";
+            this.cl4.Size = new System.Drawing.Size(24, 20);
+            this.cl4.TabIndex = 2;
+            this.cl4.ToSelect = 4;
             // 
-            // clR3
+            // cl7
             // 
-            this.clR3.BackColor = System.Drawing.Color.Green;
-            this.clR3.Location = new System.Drawing.Point(120, 51);
-            this.clR3.Name = "clR3";
-            this.clR3.Size = new System.Drawing.Size(24, 20);
-            this.clR3.TabIndex = 1;
-            this.clR3.TabStop = false;
-            this.clR3.Paint += new System.Windows.Forms.PaintEventHandler(this.clR3_Paint);
-            this.clR3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.clR3_MouseClick);
+            this.cl7.BackColor = System.Drawing.Color.Black;
+            this.cl7.Location = new System.Drawing.Point(74, 51);
+            this.cl7.Name = "cl7";
+            this.cl7.Size = new System.Drawing.Size(24, 20);
+            this.cl7.TabIndex = 2;
+            this.cl7.ToSelect = 7;
             // 
-            // clL3
+            // cl3
             // 
-            this.clL3.BackColor = System.Drawing.Color.Black;
-            this.clL3.Location = new System.Drawing.Point(120, 28);
-            this.clL3.Name = "clL3";
-            this.clL3.Size = new System.Drawing.Size(24, 20);
-            this.clL3.TabIndex = 1;
-            this.clL3.TabStop = false;
-            this.clL3.Paint += new System.Windows.Forms.PaintEventHandler(this.clL3_Paint);
-            this.clL3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.clL3_MouseClick);
+            this.cl3.BackColor = System.Drawing.Color.Black;
+            this.cl3.Location = new System.Drawing.Point(74, 26);
+            this.cl3.Name = "cl3";
+            this.cl3.Size = new System.Drawing.Size(24, 20);
+            this.cl3.TabIndex = 2;
+            this.cl3.ToSelect = 3;
             // 
-            // clR2
+            // cl6
             // 
-            this.clR2.BackColor = System.Drawing.Color.Blue;
-            this.clR2.Location = new System.Drawing.Point(90, 51);
-            this.clR2.Name = "clR2";
-            this.clR2.Size = new System.Drawing.Size(24, 20);
-            this.clR2.TabIndex = 1;
-            this.clR2.TabStop = false;
-            this.clR2.Paint += new System.Windows.Forms.PaintEventHandler(this.clR2_Paint);
-            this.clR2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.clR2_MouseClick);
+            this.cl6.BackColor = System.Drawing.Color.Black;
+            this.cl6.Location = new System.Drawing.Point(44, 51);
+            this.cl6.Name = "cl6";
+            this.cl6.Size = new System.Drawing.Size(24, 20);
+            this.cl6.TabIndex = 2;
+            this.cl6.ToSelect = 6;
             // 
-            // clR1
+            // cl5
             // 
-            this.clR1.BackColor = System.Drawing.Color.White;
-            this.clR1.Location = new System.Drawing.Point(60, 51);
-            this.clR1.Name = "clR1";
-            this.clR1.Size = new System.Drawing.Size(24, 20);
-            this.clR1.TabIndex = 1;
-            this.clR1.TabStop = false;
-            this.clR1.Paint += new System.Windows.Forms.PaintEventHandler(this.clR1_Paint);
-            this.clR1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.clR1_MouseClick);
+            this.cl5.BackColor = System.Drawing.Color.Black;
+            this.cl5.Location = new System.Drawing.Point(14, 51);
+            this.cl5.Name = "cl5";
+            this.cl5.Size = new System.Drawing.Size(24, 20);
+            this.cl5.TabIndex = 2;
+            this.cl5.ToSelect = 5;
             // 
-            // clL2
+            // cl2
             // 
-            this.clL2.BackColor = System.Drawing.Color.Black;
-            this.clL2.Location = new System.Drawing.Point(90, 28);
-            this.clL2.Name = "clL2";
-            this.clL2.Size = new System.Drawing.Size(24, 20);
-            this.clL2.TabIndex = 1;
-            this.clL2.TabStop = false;
-            this.clL2.Paint += new System.Windows.Forms.PaintEventHandler(this.clL2_Paint);
-            this.clL2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.clL2_MouseClick);
+            this.cl2.BackColor = System.Drawing.Color.Black;
+            this.cl2.Location = new System.Drawing.Point(44, 26);
+            this.cl2.Name = "cl2";
+            this.cl2.Size = new System.Drawing.Size(24, 20);
+            this.cl2.TabIndex = 2;
+            this.cl2.ToSelect = 2;
             // 
-            // clL1
+            // cl1
             // 
-            this.clL1.BackColor = System.Drawing.Color.Black;
-            this.clL1.Location = new System.Drawing.Point(60, 28);
-            this.clL1.Name = "clL1";
-            this.clL1.Size = new System.Drawing.Size(24, 20);
-            this.clL1.TabIndex = 1;
-            this.clL1.TabStop = false;
-            this.clL1.Paint += new System.Windows.Forms.PaintEventHandler(this.clL1_Paint);
-            this.clL1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.clL1_MouseClick);
+            this.cl1.BackColor = System.Drawing.Color.Black;
+            this.cl1.Location = new System.Drawing.Point(14, 26);
+            this.cl1.Name = "cl1";
+            this.cl1.Size = new System.Drawing.Size(24, 20);
+            this.cl1.TabIndex = 2;
+            this.cl1.ToSelect = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(55, 3);
+            this.label1.Location = new System.Drawing.Point(9, 3);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(65, 25);
             this.label1.TabIndex = 0;
@@ -864,7 +879,7 @@
             // 
             this.lblProcess.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.lblProcess.Font = new System.Drawing.Font("Monotype Corsiva", 50F, System.Drawing.FontStyle.Italic);
-            this.lblProcess.Location = new System.Drawing.Point(60, 453);
+            this.lblProcess.Location = new System.Drawing.Point(60, 430);
             this.lblProcess.Name = "lblProcess";
             this.lblProcess.Size = new System.Drawing.Size(724, 82);
             this.lblProcess.TabIndex = 3;
@@ -917,8 +932,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.picOpen)).EndInit();
             this.barSave.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picSave)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).EndInit();
             this.appcenter.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).EndInit();
             this.welcomeScreen.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.properties.ResumeLayout(false);
@@ -930,14 +945,6 @@
             this.pnlFont.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.clR4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clL4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clR3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clL3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clR2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clR1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clL2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clL1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -978,14 +985,6 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.PictureBox clR4;
-        private System.Windows.Forms.PictureBox clL4;
-        private System.Windows.Forms.PictureBox clR3;
-        private System.Windows.Forms.PictureBox clL3;
-        private System.Windows.Forms.PictureBox clR2;
-        private System.Windows.Forms.PictureBox clR1;
-        private System.Windows.Forms.PictureBox clL2;
-        private System.Windows.Forms.PictureBox clL1;
         private System.Windows.Forms.Panel properties;
         private System.Windows.Forms.Label propertiesLbl;
         private System.Windows.Forms.FlowLayoutPanel propertiesProps;
@@ -999,7 +998,7 @@
         private System.Windows.Forms.TextBox txtBWidth;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox txtBThick;
-        private System.Windows.Forms.ColorDialog colorDialog1;
+        public System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.Timer movingRefresh;
         private System.Windows.Forms.Panel welcomeScreen;
         private System.Windows.Forms.Label label9;
@@ -1011,6 +1010,17 @@
         private System.Windows.Forms.ComboBox cmbFont;
         private System.Windows.Forms.ComboBox cmbSize;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button btnBold;
+        private System.Windows.Forms.Button btnItl;
+        private System.Windows.Forms.Button btnUline;
+        private RightMenu.ColorBox cl1;
+        private RightMenu.ColorBox cl4;
+        private RightMenu.ColorBox cl3;
+        private RightMenu.ColorBox cl2;
+        private RightMenu.ColorBox cl8;
+        private RightMenu.ColorBox cl7;
+        private RightMenu.ColorBox cl6;
+        private RightMenu.ColorBox cl5;
     }
 }
 

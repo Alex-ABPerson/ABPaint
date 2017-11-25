@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Action.cs" />
-    <Compile Include="Element.cs" />
+    <Compile Include="Objects\Element.cs" />
     <Compile Include="Elements\Brush.cs" />
     <Compile Include="Elements\Ellipse.cs" />
     <Compile Include="Elements\Fill.cs" />
@@ -62,10 +62,16 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sizer.cs">
+    <Compile Include="RightMenu\ColorBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RightMenu\ColorBox.Designer.cs">
+      <DependentUpon>ColorBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Sizer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Sizer.Designer.cs">
+    <Compile Include="Windows\Sizer.Designer.cs">
       <DependentUpon>Sizer.cs</DependentUpon>
     </Compile>
     <Compile Include="Tools\Backend\ResizeImage.cs" />
@@ -82,7 +88,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Sizer.resx">
+    <EmbeddedResource Include="RightMenu\ColorBox.resx">
+      <DependentUpon>ColorBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Sizer.resx">
       <DependentUpon>Sizer.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
@@ -134,6 +143,14 @@
   <ItemGroup>
     <None Include="bin\Debug\graphics\save.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="bin\Debug\graphics\bold.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\graphics\italic.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\graphics\underline.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

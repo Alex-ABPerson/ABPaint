@@ -31,3 +31,4 @@ I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.csproj.GenerateResource
 I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.csproj.CoreCompileInputs.cache
 I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.exe
 I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.pdb
+I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.RightMenu.ColorBox.resources
