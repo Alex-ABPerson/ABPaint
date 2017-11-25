@@ -2,6 +2,16 @@ version: NOVER-{build}
 configuration: Release
 cache: 
     - packages -> **\packages.config
+    
 # before_build: nuget restore
-build: 
+
+build:
     publish_wap: true
+    
+artifacts:
+    - path: abpaint.zip
+    name: ABPaint
+
+- path: logs
+    name: Artifact logs
+    type: zip
