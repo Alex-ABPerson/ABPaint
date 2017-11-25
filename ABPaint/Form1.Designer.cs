@@ -790,7 +790,7 @@
             // 
             // cl8
             // 
-            this.cl8.BackColor = System.Drawing.Color.Black;
+            this.cl8.BackColor = System.Drawing.Color.Blue;
             this.cl8.Location = new System.Drawing.Point(104, 51);
             this.cl8.Name = "cl8";
             this.cl8.Size = new System.Drawing.Size(24, 20);
@@ -808,7 +808,7 @@
             // 
             // cl7
             // 
-            this.cl7.BackColor = System.Drawing.Color.Black;
+            this.cl7.BackColor = System.Drawing.Color.Green;
             this.cl7.Location = new System.Drawing.Point(74, 51);
             this.cl7.Name = "cl7";
             this.cl7.Size = new System.Drawing.Size(24, 20);
@@ -826,7 +826,7 @@
             // 
             // cl6
             // 
-            this.cl6.BackColor = System.Drawing.Color.Black;
+            this.cl6.BackColor = System.Drawing.Color.Red;
             this.cl6.Location = new System.Drawing.Point(44, 51);
             this.cl6.Name = "cl6";
             this.cl6.Size = new System.Drawing.Size(24, 20);
@@ -835,7 +835,7 @@
             // 
             // cl5
             // 
-            this.cl5.BackColor = System.Drawing.Color.Black;
+            this.cl5.BackColor = System.Drawing.Color.DarkGray;
             this.cl5.Location = new System.Drawing.Point(14, 51);
             this.cl5.Name = "cl5";
             this.cl5.Size = new System.Drawing.Size(24, 20);
