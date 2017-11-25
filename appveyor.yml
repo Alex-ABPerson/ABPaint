@@ -9,8 +9,8 @@ build:
     publish_wap: true
     
 artifacts:
-    - path: abpaint.zip
-    name: ABPaint
+    - path: ABPaint\bin\Debug\ABPaint.exe
+    name: Application
 
 - path: logs
     name: Artifact logs
