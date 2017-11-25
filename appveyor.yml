@@ -10,7 +10,7 @@ build:
     
 artifacts:
     - path: ABPaint\bin\Debug\ABPaint.exe
-    name: Application
+        name: Application
 
 - path: logs
     name: Artifact logs
