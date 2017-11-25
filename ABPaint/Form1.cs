@@ -1,4 +1,5 @@
 ﻿using ABPaint.Elements;
+using ABPaint.Objects;
 using ABPaint.Tools.Backend;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace ABPaint
     public partial class Form1 : Form
     {
         // General Variables
-        public int selectedTool = 0;
+        public Tool selectedTool = Tool.Selection;
         public int topZIndex = 0;
         public int selectedPalette = 1;
         public Element currentDrawingElement;
@@ -193,7 +194,7 @@ namespace ABPaint
             DeSelectTool(ref timgFill);
             DeSelectTool(ref timgText);
 
-            selectedTool = 1;
+            selectedTool = Tool.BitmapSelection;
         }
 
         private void timgPencil_Click(object sender, EventArgs e)
@@ -210,7 +211,7 @@ namespace ABPaint
             DeSelectTool(ref timgFill);
             DeSelectTool(ref timgText);
 
-            selectedTool = 2;
+            selectedTool = Tool.Pencil;
 
             ShowProperties("Pencil Tool Settings", false, false, true, false, false, false, GetCurrentColor());
         }
@@ -229,7 +230,7 @@ namespace ABPaint
             DeSelectTool(ref timgFill);
             DeSelectTool(ref timgText);
 
-            selectedTool = 3;
+            selectedTool = Tool.Brush;
 
             ShowProperties("Brush Tool Settings", false, false, true, false, true, false, GetCurrentColor());
         }
@@ -248,7 +249,7 @@ namespace ABPaint
             DeSelectTool(ref timgFill);
             DeSelectTool(ref timgText);
 
-            selectedTool = 4;
+            selectedTool = Tool.Rectangle;
 
             ShowProperties("Rectangle Tool Settings", true, true, false, true, false, false, GetCurrentColor());
         }
@@ -267,7 +268,7 @@ namespace ABPaint
             DeSelectTool(ref timgFill);
             DeSelectTool(ref timgText);
 
-            selectedTool = 5;
+            selectedTool = Tool.Ellipse;
 
             ShowProperties("Oval Tool Settings", true, true, false, true, false, false, GetCurrentColor());
         }
@@ -286,7 +287,7 @@ namespace ABPaint
             DeSelectTool(ref timgFill);
             DeSelectTool(ref timgText);
 
-            selectedTool = 6;
+            selectedTool = Tool.Line;
 
             ShowProperties("Line Tool Settings", false, false, true, false, true, false, GetCurrentColor());
         }
@@ -305,7 +306,7 @@ namespace ABPaint
             SelectTool(ref timgFill);
             DeSelectTool(ref timgText);
 
-            selectedTool = 7;
+            selectedTool = Tool.Fill;
 
             ShowProperties("Fill Tool Settings", false, false, true, false, false, false, GetCurrentColor());
         }
@@ -324,7 +325,7 @@ namespace ABPaint
             DeSelectTool(ref timgFill);
             SelectTool(ref timgText);
 
-            selectedTool = 8;
+            selectedTool = Tool.Text;
 
             ShowProperties("Text Tool Settings", false, false, true, false, false, true, GetCurrentColor(), "");
         }
@@ -627,7 +628,7 @@ namespace ABPaint
                     }
                 }
 
-                if (selectedTool == 2)
+                if (selectedTool == Tool.Pencil)
                 { // Pencil
                     lastMousePoint = new Point(e.Location.X, e.Location.Y);
 
@@ -644,7 +645,7 @@ namespace ABPaint
                     currentDrawingGraphics.Clear(Color.Transparent);
                 }
 
-                if (selectedTool == 3) // Brush
+                if (selectedTool == Tool.Brush) // Brush
                 {
                     lastMousePoint = new Point(e.Location.X, e.Location.Y);
 
@@ -661,7 +662,7 @@ namespace ABPaint
                     currentDrawingGraphics.Clear(Color.Transparent);
                 }
 
-                if (selectedTool == 4) // Rectangle
+                if (selectedTool == Tool.Rectangle) // Rectangle
                 {
 
                     currentDrawingElement = new RectangleE()
@@ -681,7 +682,7 @@ namespace ABPaint
                     ((RectangleE)currentDrawingElement).BorderSize = Convert.ToInt32(txtBWidth.Text);
                 }
 
-                if (selectedTool == 5) // Ellipse
+                if (selectedTool == Tool.Ellipse) // Ellipse
                 {
 
                     currentDrawingElement = new Ellipse()
@@ -701,7 +702,7 @@ namespace ABPaint
                     ((Ellipse)currentDrawingElement).BorderSize = Convert.ToInt32(txtBWidth.Text);
                 }
 
-                if (selectedTool == 6) // Line
+                if (selectedTool == Tool.Line) // Line
                 {
 
                     currentDrawingElement = new Line()
@@ -719,7 +720,7 @@ namespace ABPaint
                     ((Line)currentDrawingElement).Thickness = Convert.ToInt32(txtBThick.Text);
                 }
 
-                if (selectedTool == 7) // Fill - I would hide this function, it's quite long because it runs async which causes all sorts of problems!
+                if (selectedTool == Tool.Fill) // Fill - I would hide this function, it's quite long because it runs async which causes all sorts of problems!
                 {
                     startPoint = new Point(e.Location.X, e.Location.Y);
 
@@ -764,7 +765,7 @@ namespace ABPaint
                     lblProcess.Hide();
                 }
 
-                if (selectedTool == 8) // Text
+                if (selectedTool == Tool.Text) // Text
                 {
                     currentDrawingElement = new Elements.Text()
                     {
@@ -797,7 +798,7 @@ namespace ABPaint
 
                 MouseDownOnCanvas = true;
 
-                if (selectedTool == 7) MouseDownOnCanvas = false; // Actually, yeah... no if you are filling!
+                if (selectedTool == Tool.Fill) MouseDownOnCanvas = false; // Actually, yeah... no if you are filling!
             }
         }
 
@@ -831,7 +832,7 @@ namespace ABPaint
 
                 }
 
-                if (selectedTool == 2) grph.Reset();
+                if (selectedTool == Tool.Pencil) grph.Reset();
 
                 // Apply the data
 
@@ -894,7 +895,7 @@ namespace ABPaint
                     imageElements.Add(currentDrawingElement);
                 }
 
-                if (selectedTool == 2 || selectedTool == 3)
+                if (currentDrawingElement is Pencil || currentDrawingElement is Elements.Brush)
                 {
                     // Reset everything back
 
