@@ -2,6 +2,6 @@ version: NOVER-{build}
 configuration: Release
 cache: 
     - packages -> **\packages.config
-before_build: nuget restore
+# before_build: nuget restore
 build: 
     publish_wap: true
