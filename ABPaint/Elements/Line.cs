@@ -13,6 +13,9 @@ namespace ABPaint.Elements
         public Point EndPoint;
         public Point StartPoint;
         public int Thickness;
+        public Point BeforeResizeStart;
+        public Point BeforeResizeEnd;
+        public int BeforeResizeWidth, BeforeResizeHeight;
 
         public override Bitmap ProcessImage()
         {
@@ -26,7 +29,14 @@ namespace ABPaint.Elements
 
         public override void Resize(int newWidth, int newHeight)
         {
-            // Do Nothing
+            //StartPoint.X = BeforeResizeStart.X + (newWidth - BeforeResizeWidth);
+            //StartPoint.Y = BeforeResizeStart.Y + (newHeight - BeforeResizeHeight);
+
+            EndPoint.X = BeforeResizeEnd.X + (newWidth - BeforeResizeWidth);
+            EndPoint.Y = BeforeResizeEnd.Y + (newHeight - BeforeResizeHeight);
+
+            StartPoint.Y = BeforeResizeStart.Y;
+            //StartPoint.Y = BeforeResizeHeight + (newHeight - BeforeResizeHeight) - Thickness;
         }
     }
 }

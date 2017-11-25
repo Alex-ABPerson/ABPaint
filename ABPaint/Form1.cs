@@ -876,8 +876,15 @@ namespace ABPaint
                     currentDrawingElement.X = DrawingMin.X - (Convert.ToInt32(txtBThick.Text) * 2);
                     currentDrawingElement.Y = DrawingMin.Y - (Convert.ToInt32(txtBThick.Text) * 2);
 
+                    ((Line)currentDrawingElement).BeforeResizeWidth = currentDrawingElement.Width;
+                    ((Line)currentDrawingElement).BeforeResizeHeight = currentDrawingElement.Height;
+                    
                     ((Line)currentDrawingElement).StartPoint = new Point((startPoint.X - DrawingMin.X) + (Convert.ToInt32(txtBThick.Text) * 2), (startPoint.Y - DrawingMin.Y) + (Convert.ToInt32(txtBThick.Text) * 2));
                     ((Line)currentDrawingElement).EndPoint = new Point((mousePoint.X - DrawingMin.X) + (Convert.ToInt32(txtBThick.Text) * 2), (mousePoint.Y - DrawingMin.Y) + (Convert.ToInt32(txtBThick.Text) * 2));
+
+                    ((Line)currentDrawingElement).BeforeResizeStart = ((Line)currentDrawingElement).StartPoint;
+                    ((Line)currentDrawingElement).BeforeResizeEnd = ((Line)currentDrawingElement).EndPoint;
+
                     ((Line)currentDrawingElement).color = clrNorm.BackColor;
 
                     imageElements.Add(currentDrawingElement);
@@ -928,8 +935,6 @@ namespace ABPaint
 
             GC.Collect();
         }
-
-        
 
         public void ShowProperties(string text, bool showFColor, bool showBColor, bool showColor, bool showBWidth, bool showThickness, bool showText, Color objectColor, string Text = "", Font fnt = null)
         {
@@ -1504,8 +1509,6 @@ namespace ABPaint
                     break;
             }
         }
-
-        
 
         private void Form1_Resize(object sender, EventArgs e)
         {
