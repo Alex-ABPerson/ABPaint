@@ -1,0 +1,129 @@
+# Normalise line endings
+
+*           text=auto
+
+
+
+# Common Settings
+
+# https://github.com/alexkaratarakis/gitattributes/blob/master/Common.gitattributes
+
+# - Documents
+
+*.doc	    diff=astextplain
+
+*.DOC	    diff=astextplain
+
+*.docx      diff=astextplain
+
+*.DOCX      diff=astextplain
+
+*.dot       diff=astextplain
+
+*.DOT       diff=astextplain
+
+*.pdf       diff=astextplain
+
+*.PDF	    diff=astextplain
+
+*.rtf	    diff=astextplain
+
+*.RTF	    diff=astextplain
+
+*.md        text
+
+*.adoc      text
+
+*.textile   text
+
+*.mustache  text
+
+*.csv       text
+
+*.tab       text
+
+*.tsv       text
+
+*.sql       text
+
+
+
+# - Graphics
+
+*.png       binary
+
+*.jpg       binary
+
+*.jpeg      binary
+
+*.gif       binary
+
+*.tif       binary
+
+*.tiff      binary
+
+*.ico       binary
+
+# Might want to treat svg as text
+
+*.svg       binary
+
+*.eps       binary
+
+
+
+# C# Settings
+
+# https://github.com/alexkaratarakis/gitattributes/blob/master/CSharp.gitattributes
+
+*.cs        diff=csharp
+
+
+
+# Visual Studio Settings
+
+# https://github.com/alexkaratarakis/gitattributes/blob/master/VisualStudio.gitattributes
+
+*.sln       text eol=crlf
+
+*.csproj    text eol=crlf
+
+*.vbproj    text eol=crlf
+
+*.vcxproj   text eol=crlf
+
+*.vcproj    text eol=crlf
+
+*.dbproj    text eol=crlf
+
+*.fsproj    text eol=crlf
+
+*.lsproj    text eol=crlf
+
+*.wixproj   text eol=crlf
+
+*.modelproj text eol=crlf
+
+*.sqlproj   text eol=crlf
+
+*.wmaproj   text eol=crlf
+
+
+
+*.xproj     text eol=crlf
+
+*.props     text eol=crlf
+
+*.filters   text eol=crlf
+
+*.vcxitems  text eol=crlf
+
+
+
+# Extra Settings
+
+*.dll       binary
+
+*.lib       binary
+
+*.exe       binary
