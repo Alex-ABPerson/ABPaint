@@ -68,6 +68,8 @@
     <Compile Include="RightMenu\ColorBox.Designer.cs">
       <DependentUpon>ColorBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\Backend\ImageCropping.cs" />
+    <Compile Include="Tools\Backend\ImageFilling.cs" />
     <Compile Include="Windows\Sizer.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -1,4 +1,5 @@
 ﻿using ABPaint.Elements;
+using ABPaint.Tools.Backend;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -738,7 +739,7 @@ namespace ABPaint
                     lblProcess.Show();
                     fill = new Task<Bitmap>(() =>
                     {
-                        return SafeFloodFill((Bitmap)PaintPreview(), e.X, e.Y, Color.FromArgb(1, 0, 1));
+                        return ImageFilling.SafeFloodFill((Bitmap)PaintPreview(), e.X, e.Y, Color.FromArgb(1, 0, 1));
                     });
 
                     fill.Start();
@@ -752,7 +753,7 @@ namespace ABPaint
                     currentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y) + 1;
                     currentDrawingElement.zindex = topZIndex++;
 
-                    ((Fill)currentDrawingElement).fillPoints = CropImage(((Fill)currentDrawingElement).fillPoints, currentDrawingElement.X, currentDrawingElement.Y, currentDrawingElement.Width, currentDrawingElement.Height);
+                    ((Fill)currentDrawingElement).fillPoints = ImageCropping.CropImage(((Fill)currentDrawingElement).fillPoints, currentDrawingElement.X, currentDrawingElement.Y, currentDrawingElement.Width, currentDrawingElement.Height);
                     imageElements.Add(currentDrawingElement);
 
                     if (currentDrawingGraphics != null) currentDrawingGraphics.Dispose();
@@ -836,13 +837,13 @@ namespace ABPaint
 
                 if (currentDrawingElement is Pencil)
                 {
-                    ((Pencil)currentDrawingElement).pencilPoints = CropImage(((Pencil)currentDrawingElement).pencilPoints, DrawingMin.X, DrawingMin.Y, DrawingMax.X, DrawingMax.Y);
+                    ((Pencil)currentDrawingElement).pencilPoints = ImageCropping.CropImage(((Pencil)currentDrawingElement).pencilPoints, DrawingMin.X, DrawingMin.Y, DrawingMax.X, DrawingMax.Y);
                     ((Pencil)currentDrawingElement).pencilColor = clrNorm.BackColor;
                 }
 
                 if (currentDrawingElement is Elements.Brush)
                 {
-                    ((Elements.Brush)currentDrawingElement).brushPoints = CropImage(((Elements.Brush)currentDrawingElement).brushPoints, DrawingMin.X, DrawingMin.Y, DrawingMax.X + Convert.ToInt32(txtBThick.Text), DrawingMax.Y + Convert.ToInt32(txtBThick.Text));
+                    ((Elements.Brush)currentDrawingElement).brushPoints = ImageCropping.CropImage(((Elements.Brush)currentDrawingElement).brushPoints, DrawingMin.X, DrawingMin.Y, DrawingMax.X + Convert.ToInt32(txtBThick.Text), DrawingMax.Y + Convert.ToInt32(txtBThick.Text));
                     ((Elements.Brush)currentDrawingElement).brushColor = clrNorm.BackColor;
                 }
 
@@ -927,87 +928,7 @@ namespace ABPaint
             GC.Collect();
         }
 
-        public static Bitmap CropImage(Image source, int x, int y, int width, int height)
-        {
-            Rectangle crop = new Rectangle(x, y, width, height);
-
-            if (crop.Width == 0)
-                crop.Width = 1;
-            if (crop.Height == 0) crop.Height = 1;
-
-            var bmp = new Bitmap(crop.Width, crop.Height);
-            using (var gr = Graphics.FromImage(bmp))
-            {
-                gr.DrawImage(source, new Rectangle(0, 0, bmp.Width, bmp.Height), crop, GraphicsUnit.Pixel);
-            }
-            return bmp;
-        }
-
-        public Bitmap CropToContent(Bitmap oldBmp)
-        {
-            try
-            {
-                Rectangle currentRect = new Rectangle();
-                bool IsFirstOne = true;
-
-                // Get a base color
-
-                for (int y = 0; y < oldBmp.Height; y++)
-                {
-                    for (int x = 0; x < oldBmp.Width; x++)
-                    {
-                        Color debug = oldBmp.GetPixel(x, y);
-                        if (oldBmp.GetPixel(x, y) != Color.Transparent)
-                        {
-                            // We need to interpret this!
-
-                            // Check if it is the first one!
-
-                            if (IsFirstOne)
-                            {
-                                currentRect.X = x;
-                                currentRect.Y = y;
-                                currentRect.Width = 1;
-                                currentRect.Height = 1;
-                                IsFirstOne = false;
-                            }
-                            else
-                            {
-
-                                if (!currentRect.Contains(new Point(x, y)))
-                                {
-                                    // This will run if this is out of the current rectangle
-
-                                    if (x > (currentRect.X + currentRect.Width)) currentRect.Width = x - currentRect.X;
-                                    if (x < (currentRect.X))
-                                    {
-                                        // Move the rectangle over there and extend it's width to make the right the same!
-                                        int oldRectLeft = currentRect.Left;
-
-                                        currentRect.X = x;
-                                        currentRect.Width += oldRectLeft - x;
-                                    }
-
-                                    if (y > (currentRect.Y + currentRect.Height)) currentRect.Height = y - currentRect.Y;
-
-                                    if (y < (currentRect.Y + currentRect.Height))
-                                    {
-                                        int oldRectTop = currentRect.Top;
-
-                                        currentRect.Y = y;
-                                        currentRect.Height += oldRectTop - y;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                LastX = currentRect.X;
-                LastY = currentRect.Y;
-                return CropImage(oldBmp, currentRect.X, currentRect.Y, currentRect.Width, currentRect.Height);
-            }
-            catch { return oldBmp; }
-        }
+        
 
         public void ShowProperties(string text, bool showFColor, bool showBColor, bool showColor, bool showBWidth, bool showThickness, bool showText, Color objectColor, string Text = "", Font fnt = null)
         {
@@ -1583,48 +1504,7 @@ namespace ABPaint
             }
         }
 
-        public Bitmap SafeFloodFill(Bitmap background, int x, int y, Color new_color)
-        {
-            Color old_color = background.GetPixel(x, y);
-            Bitmap bm = new Bitmap(background.Width, background.Height);
-
-            if (old_color != new_color)
-            {
-                Stack<Point> pts = new Stack<Point>(1000);
-                pts.Push(new Point(x, y));
-                background.SetPixel(x, y, new_color);
-                bm.SetPixel(x, y, new_color);
-
-                while (pts.Count > 0)
-                {
-                    Point pt = pts.Pop();
-                    if (pt.X > 0) SafeCheckPoint(ref bm, ref background, ref pts, pt.X - 1, pt.Y, old_color, new_color);
-                    if (pt.Y > 0) SafeCheckPoint(ref bm, ref background, ref pts, pt.X, pt.Y - 1, old_color, new_color);
-                    if (pt.X < bm.Width - 1) SafeCheckPoint(ref bm, ref background, ref pts, pt.X + 1, pt.Y, old_color, new_color);
-                    if (pt.Y < bm.Height - 1) SafeCheckPoint(ref bm, ref background, ref pts, pt.X, pt.Y + 1, old_color, new_color);
-                }
-            }
-
-            GC.Collect();
-
-            return bm;
-        }
-
-        public void SafeCheckPoint(ref Bitmap bm, ref Bitmap background, ref Stack<Point> pts, int x, int y, Color old_color, Color new_color)
-        {
-            Color clr = background.GetPixel(x, y);
-            if (clr.Equals(old_color))
-            {
-                if (x < DrawingMin.X) DrawingMin.X = x;
-                if (y < DrawingMin.Y) DrawingMin.Y = y;
-                if (x > DrawingMax.X) DrawingMax.X = x;
-                if (y > DrawingMax.Y) DrawingMax.Y = y;
-
-                pts.Push(new Point(x, y));
-                background.SetPixel(x, y, new_color);
-                bm.SetPixel(x, y, new_color);
-            }
-        }
+        
 
         private void Form1_Resize(object sender, EventArgs e)
         {
