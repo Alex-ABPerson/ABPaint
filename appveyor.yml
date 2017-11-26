@@ -1,4 +1,6 @@
-version: 1.0.{build}
+-version: NOVER-{build} 
+-configuration: Release
+
 image: Visual Studio 2017
 build:
   verbosity: minimal
