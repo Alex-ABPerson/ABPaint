@@ -1,0 +1,4 @@
+version: NOVER-{build}
+configuration: Release
+cache: 
+    - packages -> **\packages.config
