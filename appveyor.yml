@@ -1,2 +1,8 @@
-version: NOVER-{build}
-configuration: Release
+version: 1.0.{build}
+image: Visual Studio 2017
+build:
+  verbosity: minimal
+
+artifacts:
+- path: ABPaint\bin\Release\ABPaint.exe
+  name: ABPaint
