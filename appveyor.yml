@@ -1,5 +1,5 @@
--version: NOVER-{build} 
--configuration: Release
+version: NOVER-{build}
+configuration: Release
 
 image: Visual Studio 2017
 build:
