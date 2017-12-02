@@ -71,6 +71,7 @@
     </Compile>
     <Compile Include="Tools\Backend\ImageCropping.cs" />
     <Compile Include="Tools\Backend\ImageFilling.cs" />
+    <Compile Include="Tools\Backend\ImageInverting.cs" />
     <Compile Include="Windows\Sizer.cs">
       <SubType>Form</SubType>
     </Compile>
