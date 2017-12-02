@@ -87,6 +87,11 @@
             this.btnUline = new System.Windows.Forms.Button();
             this.propertiesLbl = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.movingRefresh = new System.Windows.Forms.Timer(this.components);
+            this.lblProcess = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.cl8 = new ABPaint.RightMenu.ColorBox();
             this.cl4 = new ABPaint.RightMenu.ColorBox();
             this.cl7 = new ABPaint.RightMenu.ColorBox();
@@ -95,10 +100,6 @@
             this.cl5 = new ABPaint.RightMenu.ColorBox();
             this.cl2 = new ABPaint.RightMenu.ColorBox();
             this.cl1 = new ABPaint.RightMenu.ColorBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.movingRefresh = new System.Windows.Forms.Timer(this.components);
-            this.lblProcess = new System.Windows.Forms.Label();
             this.toolbox.SuspendLayout();
             this.toolCursorN.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timgCursorN)).BeginInit();
@@ -360,6 +361,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Gray;
+            this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.flowLayoutPanel1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
@@ -788,6 +790,45 @@
             this.panel3.Size = new System.Drawing.Size(139, 117);
             this.panel3.TabIndex = 0;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(9, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(65, 25);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Color:";
+            // 
+            // movingRefresh
+            // 
+            this.movingRefresh.Interval = 10;
+            this.movingRefresh.Tick += new System.EventHandler(this.movingRefresh_Tick);
+            // 
+            // lblProcess
+            // 
+            this.lblProcess.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lblProcess.Font = new System.Drawing.Font("Monotype Corsiva", 50F, System.Drawing.FontStyle.Italic);
+            this.lblProcess.Location = new System.Drawing.Point(60, 430);
+            this.lblProcess.Name = "lblProcess";
+            this.lblProcess.Size = new System.Drawing.Size(724, 82);
+            this.lblProcess.TabIndex = 3;
+            this.lblProcess.Text = "Processing...";
+            this.lblProcess.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lblProcess.Visible = false;
+            // 
+            // button1
+            // 
+            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Location = new System.Drawing.Point(689, 3);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(84, 32);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "About";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // cl8
             // 
             this.cl8.BackColor = System.Drawing.Color.Blue;
@@ -859,33 +900,6 @@
             this.cl1.Size = new System.Drawing.Size(24, 20);
             this.cl1.TabIndex = 2;
             this.cl1.ToSelect = 1;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(9, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(65, 25);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Color:";
-            // 
-            // movingRefresh
-            // 
-            this.movingRefresh.Interval = 10;
-            this.movingRefresh.Tick += new System.EventHandler(this.movingRefresh_Tick);
-            // 
-            // lblProcess
-            // 
-            this.lblProcess.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lblProcess.Font = new System.Drawing.Font("Monotype Corsiva", 50F, System.Drawing.FontStyle.Italic);
-            this.lblProcess.Location = new System.Drawing.Point(60, 430);
-            this.lblProcess.Name = "lblProcess";
-            this.lblProcess.Size = new System.Drawing.Size(724, 82);
-            this.lblProcess.TabIndex = 3;
-            this.lblProcess.Text = "Processing...";
-            this.lblProcess.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblProcess.Visible = false;
             // 
             // Form1
             // 
@@ -1021,6 +1035,7 @@
         private RightMenu.ColorBox cl7;
         private RightMenu.ColorBox cl6;
         private RightMenu.ColorBox cl5;
+        private System.Windows.Forms.Button button1;
     }
 }
 

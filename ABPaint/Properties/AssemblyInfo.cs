@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ABPaint")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("An open-source paint program that is designed to ensure that the user does not need to manually create layers etc.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("ABSoftware - SonicMad")]
 [assembly: AssemblyProduct("ABPaint")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]

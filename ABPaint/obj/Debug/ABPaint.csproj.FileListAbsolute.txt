@@ -32,3 +32,4 @@ I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.csproj.CoreCompileInput
 I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.exe
 I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.pdb
 I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.RightMenu.ColorBox.resources
+I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.Windows.About.resources
