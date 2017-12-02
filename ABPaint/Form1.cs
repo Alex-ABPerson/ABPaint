@@ -410,51 +410,75 @@ namespace ABPaint
                         }
                         else
                         {
-                            switch (CornerSelected)
+                            if (selectedElement is Line)
                             {
-                                case 1: // Top-left corner
-                                    selectedElement.X = mouseLoc.X;
-                                    selectedElement.Y = mouseLoc.Y;
-
-                                    int proposedWidth = ((mouseLoc.X - BeforeResizePoint.X) * -1) + BeforeResizeSize.Width;
-                                    int proposedHeight = ((mouseLoc.Y - BeforeResizePoint.Y) * -1) + BeforeResizeSize.Height;
+                                if (CornerSelected == 1) {
+                                    int proposedWidth = ((mouseLoc.X - BeforeResizePoint.X)) + BeforeResizeSize.Width - selectedElement.X;
+                                    int proposedHeight = ((mouseLoc.Y - BeforeResizePoint.Y)) + BeforeResizeSize.Height - selectedElement.Y;
                                     if (proposedWidth > 0) selectedElement.Width = proposedWidth;
                                     if (proposedHeight > 0) selectedElement.Height = proposedHeight;
 
-                                    movingRefresh.Start();
-                                    selectedElement.Resize(selectedElement.Width, selectedElement.Height);
-                                    break;
-                                case 2: // Top-right corner
-                                    selectedElement.Y = mouseLoc.Y;
-
-                                    int proposedWidth2 = ((mouseLoc.X - BeforeResizePoint.X)) + BeforeResizeSize.Width;
-                                    int proposedHeight2 = ((mouseLoc.Y - BeforeResizePoint.Y) * -1) + BeforeResizeSize.Height;
-                                    if (proposedWidth2 > 0) selectedElement.Width = proposedWidth2;
-                                    if (proposedHeight2 > 0) selectedElement.Height = proposedHeight2;
+                                    ((Line)selectedElement).StartPoint = new Point(mouseLoc.X - selectedElement.X, mouseLoc.Y - selectedElement.Y);
 
                                     movingRefresh.Start();
-                                    selectedElement.Resize(selectedElement.Width, selectedElement.Height);
-                                    break;
-                                case 3: // Bottom-left corner
-                                    selectedElement.X = mouseLoc.X;
+                                } else if (CornerSelected == 2) {
 
-                                    int proposedWidth3 = ((mouseLoc.X - BeforeResizePoint.X) * -1) + BeforeResizeSize.Width;
-                                    int proposedHeight3 = ((mouseLoc.Y - BeforeResizePoint.Y)) + BeforeResizeSize.Height;
-                                    if (proposedWidth3 > 0) selectedElement.Width = proposedWidth3;
-                                    if (proposedHeight3 > 0) selectedElement.Height = proposedHeight3;
-
-                                    movingRefresh.Start();
-                                    selectedElement.Resize(selectedElement.Width, selectedElement.Height);
-                                    break;
-                                case 4: // Bottom-right corner
-                                    int proposedWidth4 = ((mouseLoc.X - BeforeResizePoint.X)) + BeforeResizeSize.Width;
-                                    int proposedHeight4 = ((mouseLoc.Y - BeforeResizePoint.Y)) + BeforeResizeSize.Height;
-                                    if (proposedWidth4 > 0) selectedElement.Width = proposedWidth4;
-                                    if (proposedHeight4 > 0) selectedElement.Height = proposedHeight4;
+                                    int proposedWidth = ((mouseLoc.X - BeforeResizePoint.X)) + BeforeResizeSize.Width - selectedElement.X;
+                                    int proposedHeight = ((mouseLoc.Y - BeforeResizePoint.Y)) + BeforeResizeSize.Height - selectedElement.Y;
+                                    if (proposedWidth > 0) selectedElement.Width = proposedWidth;
+                                    if (proposedHeight > 0) selectedElement.Height = proposedHeight;
+                                  
+                                    ((Line)selectedElement).EndPoint = new Point(mouseLoc.X - selectedElement.X, mouseLoc.Y - selectedElement.Y);
 
                                     movingRefresh.Start();
-                                    selectedElement.Resize(selectedElement.Width, selectedElement.Height);
-                                    break;
+                                }
+                            } else {
+                                switch (CornerSelected)
+                                {
+                                    case 1: // Top-left corner
+                                        selectedElement.X = mouseLoc.X;
+                                        selectedElement.Y = mouseLoc.Y;
+
+                                        int proposedWidth = ((mouseLoc.X - BeforeResizePoint.X) * -1) + BeforeResizeSize.Width;
+                                        int proposedHeight = ((mouseLoc.Y - BeforeResizePoint.Y) * -1) + BeforeResizeSize.Height;
+                                        if (proposedWidth > 0) selectedElement.Width = proposedWidth;
+                                        if (proposedHeight > 0) selectedElement.Height = proposedHeight;
+
+                                        movingRefresh.Start();
+                                        selectedElement.Resize(selectedElement.Width, selectedElement.Height);
+                                        break;
+                                    case 2: // Top-right corner
+                                        selectedElement.Y = mouseLoc.Y;
+
+                                        int proposedWidth2 = ((mouseLoc.X - BeforeResizePoint.X)) + BeforeResizeSize.Width;
+                                        int proposedHeight2 = ((mouseLoc.Y - BeforeResizePoint.Y) * -1) + BeforeResizeSize.Height;
+                                        if (proposedWidth2 > 0) selectedElement.Width = proposedWidth2;
+                                        if (proposedHeight2 > 0) selectedElement.Height = proposedHeight2;
+
+                                        movingRefresh.Start();
+                                        selectedElement.Resize(selectedElement.Width, selectedElement.Height);
+                                        break;
+                                    case 3: // Bottom-left corner
+                                        selectedElement.X = mouseLoc.X;
+
+                                        int proposedWidth3 = ((mouseLoc.X - BeforeResizePoint.X) * -1) + BeforeResizeSize.Width;
+                                        int proposedHeight3 = ((mouseLoc.Y - BeforeResizePoint.Y)) + BeforeResizeSize.Height;
+                                        if (proposedWidth3 > 0) selectedElement.Width = proposedWidth3;
+                                        if (proposedHeight3 > 0) selectedElement.Height = proposedHeight3;
+
+                                        movingRefresh.Start();
+                                        selectedElement.Resize(selectedElement.Width, selectedElement.Height);
+                                        break;
+                                    case 4: // Bottom-right corner
+                                        int proposedWidth4 = ((mouseLoc.X - BeforeResizePoint.X)) + BeforeResizeSize.Width;
+                                        int proposedHeight4 = ((mouseLoc.Y - BeforeResizePoint.Y)) + BeforeResizeSize.Height;
+                                        if (proposedWidth4 > 0) selectedElement.Width = proposedWidth4;
+                                        if (proposedHeight4 > 0) selectedElement.Height = proposedHeight4;
+
+                                        movingRefresh.Start();
+                                        selectedElement.Resize(selectedElement.Width, selectedElement.Height);
+                                        break;
+                                }
                             }
                         }
 
@@ -562,22 +586,38 @@ namespace ABPaint
                         {
                             // The mouse is in this element!
 
+                            // I know it's bad to hard code certain elements but the thing is that line is completely different to ANY other element I could think of in resizing so I have to do this for it...
 
-                            // Check if the mouse is on the scaling points otherwise move the element.
+                            if (selectedElement is Line)
+                            {
+                                // Check if the mouse is on the two points otherwise move the element.
 
-                            CornerSelected = 0;
+                                CornerSelected = 0;
 
-                            // Top left corner
-                            if (new Rectangle(selectedElement.X - 10, selectedElement.Y - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 1;
+                                // First point
+                                if (new Rectangle(((Line)selectedElement).StartPoint.X + selectedElement.X - 10, ((Line)selectedElement).StartPoint.Y + selectedElement.Y - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 1;
 
-                            // Top Right Corner
-                            if (new Rectangle(selectedElement.Right - 10, selectedElement.Y - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 2;
+                                // Second point
+                                if (new Rectangle(((Line)selectedElement).EndPoint.X + selectedElement.X - 10, ((Line)selectedElement).EndPoint.Y + selectedElement.Y - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 2;
+                            }
+                            else
+                            {
+                                // Check if the mouse is on the scaling points otherwise move the element.
 
-                            // Bottom Left corner
-                            if (new Rectangle(selectedElement.X - 10, selectedElement.Bottom - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 3;
+                                CornerSelected = 0;
 
-                            // Bottom Right corner
-                            if (new Rectangle(selectedElement.Right - 10, selectedElement.Bottom - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 4;
+                                // Top left corner
+                                if (new Rectangle(selectedElement.X - 10, selectedElement.Y - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 1;
+
+                                // Top Right Corner
+                                if (new Rectangle(selectedElement.Right - 10, selectedElement.Y - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 2;
+
+                                // Bottom Left corner
+                                if (new Rectangle(selectedElement.X - 10, selectedElement.Bottom - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 3;
+
+                                // Bottom Right corner
+                                if (new Rectangle(selectedElement.Right - 10, selectedElement.Bottom - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 4;
+                            }
 
                             if (CornerSelected == 0)
                             {
@@ -593,14 +633,19 @@ namespace ABPaint
                             }
                             else
                             {
-                                if (CornerSelected == 1) BeforeResizePoint = new Point(selectedElement.X, selectedElement.Y);
-                                else if (CornerSelected == 2) BeforeResizePoint = new Point(selectedElement.X + selectedElement.Width, selectedElement.Y);
-                                else if (CornerSelected == 3) BeforeResizePoint = new Point(selectedElement.X, selectedElement.Y + selectedElement.Height);
-                                else if (CornerSelected == 4) BeforeResizePoint = new Point(selectedElement.X + selectedElement.Width, selectedElement.Y + selectedElement.Height);
-
+                                if (selectedElement is Line)
+                                {
+                                    if (CornerSelected == 1) BeforeResizePoint = new Point(((Line)selectedElement).StartPoint.X, ((Line)selectedElement).StartPoint.Y);
+                                    else if (CornerSelected == 2) BeforeResizePoint = new Point(((Line)selectedElement).EndPoint.X, ((Line)selectedElement).EndPoint.Y);
+                                } else {
+                                    if (CornerSelected == 1) BeforeResizePoint = new Point(selectedElement.X, selectedElement.Y);
+                                    else if (CornerSelected == 2) BeforeResizePoint = new Point(selectedElement.X + selectedElement.Width, selectedElement.Y);
+                                    else if (CornerSelected == 3) BeforeResizePoint = new Point(selectedElement.X, selectedElement.Y + selectedElement.Height);
+                                    else if (CornerSelected == 4) BeforeResizePoint = new Point(selectedElement.X + selectedElement.Width, selectedElement.Y + selectedElement.Height);
+                                }
                                 BeforeResizeSize = new Size(selectedElement.Width, selectedElement.Height);
                             }
-
+                            
                         }
                     }
                 }
@@ -1172,10 +1217,16 @@ namespace ABPaint
 
                     if (IsOnSelection)
                     {
-                        if (CornerSelected == 1) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - widthamount - 10, selectedElement.Y - heightamount - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X - widthamount - 10, selectedElement.Y - heightamount - 10, 20, 20);
-                        if (CornerSelected == 2) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - 10, selectedElement.Y - heightamount - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - 10, selectedElement.Y - heightamount - 10, 20, 20);
-                        if (CornerSelected == 3) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - widthamount - 10, ((selectedElement.Y - heightamount) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X - widthamount - 10, ((selectedElement.Y - heightamount) + selectedElement.Height) - 10, 20, 20);
-                        if (CornerSelected == 4) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - 10, ((selectedElement.Y - heightamount) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - 10, ((selectedElement.Y - heightamount) + selectedElement.Height) - 10, 20, 20);
+                        if (selectedElement is Line)
+                        {
+                            if (CornerSelected == 1) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - 10, ((Line)selectedElement).StartPoint.Y + selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - 10, ((Line)selectedElement).StartPoint.Y + selectedElement.Y - 10, 20, 20);
+                            if (CornerSelected == 2) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - 10, ((Line)selectedElement).EndPoint.Y + selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - 10, ((Line)selectedElement).EndPoint.Y + selectedElement.Y - 10, 20, 20);
+                        } else {
+                            if (CornerSelected == 1) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - widthamount - 10, selectedElement.Y - heightamount - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X - widthamount - 10, selectedElement.Y - heightamount - 10, 20, 20);
+                            if (CornerSelected == 2) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - 10, selectedElement.Y - heightamount - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - 10, selectedElement.Y - heightamount - 10, 20, 20);
+                            if (CornerSelected == 3) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - widthamount - 10, ((selectedElement.Y - heightamount) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X - widthamount - 10, ((selectedElement.Y - heightamount) + selectedElement.Height) - 10, 20, 20);
+                            if (CornerSelected == 4) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - 10, ((selectedElement.Y - heightamount) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - 10, ((selectedElement.Y - heightamount) + selectedElement.Height) - 10, 20, 20);
+                        }
                     }
                 }
             }

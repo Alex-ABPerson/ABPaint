@@ -29,14 +29,14 @@ namespace ABPaint.Elements
 
         public override void Resize(int newWidth, int newHeight)
         {
-            //StartPoint.X = BeforeResizeStart.X + (newWidth - BeforeResizeWidth);
-            //StartPoint.Y = BeforeResizeStart.Y + (newHeight - BeforeResizeHeight);
+            ////StartPoint.X = BeforeResizeStart.X + (newWidth - BeforeResizeWidth);
+            ////StartPoint.Y = BeforeResizeStart.Y + (newHeight - BeforeResizeHeight);
 
-            EndPoint.X = BeforeResizeEnd.X + (newWidth - BeforeResizeWidth);
-            EndPoint.Y = BeforeResizeEnd.Y + (newHeight - BeforeResizeHeight);
+            //EndPoint.X = BeforeResizeEnd.X + (newWidth - BeforeResizeWidth);
+            //EndPoint.Y = BeforeResizeEnd.Y + (newHeight - BeforeResizeHeight);
 
-            StartPoint.Y = BeforeResizeStart.Y;
-            //StartPoint.Y = BeforeResizeHeight + (newHeight - BeforeResizeHeight) - Thickness;
+            //StartPoint.Y = BeforeResizeStart.Y;
+            ////StartPoint.Y = BeforeResizeHeight + (newHeight - BeforeResizeHeight) - Thickness;
         }
     }
 }
