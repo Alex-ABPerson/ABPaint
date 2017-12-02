@@ -1584,5 +1584,23 @@ namespace ABPaint
         {
             (new Windows.About()).Show();
         }
+
+        private void zoomDown_Click(object sender, EventArgs e)
+        {
+            if (MagnificationLevel > 1)
+            {
+                MagnificationLevel = MagnificationLevel / 2;
+                label11.Text = "X" + MagnificationLevel;
+            }
+        }
+
+        private void zoomUp_Click(object sender, EventArgs e)
+        {
+            if (MagnificationLevel < 512)
+            {
+                MagnificationLevel = MagnificationLevel * 2;
+                label11.Text = "X" + MagnificationLevel;
+            }
+        }
     }
 }
