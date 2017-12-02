@@ -32,14 +32,12 @@ namespace ABPaint.Elements
 
             if (IsFilled) g.FillRectangle(new SolidBrush(fillColor), 0, 0, Math.Abs(Width), Math.Abs(Height)); // Fill
 
-            g.DrawRectangle(new Pen(borderColor, BorderSize), 0, 0, Math.Abs(Width), Math.Abs(Height));
+            g.DrawRectangle(new Pen(borderColor, BorderSize), BorderSize / 2, BorderSize / 2, Math.Abs(Width - (BorderSize)), Math.Abs(Height - (BorderSize)));
 
             //g.FillRectangle(new SolidBrush(borderColor), 0, 0, BorderSize, Height); // Left border
             //g.FillRectangle(new SolidBrush(borderColor), 0, 0, Width, BorderSize); // Top border
             //g.FillRectangle(new SolidBrush(borderColor), Width - BorderSize, 0, BorderSize, Height); // Right border
             //g.FillRectangle(new SolidBrush(borderColor), 0, Height - BorderSize, Width, BorderSize); // Bottom border
-
-
 
             return ret;
         }

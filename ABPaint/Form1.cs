@@ -873,8 +873,8 @@ namespace ABPaint
                 if (currentDrawingElement is RectangleE || currentDrawingElement is Ellipse)
                 {
                     currentDrawingElement.zindex = topZIndex++;
-                    currentDrawingElement.Width = mousePoint.X - startPoint.X;
-                    currentDrawingElement.Height = mousePoint.Y - startPoint.Y;
+                    currentDrawingElement.Width = mousePoint.X - startPoint.X + Convert.ToInt32(txtBWidth.Text);
+                    currentDrawingElement.Height = mousePoint.Y - startPoint.Y + Convert.ToInt32(txtBWidth.Text);
                     if (currentDrawingElement.Width < 0) currentDrawingElement.X = startPoint.X - Math.Abs(currentDrawingElement.Width); else currentDrawingElement.X = startPoint.X;
                     if (currentDrawingElement.Height < 0) currentDrawingElement.Y = startPoint.Y - Math.Abs(currentDrawingElement.Height); else currentDrawingElement.Y = startPoint.Y;
                     currentDrawingElement.Width = Math.Abs(currentDrawingElement.Width);
@@ -1139,9 +1139,9 @@ namespace ABPaint
 
                     int borderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
 
-                    if (ele.IsFilled) e.Graphics.FillRectangle(new SolidBrush(ele.fillColor), startPoint.X - widthamount, startPoint.Y - heightamount, Math.Abs(width), Math.Abs(height)); // Fill
+                    if (ele.IsFilled) e.Graphics.FillRectangle(new SolidBrush(ele.fillColor), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height)); // Fill
 
-                    e.Graphics.DrawRectangle(new Pen(ele.borderColor, borderSize), startPoint.X - widthamount, startPoint.Y - heightamount, Math.Abs(width), Math.Abs(height));
+                    e.Graphics.DrawRectangle(new Pen(ele.borderColor, borderSize), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height));
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, ele.BorderSize, height); // Left border
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, width, ele.BorderSize); // Top border
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), (ele.Width - ele.BorderSize) + DrawingMin.X, DrawingMin.Y, ele.BorderSize, Height); // Right border
@@ -1172,9 +1172,9 @@ namespace ABPaint
                     //if (height < 0) currentDrawingElement.Height = 1;
 
                     int borderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
-                    if (ele.IsFilled) e.Graphics.FillEllipse(new SolidBrush(ele.fillColor), startPoint.X - widthamount + borderSize, startPoint.Y - heightamount + borderSize, Math.Abs(width) - (borderSize * 2), Math.Abs(height) - (borderSize * 2)); // Fill
+                    if (ele.IsFilled) e.Graphics.FillEllipse(new SolidBrush(ele.fillColor), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height)); // Fill
 
-                    e.Graphics.DrawEllipse(new Pen(ele.borderColor, borderSize), startPoint.X - widthamount + borderSize, startPoint.Y - heightamount + borderSize, Math.Abs(width) - (borderSize * 2), Math.Abs(height) - (borderSize * 2));
+                    e.Graphics.DrawEllipse(new Pen(ele.borderColor, borderSize), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height));
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, ele.BorderSize, height); // Left border
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, width, ele.BorderSize); // Top border
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), (ele.Width - ele.BorderSize) + DrawingMin.X, DrawingMin.Y, ele.BorderSize, Height); // Right border

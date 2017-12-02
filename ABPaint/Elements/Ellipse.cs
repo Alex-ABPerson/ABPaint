@@ -29,16 +29,14 @@ namespace ABPaint.Elements
             //if (width < 0) currentDrawingElement.Width = 1;
             //if (height < 0) currentDrawingElement.Height = 1;
 
-            if (IsFilled) g.FillEllipse(new SolidBrush(fillColor), BorderSize, BorderSize, Math.Abs(Width) - (BorderSize * 2), Math.Abs(Height) - (BorderSize * 2)); // Fill
+            if (IsFilled) g.FillEllipse(new SolidBrush(fillColor), 0, 0, Math.Abs(Width), Math.Abs(Height)); // Fill
 
-            g.DrawEllipse(new Pen(borderColor, BorderSize), BorderSize, BorderSize, Math.Abs(Width) - (BorderSize * 2), Math.Abs(Height) - (BorderSize * 2));
+            g.DrawEllipse(new Pen(borderColor, BorderSize), BorderSize / 2, BorderSize / 2, Math.Abs(Width - (BorderSize)), Math.Abs(Height - (BorderSize)));
 
             //g.FillRectangle(new SolidBrush(borderColor), 0, 0, BorderSize, Height); // Left border
             //g.FillRectangle(new SolidBrush(borderColor), 0, 0, Width, BorderSize); // Top border
             //g.FillRectangle(new SolidBrush(borderColor), Width - BorderSize, 0, BorderSize, Height); // Right border
             //g.FillRectangle(new SolidBrush(borderColor), 0, Height - BorderSize, Width, BorderSize); // Bottom border
-
-
 
             return ret;
         }
