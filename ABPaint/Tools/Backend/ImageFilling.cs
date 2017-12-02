@@ -9,6 +9,14 @@ namespace ABPaint.Tools.Backend
 {
     public static class ImageFilling
     {
+        /// <summary>
+        /// Fills an image with a certain color - based on an x and y.
+        /// </summary>
+        /// <param name="background">The original image.</param>
+        /// <param name="x">The X where the image will be filled from.</param>
+        /// <param name="y">The Y where the image will be filled from.</param>
+        /// <param name="new_color">The new color that will replace the old.</param>
+        /// <returns>A new bitmap that is the filled area.</returns>
         public static Bitmap SafeFloodFill(Bitmap background, int x, int y, Color new_color)
         {
             Color old_color = background.GetPixel(x, y);
@@ -36,6 +44,16 @@ namespace ABPaint.Tools.Backend
             return bm;
         }
 
+        /// <summary>
+        /// Checks if this pixel should be filled.
+        /// </summary>
+        /// <param name="bm">The new bitmap that is being created</param>
+        /// <param name="background">The original bitmap.</param>
+        /// <param name="pts">A stack of which pixels are left.</param>
+        /// <param name="x">The pixel to check's X.</param>
+        /// <param name="y">The pixel to check's Y.</param>
+        /// <param name="old_color">The color before.</param>
+        /// <param name="new_color">The new color.</param>
         public static void SafeCheckPoint(ref Bitmap bm, ref Bitmap background, ref Stack<Point> pts, int x, int y, Color old_color, Color new_color)
         {
             Color clr = background.GetPixel(x, y);

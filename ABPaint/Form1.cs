@@ -321,6 +321,9 @@ namespace ABPaint
             PaintPreview();
         }
 
+        /// <summary>
+        /// Resizes and repositions the canvaspre.
+        /// </summary>
         void ReloadImage()
         {
             canvaspre.Width = (imageSize.Width * MagnificationLevel) + 2;
@@ -335,6 +338,10 @@ namespace ABPaint
             //else appcenter.VerticalScroll.Visible = false;
         }
 
+        /// <summary>
+        /// Draws the preview. (Probably the most crucial method in the whole application!)
+        /// </summary>
+        /// <returns>An image for the result.</returns>
         public Image PaintPreview()
         {
             //try
@@ -363,7 +370,13 @@ namespace ABPaint
             return endResult;
             //} catch { return endImage; }
         }
-
+        
+        /// <summary>
+        /// Selects the element at the specified X and Y.
+        /// </summary>
+        /// <param name="x">The X to search for the element.</param>
+        /// <param name="y">The Y to search for the element.</param>
+        /// <returns>The element found at the location.</returns>
         public Element selectElementByLocation(int x, int y)
         {
             Element ret = null;
@@ -958,6 +971,19 @@ namespace ABPaint
             GC.Collect();
         }
 
+        /// <summary>
+        /// Shows the properties panel with the specified options.
+        /// </summary>
+        /// <param name="text">The text to put as the label.</param>
+        /// <param name="showFColor">Show the Fill Color.</param>
+        /// <param name="showBColor">Show the Border Color.</param>
+        /// <param name="showColor">Show the Color.</param>
+        /// <param name="showBWidth">Show the Border Size.</param>
+        /// <param name="showThickness">Show the Thickness.</param>
+        /// <param name="showText">Show the Text tools.</param>
+        /// <param name="objectColor">The color of this object (if this is a selection)</param>
+        /// <param name="Text">The text to put into the "Text" box.</param>
+        /// <param name="fnt">The font to put into the "Font" box.</param>
         public void ShowProperties(string text, bool showFColor, bool showBColor, bool showColor, bool showBWidth, bool showThickness, bool showText, Color objectColor, string Text = "", Font fnt = null)
         {
             properties.Show();

@@ -9,6 +9,15 @@ namespace ABPaint.Tools.Backend
 {
     public static class ImageCropping
     {
+        /// <summary>
+        /// Crops an image to the specified size.
+        /// </summary>
+        /// <param name="source">The original image</param>
+        /// <param name="x">The X of the new size.</param>
+        /// <param name="y">The Y of the new size.</param>
+        /// <param name="width">The Width of the new size.</param>
+        /// <param name="height">The Height of the new size.</param>
+        /// <returns>A new bitmap that has cropped to the specified size.</returns>
         public static Bitmap CropImage(Image source, int x, int y, int width, int height)
         {
             Rectangle crop = new Rectangle(x, y, width, height);
@@ -25,6 +34,11 @@ namespace ABPaint.Tools.Backend
             return bmp;
         }
 
+        /// <summary>
+        /// Crops an image to it's contents
+        /// </summary>
+        /// <param name="oldBmp">The image before.</param>
+        /// <returns>The image cropped to it's contents.</returns>
         public static Bitmap CropToContent(Bitmap oldBmp)
         {
             try

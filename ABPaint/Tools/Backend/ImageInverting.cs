@@ -11,6 +11,11 @@ namespace ABPaint.Tools.Backend
 {
     public static class ImageInverting
     {
+        /// <summary>
+        /// Inverts the current image. White becomes black etc.
+        /// </summary>
+        /// <param name="bitmapImage">The old image.</param>
+        /// <returns>The inverted image.</returns>
         public static Bitmap InvertImage(Bitmap bitmapImage)
         {
             var bitmapRead = bitmapImage.LockBits(new Rectangle(0, 0, bitmapImage.Width, bitmapImage.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppPArgb);

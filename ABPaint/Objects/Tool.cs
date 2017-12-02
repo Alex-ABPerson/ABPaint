@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ABPaint.Objects
 {
+    /// <summary>
+    /// The tools within the toolbox - commonly used for knowing what tool is selected.
+    /// </summary>
     public enum Tool
     {
         Selection = 0,

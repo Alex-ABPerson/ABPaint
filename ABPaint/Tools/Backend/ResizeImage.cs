@@ -11,6 +11,12 @@ namespace ABPaint.Tools.Backend
 {
     public static class ResizeImage
     {
+        /// <summary>
+        /// Resizes an image to this new size.
+        /// </summary>
+        /// <param name="imgToResize">The old image.</param>
+        /// <param name="size">The new size.</param>
+        /// <returns>The resized image.</returns>
         public static Bitmap resizeImage(Bitmap imgToResize, Size size)
         {
             //Get the image current width
