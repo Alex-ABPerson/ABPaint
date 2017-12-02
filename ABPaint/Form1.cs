@@ -509,7 +509,7 @@ namespace ABPaint
 
                 if (currentDrawingElement is Elements.Brush)
                 {
-                    currentDrawingGraphics.FillEllipse(sb101, mousePoint.X, mousePoint.Y, Convert.ToInt32(txtBThick.Text), Convert.ToInt32(txtBThick.Text));
+                    currentDrawingGraphics.FillEllipse(sb101, mousePoint.X, mousePoint.Y, Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text), Convert.ToInt32(txtBThick.Text));
 
                     if (mousePoint.X > DrawingMax.X) DrawingMax.X = mousePoint.X;
                     if (mousePoint.Y > DrawingMax.Y) DrawingMax.Y = mousePoint.Y;
@@ -651,7 +651,7 @@ namespace ABPaint
                 }
 
                 if (selectedTool == Tool.Pencil)
-                { // Pencil
+                {
                     lastMousePoint = new Point(e.Location.X, e.Location.Y);
 
                     currentDrawingElement = new Pencil()
@@ -667,7 +667,7 @@ namespace ABPaint
                     currentDrawingGraphics.Clear(Color.Transparent);
                 }
 
-                if (selectedTool == Tool.Brush) // Brush
+                if (selectedTool == Tool.Brush)
                 {
                     lastMousePoint = new Point(e.Location.X, e.Location.Y);
 
@@ -684,9 +684,8 @@ namespace ABPaint
                     currentDrawingGraphics.Clear(Color.Transparent);
                 }
 
-                if (selectedTool == Tool.Rectangle) // Rectangle
+                if (selectedTool == Tool.Rectangle)
                 {
-
                     currentDrawingElement = new RectangleE()
                     {
                         Width = imageSize.Width,
@@ -701,10 +700,10 @@ namespace ABPaint
                     ((RectangleE)currentDrawingElement).IsFilled = true;
                     ((RectangleE)currentDrawingElement).borderColor = clrBord.BackColor;
                     ((RectangleE)currentDrawingElement).fillColor = clrFill.BackColor;
-                    ((RectangleE)currentDrawingElement).BorderSize = Convert.ToInt32(txtBWidth.Text);
+                    ((RectangleE)currentDrawingElement).BorderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
                 }
 
-                if (selectedTool == Tool.Ellipse) // Ellipse
+                if (selectedTool == Tool.Ellipse)
                 {
 
                     currentDrawingElement = new Ellipse()
@@ -721,10 +720,10 @@ namespace ABPaint
                     ((Ellipse)currentDrawingElement).IsFilled = true;
                     ((Ellipse)currentDrawingElement).borderColor = clrBord.BackColor;
                     ((Ellipse)currentDrawingElement).fillColor = clrFill.BackColor;
-                    ((Ellipse)currentDrawingElement).BorderSize = Convert.ToInt32(txtBWidth.Text);
+                    ((Ellipse)currentDrawingElement).BorderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
                 }
 
-                if (selectedTool == Tool.Line) // Line
+                if (selectedTool == Tool.Line)
                 {
 
                     currentDrawingElement = new Line()
@@ -739,10 +738,10 @@ namespace ABPaint
                     startPoint = e.Location;
 
                     ((Line)currentDrawingElement).color = clrNorm.BackColor;
-                    ((Line)currentDrawingElement).Thickness = Convert.ToInt32(txtBThick.Text);
+                    ((Line)currentDrawingElement).Thickness = Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
                 }
 
-                if (selectedTool == Tool.Fill) // Fill - I would hide this function, it's quite long because it runs async which causes all sorts of problems!
+                if (selectedTool == Tool.Fill) // I would hide this function, it's quite long because it runs async which causes all sorts of problems!
                 {
                     startPoint = new Point(e.Location.X, e.Location.Y);
 
@@ -787,7 +786,7 @@ namespace ABPaint
                     lblProcess.Hide();
                 }
 
-                if (selectedTool == Tool.Text) // Text
+                if (selectedTool == Tool.Text)
                 {
                     currentDrawingElement = new Elements.Text()
                     {
@@ -804,13 +803,13 @@ namespace ABPaint
                         FontStyle italic = (ItalicSelected) ? FontStyle.Italic : FontStyle.Regular;
                         FontStyle underline = (UnderlineSelected) ? FontStyle.Underline : FontStyle.Regular;
 
-                        ((Text)currentDrawingElement).fnt = new Font(cmbFont.Text, Convert.ToInt32(cmbSize.Text), bold | italic | underline);
+                        ((Text)currentDrawingElement).fnt = new Font(cmbFont.Text, Convert.ToInt32(string.IsNullOrEmpty(cmbSize.Text) ? "0" : cmbSize.Text), bold | italic | underline);
                     }
                     catch
                     {
                         cmbFont.Text = "Microsoft Sans Serif";
                         cmbSize.Text = "12";
-                        ((Text)currentDrawingElement).fnt = new Font(cmbFont.Text, Convert.ToInt32(cmbSize.Text), FontStyle.Regular);
+                        ((Text)currentDrawingElement).fnt = new Font(cmbFont.Text, Convert.ToInt32(string.IsNullOrEmpty(cmbSize.Text) ? "0" : cmbSize.Text), FontStyle.Regular);
                     }
 
                     Size widthHeight = Elements.Text.MeasureText(txtTText.Text, ((Text)currentDrawingElement).fnt);
@@ -866,15 +865,15 @@ namespace ABPaint
 
                 if (currentDrawingElement is Elements.Brush)
                 {
-                    ((Elements.Brush)currentDrawingElement).brushPoints = ImageCropping.CropImage(((Elements.Brush)currentDrawingElement).brushPoints, DrawingMin.X, DrawingMin.Y, DrawingMax.X + Convert.ToInt32(txtBThick.Text), DrawingMax.Y + Convert.ToInt32(txtBThick.Text));
+                    ((Elements.Brush)currentDrawingElement).brushPoints = ImageCropping.CropImage(((Elements.Brush)currentDrawingElement).brushPoints, DrawingMin.X, DrawingMin.Y, DrawingMax.X + Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text), DrawingMax.Y + Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text));
                     ((Elements.Brush)currentDrawingElement).brushColor = clrNorm.BackColor;
                 }
 
                 if (currentDrawingElement is RectangleE || currentDrawingElement is Ellipse)
                 {
                     currentDrawingElement.zindex = topZIndex++;
-                    currentDrawingElement.Width = mousePoint.X - startPoint.X + Convert.ToInt32(txtBWidth.Text);
-                    currentDrawingElement.Height = mousePoint.Y - startPoint.Y + Convert.ToInt32(txtBWidth.Text);
+                    currentDrawingElement.Width = mousePoint.X - startPoint.X + Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
+                    currentDrawingElement.Height = mousePoint.Y - startPoint.Y + Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
                     if (currentDrawingElement.Width < 0) currentDrawingElement.X = startPoint.X - Math.Abs(currentDrawingElement.Width); else currentDrawingElement.X = startPoint.X;
                     if (currentDrawingElement.Height < 0) currentDrawingElement.Y = startPoint.Y - Math.Abs(currentDrawingElement.Height); else currentDrawingElement.Y = startPoint.Y;
                     currentDrawingElement.Width = Math.Abs(currentDrawingElement.Width);
@@ -887,22 +886,23 @@ namespace ABPaint
                 {
                     currentDrawingElement.zindex = topZIndex++;
 
-                    currentDrawingElement.Width = (DrawingMax.X - DrawingMin.X) + (Convert.ToInt32(txtBThick.Text) * 3);
-                    currentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y) + (Convert.ToInt32(txtBThick.Text) * 3);
+                    int thickness = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
+                    currentDrawingElement.Width = (DrawingMax.X - DrawingMin.X) + (thickness * 3);
+                    currentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y) + (thickness * 3);
 
                     // The below code is to get the X even in minus numbers!
 
                     //if (width < 0) currentDrawingElement.Width = 1;
                     //if (height < 0) currentDrawingElement.Height = 1;
 
-                    currentDrawingElement.X = DrawingMin.X - (Convert.ToInt32(txtBThick.Text) * 2);
-                    currentDrawingElement.Y = DrawingMin.Y - (Convert.ToInt32(txtBThick.Text) * 2);
+                    currentDrawingElement.X = DrawingMin.X - (thickness * 2);
+                    currentDrawingElement.Y = DrawingMin.Y - (thickness * 2);
 
                     ((Line)currentDrawingElement).BeforeResizeWidth = currentDrawingElement.Width;
                     ((Line)currentDrawingElement).BeforeResizeHeight = currentDrawingElement.Height;
                     
-                    ((Line)currentDrawingElement).StartPoint = new Point((startPoint.X - DrawingMin.X) + (Convert.ToInt32(txtBThick.Text) * 2), (startPoint.Y - DrawingMin.Y) + (Convert.ToInt32(txtBThick.Text) * 2));
-                    ((Line)currentDrawingElement).EndPoint = new Point((mousePoint.X - DrawingMin.X) + (Convert.ToInt32(txtBThick.Text) * 2), (mousePoint.Y - DrawingMin.Y) + (Convert.ToInt32(txtBThick.Text) * 2));
+                    ((Line)currentDrawingElement).StartPoint = new Point((startPoint.X - DrawingMin.X) + (thickness * 2), (startPoint.Y - DrawingMin.Y) + (thickness * 2));
+                    ((Line)currentDrawingElement).EndPoint = new Point((mousePoint.X - DrawingMin.X) + (thickness * 2), (mousePoint.Y - DrawingMin.Y) + (thickness * 2));
 
                     ((Line)currentDrawingElement).BeforeResizeStart = ((Line)currentDrawingElement).StartPoint;
                     ((Line)currentDrawingElement).BeforeResizeEnd = ((Line)currentDrawingElement).EndPoint;
@@ -931,8 +931,8 @@ namespace ABPaint
                     currentDrawingElement.zindex = topZIndex++;
                     currentDrawingElement.X = DrawingMin.X;
                     currentDrawingElement.Y = DrawingMin.Y;
-                    currentDrawingElement.Width = (DrawingMax.X - DrawingMin.X) + Convert.ToInt32(txtBThick.Text);
-                    currentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y) + Convert.ToInt32(txtBThick.Text);
+                    currentDrawingElement.Width = (DrawingMax.X - DrawingMin.X) + Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
+                    currentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y) + Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
 
                     if (currentDrawingElement.Width < 0) currentDrawingElement.Width = 1;
                     if (currentDrawingElement.Height < 0) currentDrawingElement.Height = 1;
@@ -1182,7 +1182,7 @@ namespace ABPaint
                 }
 
                 if (currentDrawingElement is Line)
-                    e.Graphics.DrawLine(new Pen(clrNorm.BackColor, Convert.ToInt32(txtBThick.Text)), startPoint.X, startPoint.Y, mousePoint.X, mousePoint.Y);
+                    e.Graphics.DrawLine(new Pen(clrNorm.BackColor, Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text)), startPoint.X, startPoint.Y, mousePoint.X, mousePoint.Y);
 
                 if (currentDrawingElement is Elements.Text)
                     e.Graphics.DrawString(((Elements.Text)currentDrawingElement).mainText, ((Elements.Text)currentDrawingElement).fnt, new SolidBrush(((Elements.Text)currentDrawingElement).clr), mousePoint.X, mousePoint.Y);
@@ -1502,8 +1502,8 @@ namespace ABPaint
 
             if (selectedElement != null)
             {
-                if (selectedElement is Elements.Brush) ((Elements.Brush)selectedElement).Width = Convert.ToInt32(txtBThick.Text);
-                if (selectedElement is Line) ((Line)selectedElement).Thickness = Convert.ToInt32(txtBThick.Text);
+                if (selectedElement is Elements.Brush) ((Elements.Brush)selectedElement).Width = Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
+                if (selectedElement is Line) ((Line)selectedElement).Thickness = Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
 
                 Task<Image> tskPP = new Task<Image>(PaintPreview);
                 tskPP.Start();
