@@ -417,6 +417,7 @@ __pycache__/
 # End of https://www.gitignore.io/api/macos,linux,windows,jetbrains,visualstudio,visualstudiocode
 
 ### ABPaint Extra ###
+.vs
 ABPaint\bin\Debug
 ABPaint\bin\Release
 ABPaint\obj\Debug\*
