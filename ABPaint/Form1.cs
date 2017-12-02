@@ -1529,7 +1529,13 @@ namespace ABPaint
             if (selectedElement != null)
             {
                 if (selectedElement is Elements.Brush) ((Elements.Brush)selectedElement).Width = Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
-                if (selectedElement is Line) ((Line)selectedElement).Thickness = Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
+                if (selectedElement is Line)
+                {
+                    int beforeThickness = ((Line)selectedElement).Thickness;
+                    ((Line)selectedElement).Thickness = Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
+                    selectedElement.Width += ((Line)selectedElement).Thickness - beforeThickness;
+                    selectedElement.Height += ((Line)selectedElement).Thickness - beforeThickness;
+                }
 
                 Task<Image> tskPP = new Task<Image>(PaintPreview);
                 tskPP.Start();
