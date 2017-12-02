@@ -502,73 +502,71 @@ namespace ABPaint
 
             if (MouseDownOnCanvas)
             {
-                mousePoint = new Point(e.Location.X, e.Location.Y);
-
                 if (currentDrawingElement is Pencil)
                 {
-                    grph.AddLine(lastMousePoint.X, lastMousePoint.Y, mousePoint.X, mousePoint.Y);
+                    grph.AddLine(lastMousePoint.X, lastMousePoint.Y, mouseLoc.X, mouseLoc.Y);
 
                     // We now need to use the element
 
                     currentDrawingGraphics.DrawPath(new Pen(Color.FromArgb(1, 0, 1), 10), grph);
 
-                    if (mousePoint.X > DrawingMax.X) DrawingMax.X = mousePoint.X;
-                    if (mousePoint.Y > DrawingMax.Y) DrawingMax.Y = mousePoint.Y;
-                    if (mousePoint.X < DrawingMin.X) DrawingMin.X = mousePoint.X;
-                    if (mousePoint.Y < DrawingMin.Y) DrawingMin.Y = mousePoint.Y;
+                    if (mouseLoc.X > DrawingMax.X) DrawingMax.X = mouseLoc.X;
+                    if (mouseLoc.Y > DrawingMax.Y) DrawingMax.Y = mouseLoc.Y;
+                    if (mouseLoc.X < DrawingMin.X) DrawingMin.X = mouseLoc.X;
+                    if (mouseLoc.Y < DrawingMin.Y) DrawingMin.Y = mouseLoc.Y;
 
                     canvaspre.Invalidate();
                 }
 
                 if (currentDrawingElement is Elements.Brush)
                 {
-                    //grph.AddLine(lastMousePoint.X, lastMousePoint.Y, mousePoint.X, mousePoint.Y);
-                    //BrushDrawing.DrawLineOfEllipse(Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text), currentDrawingGraphics, sb101, lastMousePoint.X, lastMousePoint.Y, mousePoint.X, mousePoint.Y);
+                    //grph.AddLine(lastMousePoint.X, lastMousePoint.Y, mouseLoc.X, mouseLoc.Y);
+                    //BrushDrawing.DrawLineOfEllipse(Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text), currentDrawingGraphics, sb101, lastMousePoint.X, lastMousePoint.Y, mouseLoc.X, mouseLoc.Y);
 
                     BrushDrawing.DrawLineOfEllipse(Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text), currentDrawingGraphics, sb101, lastMousePoint.X, lastMousePoint.Y, mouseLoc.X, mouseLoc.Y);
                     //currentDrawingGraphics.DrawPath(new Pen(Color.FromArgb(1, 0, 1)), grph);
                     //currentDrawingGraphics.DrawPath(new Pen(Color.FromArgb(1, 0, 1), Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text)), grph);
                     //currentDrawingGraphics.DrawLine(new Pen(Color.FromArgb(1, 0, 1), Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text)), lastMousePoint, mouseLoc);
-                    //currentDrawingGraphics.FillEllipse(sb101, mousePoint.X, mousePoint.Y, Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text), Convert.ToInt32(txtBThick.Text));
+                    //currentDrawingGraphics.FillEllipse(sb101, mouseLoc.X, mouseLoc.Y, Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text), Convert.ToInt32(txtBThick.Text));
 
-                    if (mousePoint.X > DrawingMax.X) DrawingMax.X = mousePoint.X;
-                    if (mousePoint.Y > DrawingMax.Y) DrawingMax.Y = mousePoint.Y;
-                    if (mousePoint.X < DrawingMin.X) DrawingMin.X = mousePoint.X;
-                    if (mousePoint.Y < DrawingMin.Y) DrawingMin.Y = mousePoint.Y;
+                    if (mouseLoc.X > DrawingMax.X) DrawingMax.X = mouseLoc.X;
+                    if (mouseLoc.Y > DrawingMax.Y) DrawingMax.Y = mouseLoc.Y;
+                    if (mouseLoc.X < DrawingMin.X) DrawingMin.X = mouseLoc.X;
+                    if (mouseLoc.Y < DrawingMin.Y) DrawingMin.Y = mouseLoc.Y;
 
                     canvaspre.Invalidate();
                 }
 
                 if (currentDrawingElement is RectangleE || currentDrawingElement is Ellipse)
                 {
-                    DrawingMax.X = mousePoint.X;
-                    DrawingMax.Y = mousePoint.Y;
+                    DrawingMax.X = mouseLoc.X;
+                    DrawingMax.Y = mouseLoc.Y;
 
-                    if (mousePoint.X < DrawingMin.X) DrawingMin.X = mousePoint.X;
-                    if (mousePoint.Y < DrawingMin.Y) DrawingMin.Y = mousePoint.Y;
+                    if (mouseLoc.X < DrawingMin.X) DrawingMin.X = mouseLoc.X;
+                    if (mouseLoc.Y < DrawingMin.Y) DrawingMin.Y = mouseLoc.Y;
 
                     canvaspre.Invalidate();
                 }
 
                 if (currentDrawingElement is Line)
                 {
-                    if (mousePoint.X > DrawingMax.X) DrawingMax.X = mousePoint.X;
-                    if (mousePoint.Y > DrawingMax.Y) DrawingMax.Y = mousePoint.Y;
-                    if (mousePoint.X < DrawingMin.X) DrawingMin.X = mousePoint.X;
-                    if (mousePoint.Y < DrawingMin.Y) DrawingMin.Y = mousePoint.Y;
+                    if (mouseLoc.X > DrawingMax.X) DrawingMax.X = mouseLoc.X;
+                    if (mouseLoc.Y > DrawingMax.Y) DrawingMax.Y = mouseLoc.Y;
+                    if (mouseLoc.X < DrawingMin.X) DrawingMin.X = mouseLoc.X;
+                    if (mouseLoc.Y < DrawingMin.Y) DrawingMin.Y = mouseLoc.Y;
 
                     canvaspre.Invalidate();
                 }
 
                 if (currentDrawingElement is Elements.Text)
                 {
-                    ((Elements.Text)currentDrawingElement).X = mousePoint.X;
-                    ((Elements.Text)currentDrawingElement).Y = mousePoint.Y;
+                    ((Elements.Text)currentDrawingElement).X = mouseLoc.X;
+                    ((Elements.Text)currentDrawingElement).Y = mouseLoc.Y;
 
                     canvaspre.Invalidate();
                 }
 
-                lastMousePoint = mousePoint;
+                lastMousePoint = mouseLoc;
             }
         }
 
@@ -578,15 +576,15 @@ namespace ABPaint
 
             if (e.Button == MouseButtons.Left)
             {
-                DrawingMin.X = e.Location.X;
-                DrawingMin.Y = e.Location.Y; // This fixes a bug.
+                DrawingMin.X = mouseLoc.X;
+                DrawingMin.Y = mouseLoc.Y; // This fixes a bug.
                 DrawingMax.X = 0;
                 DrawingMax.Y = 0;
 
                 if (selectedTool == 0)
                 { // Selection tool! This one is really complex!                        
 
-                    selectedElement = selectElementByLocation(e.Location.X, e.Location.Y);
+                    selectedElement = selectElementByLocation(mouseLoc.X, mouseLoc.Y);
 
                     if (selectedElement == null) ShowProperties("Selection Tool - Nothing selected!", false, false, false, false, false, false, GetCurrentColor());
                     if (selectedElement is Pencil) ShowProperties("Selection Tool - Pencil", false, false, true, false, false, false, ((Pencil)selectedElement).pencilColor);
@@ -645,8 +643,8 @@ namespace ABPaint
 
                                 IsMovingOld = new Point(selectedElement.X, selectedElement.Y);
 
-                                IsMovingGap.Width = e.X - selectedElement.X;
-                                IsMovingGap.Height = e.Y - selectedElement.Y;
+                                IsMovingGap.Width = mouseLoc.X - selectedElement.X;
+                                IsMovingGap.Height = mouseLoc.Y - selectedElement.Y;
 
                                 movingRefresh.Start();
                                 IsMoving = true;
@@ -672,7 +670,7 @@ namespace ABPaint
 
                 if (selectedTool == Tool.Pencil)
                 {
-                    lastMousePoint = new Point(e.Location.X, e.Location.Y);
+                    lastMousePoint = new Point(mouseLoc.X, mouseLoc.Y);
 
                     currentDrawingElement = new Pencil()
                     {
@@ -689,7 +687,7 @@ namespace ABPaint
 
                 if (selectedTool == Tool.Brush)
                 {
-                    lastMousePoint = new Point(e.Location.X, e.Location.Y);
+                    lastMousePoint = new Point(mouseLoc.X, mouseLoc.Y);
 
                     currentDrawingElement = new Elements.Brush()
                     {
@@ -712,8 +710,8 @@ namespace ABPaint
                         Height = imageSize.Height
                     };
 
-                    DrawingMin.X = e.X;
-                    DrawingMin.Y = e.Y;
+                    DrawingMin.X = mouseLoc.X;
+                    DrawingMin.Y = mouseLoc.Y;
 
                     startPoint = e.Location;
 
@@ -732,8 +730,8 @@ namespace ABPaint
                         Height = imageSize.Height
                     };
 
-                    DrawingMin.X = e.X;
-                    DrawingMin.Y = e.Y;
+                    DrawingMin.X = mouseLoc.X;
+                    DrawingMin.Y = mouseLoc.Y;
 
                     startPoint = e.Location;
 
@@ -752,8 +750,8 @@ namespace ABPaint
                         Height = imageSize.Height
                     };
 
-                    DrawingMin.X = e.X;
-                    DrawingMin.Y = e.Y;
+                    DrawingMin.X = mouseLoc.X;
+                    DrawingMin.Y = mouseLoc.Y;
 
                     startPoint = e.Location;
 
@@ -763,25 +761,25 @@ namespace ABPaint
 
                 if (selectedTool == Tool.Fill) // I would hide this function, it's quite long because it runs async which causes all sorts of problems!
                 {
-                    startPoint = new Point(e.Location.X, e.Location.Y);
+                    startPoint = new Point(mouseLoc.X, mouseLoc.Y);
 
                     currentDrawingElement = new Fill()
                     {
-                        X = e.X,
-                        Y = e.Y,
+                        X = mouseLoc.X,
+                        Y = mouseLoc.Y,
                         Width = imageSize.Width,
                         Height = imageSize.Height
                     };
 
-                    DrawingMin.X = e.X;
-                    DrawingMin.Y = e.Y;
-                    DrawingMax.X = e.X;
-                    DrawingMax.Y = e.Y;
+                    DrawingMin.X = mouseLoc.X;
+                    DrawingMin.Y = mouseLoc.Y;
+                    DrawingMax.X = mouseLoc.X;
+                    DrawingMax.Y = mouseLoc.Y;
 
                     lblProcess.Show();
                     fill = new Task<Bitmap>(() =>
                     {
-                        return ImageFilling.SafeFloodFill((Bitmap)PaintPreview(), e.X, e.Y, Color.FromArgb(1, 0, 1));
+                        return ImageFilling.SafeFloodFill((Bitmap)PaintPreview(), mouseLoc.X, mouseLoc.Y, Color.FromArgb(1, 0, 1));
                     });
 
                     fill.Start();
@@ -810,8 +808,8 @@ namespace ABPaint
                 {
                     currentDrawingElement = new Elements.Text()
                     {
-                        X = e.X,
-                        Y = e.Y,
+                        X = mouseLoc.X,
+                        Y = mouseLoc.Y,
                     };
 
                     ((Text)currentDrawingElement).mainText = txtTText.Text;
