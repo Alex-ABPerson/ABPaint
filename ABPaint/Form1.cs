@@ -247,7 +247,7 @@ namespace ABPaint
 
             selectedTool = Tool.Ellipse;
 
-            ShowProperties("Oval Tool Settings", true, true, false, true, false, false, GetCurrentColor());
+            ShowProperties("Ellipse Tool Settings", true, true, false, true, false, false, GetCurrentColor());
         }
 
         private void timgLine_Click(object sender, EventArgs e)
@@ -409,8 +409,8 @@ namespace ABPaint
                 {
                     if (IsMoving)
                     {
-                        selectedElement.X = e.Location.X - IsMovingGap.Width;
-                        selectedElement.Y = e.Location.Y - IsMovingGap.Height;
+                        selectedElement.X = mouseLoc.X - IsMovingGap.Width;
+                        selectedElement.Y = mouseLoc.Y - IsMovingGap.Height;
                     }
                     else
                     {
@@ -510,7 +510,7 @@ namespace ABPaint
 
                     // We now need to use the element
 
-                    currentDrawingGraphics.DrawPath(new Pen(Color.FromArgb(1, 0, 1)), grph);
+                    currentDrawingGraphics.DrawPath(new Pen(Color.FromArgb(1, 0, 1), 10), grph);
 
                     if (mousePoint.X > DrawingMax.X) DrawingMax.X = mousePoint.X;
                     if (mousePoint.Y > DrawingMax.Y) DrawingMax.Y = mousePoint.Y;
@@ -522,7 +522,14 @@ namespace ABPaint
 
                 if (currentDrawingElement is Elements.Brush)
                 {
-                    currentDrawingGraphics.FillEllipse(sb101, mousePoint.X, mousePoint.Y, Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text), Convert.ToInt32(txtBThick.Text));
+                    //grph.AddLine(lastMousePoint.X, lastMousePoint.Y, mousePoint.X, mousePoint.Y);
+                    //BrushDrawing.DrawLineOfEllipse(Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text), currentDrawingGraphics, sb101, lastMousePoint.X, lastMousePoint.Y, mousePoint.X, mousePoint.Y);
+
+                    BrushDrawing.DrawLineOfEllipse(Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text), currentDrawingGraphics, sb101, lastMousePoint.X, lastMousePoint.Y, mouseLoc.X, mouseLoc.Y);
+                    //currentDrawingGraphics.DrawPath(new Pen(Color.FromArgb(1, 0, 1)), grph);
+                    //currentDrawingGraphics.DrawPath(new Pen(Color.FromArgb(1, 0, 1), Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text)), grph);
+                    //currentDrawingGraphics.DrawLine(new Pen(Color.FromArgb(1, 0, 1), Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text)), lastMousePoint, mouseLoc);
+                    //currentDrawingGraphics.FillEllipse(sb101, mousePoint.X, mousePoint.Y, Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text), Convert.ToInt32(txtBThick.Text));
 
                     if (mousePoint.X > DrawingMax.X) DrawingMax.X = mousePoint.X;
                     if (mousePoint.Y > DrawingMax.Y) DrawingMax.Y = mousePoint.Y;
