@@ -34,7 +34,7 @@ namespace ABPaint.Elements
 
         public override void Resize(int newWidth, int newHeight)
         {
-            fillPoints = ResizeImage.resizeImage(fillPoints, new Size(newWidth, newHeight));
+            fillPoints = ResizeImage.resizeImageNoAntiAlias(fillPoints, new Size(newWidth, newHeight));
         }
     }
 }

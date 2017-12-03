@@ -36,7 +36,7 @@ namespace ABPaint.Elements
 
         public override void Resize(int newWidth, int newHeight)
         {
-            brushPoints = ResizeImage.resizeImage(brushPoints, new Size(newWidth, newHeight));
+            brushPoints = ResizeImage.resizeImageNoAntiAlias(brushPoints, new Size(newWidth, newHeight));
         }
     }
 }

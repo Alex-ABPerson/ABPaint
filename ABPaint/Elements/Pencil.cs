@@ -50,7 +50,7 @@ namespace ABPaint.Elements
 
         public override void Resize(int newWidth, int newHeight)
         {
-            pencilPoints = ResizeImage.resizeImage(pencilPoints, new Size(newWidth, newHeight));
+            pencilPoints = ResizeImage.resizeImageNoAntiAlias(pencilPoints, new Size(newWidth, newHeight));
         }
     }
 }
