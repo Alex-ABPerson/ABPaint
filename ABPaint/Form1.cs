@@ -1452,10 +1452,15 @@ namespace ABPaint
             }
         }
 
-        private void txtTText_TextChanged(object sender, EventArgs e)
+        private async void txtTText_TextChanged(object sender, EventArgs e)
         {
             if (selectedElement != null)
                 ((Text)selectedElement).mainText = txtTText.Text;
+
+            Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
+            tskPP.Start();
+
+            endImage = await tskPP;
         }
 
         private async void btnItl_Click(object sender, EventArgs e)
@@ -1551,12 +1556,6 @@ namespace ABPaint
                         ((Text)selectedElement).fnt = new Font(((Text)selectedElement).fnt.FontFamily, float.Parse(cmbSize.Text), ((Text)selectedElement).fnt.Style);
                     }
         }
-        #endregion
-
-        private void movingRefresh_Tick(object sender, EventArgs e)
-        {
-            endImage = PaintPreview();
-        }
 
         private async void txtBThick_TextChanged(object sender, EventArgs e)
         {
@@ -1580,6 +1579,12 @@ namespace ABPaint
                 endImage = await tskPP;
             }
         }
+        #endregion
+
+        private void movingRefresh_Tick(object sender, EventArgs e)
+        {
+            endImage = PaintPreview();
+        }        
 
         private void CanvasAnywhereClick(object sender, EventArgs e)
         {
