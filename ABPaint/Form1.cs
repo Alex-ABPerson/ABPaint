@@ -76,6 +76,7 @@ namespace ABPaint
         public Point BeforeResizePoint;
         public Size BeforeResizeSize;
         public bool Resized = false;
+        public bool LimitMouse;
 
         // Text
         public bool BoldSelected = false;
@@ -1289,7 +1290,7 @@ namespace ABPaint
                             if (CornerSelected == 2) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - (10 / MagnificationLevel), selectedElement.Y - heightamount - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - (10 / MagnificationLevel), selectedElement.Y - heightamount - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel);
                             if (CornerSelected == 3) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - widthamount - (10 / MagnificationLevel), ((selectedElement.Y - heightamount) + selectedElement.Height) - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X - widthamount - (10 / MagnificationLevel), ((selectedElement.Y - heightamount) + selectedElement.Height) - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel);
                             if (CornerSelected == 4) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - (10 / MagnificationLevel), ((selectedElement.Y - heightamount) + selectedElement.Height) - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - (10 / MagnificationLevel), ((selectedElement.Y - heightamount) + selectedElement.Height) - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel);
-                        }
+                        }                        
                     }
                 }
             }
@@ -1527,7 +1528,7 @@ namespace ABPaint
             }
         }
 
-        private void cmbFont_SelectedIndexChanged(object sender, EventArgs e)
+        private async void cmbFont_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (selectedElement != null)
                 if (selectedElement is Text)
@@ -1540,9 +1541,14 @@ namespace ABPaint
                         cmbFont.Text = "Microsoft Sans Serif";
                         ((Text)selectedElement).fnt = new Font(cmbFont.Text, ((Text)selectedElement).fnt.Size, ((Text)selectedElement).fnt.Style);
                     }
+
+            Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
+            tskPP.Start();
+
+            endImage = await tskPP;
         }
 
-        private void cmbSize_SelectedIndexChanged(object sender, EventArgs e)
+        private async void cmbSize_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (selectedElement != null)
                 if (selectedElement is Text)
@@ -1555,6 +1561,11 @@ namespace ABPaint
                         cmbSize.Text = "12";
                         ((Text)selectedElement).fnt = new Font(((Text)selectedElement).fnt.FontFamily, float.Parse(cmbSize.Text), ((Text)selectedElement).fnt.Style);
                     }
+
+            Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
+            tskPP.Start();
+
+            endImage = await tskPP;
         }
 
         private async void txtBThick_TextChanged(object sender, EventArgs e)
@@ -1584,7 +1595,7 @@ namespace ABPaint
         private void movingRefresh_Tick(object sender, EventArgs e)
         {
             endImage = PaintPreview();
-        }        
+        }
 
         private void CanvasAnywhereClick(object sender, EventArgs e)
         {
@@ -1597,7 +1608,6 @@ namespace ABPaint
             {
                 case Keys.Delete:
                     if (selectedElement != null)
-                    {
                         if (selectedTool == 0)
                         {
                             imageElements.Remove(selectedElement);
@@ -1606,9 +1616,16 @@ namespace ABPaint
                             canvaspre.Invalidate();
                             endImage = PaintPreview();
                         }
-                    }
 
                     break;
+                //case Keys.ShiftKey: THIS FEATURE IS CURRENTLY UN-NEEDED AND ISN'T REALLY NECESSARY, MAYBE IN BETA 1 OR SOMETHING! 
+                //    if (selectedElement != null)
+                //        if (CornerSelected != 0)
+                //            LimitMouse = true;
+
+                //    canvaspre.Invalidate();
+
+                //    break;
             }
         }
 
