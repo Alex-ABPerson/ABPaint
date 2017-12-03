@@ -1,3 +1,4 @@
+
 # ABPaint
 An open-source paint program that is designed to ensure that the user does not need to manually create layers etc.
 
@@ -36,6 +37,7 @@ You don't have to use Bitmaps but if you have to or want to for a certain thing 
 
 - You can do much more complicated shapes.
 - Certain effects can only be achieved with Bitmaps - like making a mask around some text with the fill tool, for example.
+- It's better for producing pixel art in then vectors are.
 
 ## How do I use it?
 
