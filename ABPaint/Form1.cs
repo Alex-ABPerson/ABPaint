@@ -783,47 +783,50 @@ namespace ABPaint
 
                 if (selectedTool == Tool.Fill) // I would hide this function, it's quite long because it runs async which causes all sorts of problems!
                 {
-                    startPoint = new Point(mouseLoc.X, mouseLoc.Y);
-
-                    currentDrawingElement = new Fill()
+                    try
                     {
-                        X = mouseLoc.X,
-                        Y = mouseLoc.Y,
-                        Width = imageSize.Width,
-                        Height = imageSize.Height
-                    };
+                        startPoint = new Point(mouseLoc.X, mouseLoc.Y);
 
-                    DrawingMin.X = mouseLoc.X;
-                    DrawingMin.Y = mouseLoc.Y;
-                    DrawingMax.X = mouseLoc.X;
-                    DrawingMax.Y = mouseLoc.Y;
+                        currentDrawingElement = new Fill()
+                        {
+                            X = mouseLoc.X,
+                            Y = mouseLoc.Y,
+                            Width = imageSize.Width,
+                            Height = imageSize.Height
+                        };
 
-                    lblProcess.Show();
-                    fill = new Task<Bitmap>(() =>
-                    {
-                        return ImageFilling.SafeFloodFill((Bitmap)PaintPreview(), mouseLoc.X, mouseLoc.Y, Color.FromArgb(1, 0, 1));
-                    });
+                        DrawingMin.X = mouseLoc.X;
+                        DrawingMin.Y = mouseLoc.Y;
+                        DrawingMax.X = mouseLoc.X;
+                        DrawingMax.Y = mouseLoc.Y;
 
-                    fill.Start();
+                        lblProcess.Show();
+                        fill = new Task<Bitmap>(() =>
+                        {
+                            return ImageFilling.SafeFloodFill((Bitmap)PaintPreview(), mouseLoc.X, mouseLoc.Y, Color.FromArgb(1, 0, 1));
+                        });
 
-                    ((Fill)currentDrawingElement).fillPoints = await fill;
-                    ((Fill)currentDrawingElement).fillColor = clrNorm.BackColor;
+                        fill.Start();
 
-                    currentDrawingElement.X = DrawingMin.X - 1; currentDrawingElement.Y = DrawingMin.Y - 1;
+                        ((Fill)currentDrawingElement).fillPoints = await fill;
+                        ((Fill)currentDrawingElement).fillColor = clrNorm.BackColor;
 
-                    currentDrawingElement.Width = (DrawingMax.X - DrawingMin.X) + 1;
-                    currentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y) + 1;
-                    currentDrawingElement.zindex = topZIndex++;
+                        currentDrawingElement.X = DrawingMin.X - 1; currentDrawingElement.Y = DrawingMin.Y - 1;
 
-                    ((Fill)currentDrawingElement).fillPoints = ImageCropping.CropImage(((Fill)currentDrawingElement).fillPoints, currentDrawingElement.X, currentDrawingElement.Y, currentDrawingElement.Width, currentDrawingElement.Height);
-                    imageElements.Add(currentDrawingElement);
+                        currentDrawingElement.Width = (DrawingMax.X - DrawingMin.X) + 1;
+                        currentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y) + 1;
+                        currentDrawingElement.zindex = topZIndex++;
 
-                    if (currentDrawingGraphics != null) currentDrawingGraphics.Dispose();
-                    currentDrawingElement = null;
+                        ((Fill)currentDrawingElement).fillPoints = ImageCropping.CropImage(((Fill)currentDrawingElement).fillPoints, currentDrawingElement.X, currentDrawingElement.Y, currentDrawingElement.Width, currentDrawingElement.Height);
+                        imageElements.Add(currentDrawingElement);
 
-                    endImage = PaintPreview();
+                        if (currentDrawingGraphics != null) currentDrawingGraphics.Dispose();
+                        currentDrawingElement = null;
 
-                    lblProcess.Hide();
+                        endImage = PaintPreview();
+
+                        lblProcess.Hide();
+                    } catch { }
                 }
 
                 if (selectedTool == Tool.Text)
@@ -1552,11 +1555,19 @@ namespace ABPaint
                     try
                     {
                         ((Text)selectedElement).fnt = new Font(((Text)selectedElement).fnt.FontFamily, float.Parse(cmbSize.Text), ((Text)selectedElement).fnt.Style);
+
+                        SizeF TextSize = Elements.Text.MeasureText(((Text)selectedElement).mainText, ((Text)selectedElement).fnt);
+                        ((Text)selectedElement).Width = (int)Math.Round(TextSize.Width);
+                        ((Text)selectedElement).Height = (int)Math.Round(TextSize.Height);
                     }
                     catch
                     {
                         cmbSize.Text = "12";
                         ((Text)selectedElement).fnt = new Font(((Text)selectedElement).fnt.FontFamily, float.Parse(cmbSize.Text), ((Text)selectedElement).fnt.Style);
+
+                        SizeF TextSize = Elements.Text.MeasureText(((Text)selectedElement).mainText, ((Text)selectedElement).fnt);
+                        ((Text)selectedElement).Width = (int)Math.Round(TextSize.Width);
+                        ((Text)selectedElement).Height = (int)Math.Round(TextSize.Height);
                     }
 
             Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);

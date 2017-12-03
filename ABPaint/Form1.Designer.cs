@@ -1080,7 +1080,6 @@
         private System.Windows.Forms.TextBox txtTText;
         private System.Windows.Forms.FlowLayoutPanel pnlFont;
         private System.Windows.Forms.ComboBox cmbFont;
-        private System.Windows.Forms.ComboBox cmbSize;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button btnBold;
         private System.Windows.Forms.Button btnItl;
@@ -1098,6 +1097,7 @@
         private System.Windows.Forms.Button zoomDown;
         private System.Windows.Forms.Button zoomUp;
         private System.Windows.Forms.Label label11;
+        public System.Windows.Forms.ComboBox cmbSize;
     }
 }
 
