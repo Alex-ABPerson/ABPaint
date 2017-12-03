@@ -448,22 +448,19 @@ namespace ABPaint
                         {
                             if (selectedElement is Line)
                             {
-                                if (CornerSelected == 1) {
-                                    int proposedWidth = ((mouseLoc.X - BeforeResizePoint.X)) + BeforeResizeSize.Width - selectedElement.X;
-                                    int proposedHeight = ((mouseLoc.Y - BeforeResizePoint.Y)) + BeforeResizeSize.Height - selectedElement.Y;
-                                    if (proposedWidth > 0) selectedElement.Width = proposedWidth;
-                                    if (proposedHeight > 0) selectedElement.Height = proposedHeight;
+                                int proposedWidth = (((Line)selectedElement).StartPoint.X > ((Line)selectedElement).EndPoint.X) ? ((Line)selectedElement).StartPoint.X : ((Line)selectedElement).EndPoint.X;
+                                int proposedHeight = (((Line)selectedElement).StartPoint.Y > ((Line)selectedElement).EndPoint.Y) ? ((Line)selectedElement).StartPoint.Y : ((Line)selectedElement).EndPoint.Y;
+                                if (proposedWidth > 0) selectedElement.Width = proposedWidth + Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
+                                if (proposedHeight > 0) selectedElement.Height = proposedHeight + Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
 
+                                //selectedElement.X = BeforeResizePoint.X + ((((Line)selectedElement).StartPoint.X < ((Line)selectedElement).EndPoint.X) ? ((Line)selectedElement).StartPoint.X : ((Line)selectedElement).EndPoint.X);
+                                //selectedElement.Y = BeforeResizePoint.X + ((((Line)selectedElement).StartPoint.Y < ((Line)selectedElement).EndPoint.Y) ? ((Line)selectedElement).StartPoint.Y : ((Line)selectedElement).EndPoint.Y);
+
+                                if (CornerSelected == 1) {                                   
                                     ((Line)selectedElement).StartPoint = new Point(mouseLoc.X - selectedElement.X, mouseLoc.Y - selectedElement.Y);
-
+                                    
                                     movingRefresh.Start();
-                                } else if (CornerSelected == 2) {
-
-                                    int proposedWidth = ((mouseLoc.X - BeforeResizePoint.X)) + BeforeResizeSize.Width - selectedElement.X;
-                                    int proposedHeight = ((mouseLoc.Y - BeforeResizePoint.Y)) + BeforeResizeSize.Height - selectedElement.Y;
-                                    if (proposedWidth > 0) selectedElement.Width = proposedWidth;
-                                    if (proposedHeight > 0) selectedElement.Height = proposedHeight;
-                                  
+                                } else if (CornerSelected == 2) {                                 
                                     ((Line)selectedElement).EndPoint = new Point(mouseLoc.X - selectedElement.X, mouseLoc.Y - selectedElement.Y);
 
                                     movingRefresh.Start();
