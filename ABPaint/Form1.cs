@@ -803,7 +803,7 @@ namespace ABPaint
                         lblProcess.Show();
                         fill = new Task<Bitmap>(() =>
                         {
-                            return ImageFilling.SafeFloodFill((Bitmap)PaintPreview(), mouseLoc.X, mouseLoc.Y, Color.FromArgb(1, 0, 1));
+                            return ImageFilling.SafeFloodFill(ImageFormer.ImageToByteArray(PaintPreview()), mouseLoc.X, mouseLoc.Y, Color.FromArgb(1, 0, 1));
                         });
 
                         fill.Start();
@@ -826,7 +826,7 @@ namespace ABPaint
                         endImage = PaintPreview();
 
                         lblProcess.Hide();
-                    } catch { }
+                    } catch { lblProcess.Hide(); }
                 }
 
                 if (selectedTool == Tool.Text)

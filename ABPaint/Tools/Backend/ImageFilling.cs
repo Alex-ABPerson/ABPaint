@@ -17,25 +17,27 @@ namespace ABPaint.Tools.Backend
         /// <param name="y">The Y where the image will be filled from.</param>
         /// <param name="new_color">The new color that will replace the old.</param>
         /// <returns>A new bitmap that is the filled area.</returns>
-        public static Bitmap SafeFloodFill(Bitmap background, int x, int y, Color new_color)
+        public static Bitmap SafeFloodFill(byte[] background, int x, int y, Color new_color)
         {
-            Color old_color = background.GetPixel(x, y);
-            Bitmap bm = new Bitmap(background.Width, background.Height);
+            Bitmap newBackground = (Bitmap)ImageFormer.ByteArrayToImage(background);
+
+            Color old_color = newBackground.GetPixel(x, y);
+            Bitmap bm = new Bitmap(newBackground.Width, newBackground.Height);
 
             if (old_color != new_color)
             {
                 Stack<Point> pts = new Stack<Point>(1000);
                 pts.Push(new Point(x, y));
-                background.SetPixel(x, y, new_color);
+                newBackground.SetPixel(x, y, new_color);
                 bm.SetPixel(x, y, new_color);
 
                 while (pts.Count > 0)
                 {
                     Point pt = pts.Pop();
-                    if (pt.X > 0) SafeCheckPoint(ref bm, ref background, ref pts, pt.X - 1, pt.Y, old_color, new_color);
-                    if (pt.Y > 0) SafeCheckPoint(ref bm, ref background, ref pts, pt.X, pt.Y - 1, old_color, new_color);
-                    if (pt.X < bm.Width - 1) SafeCheckPoint(ref bm, ref background, ref pts, pt.X + 1, pt.Y, old_color, new_color);
-                    if (pt.Y < bm.Height - 1) SafeCheckPoint(ref bm, ref background, ref pts, pt.X, pt.Y + 1, old_color, new_color);
+                    if (pt.X > 0) SafeCheckPoint(ref bm, newBackground, ref pts, pt.X - 1, pt.Y, old_color, new_color);
+                    if (pt.Y > 0) SafeCheckPoint(ref bm, newBackground, ref pts, pt.X, pt.Y - 1, old_color, new_color);
+                    if (pt.X < bm.Width - 1) SafeCheckPoint(ref bm, newBackground, ref pts, pt.X + 1, pt.Y, old_color, new_color);
+                    if (pt.Y < bm.Height - 1) SafeCheckPoint(ref bm, newBackground, ref pts, pt.X, pt.Y + 1, old_color, new_color);
                 }
             }
 
@@ -54,7 +56,7 @@ namespace ABPaint.Tools.Backend
         /// <param name="y">The pixel to check's Y.</param>
         /// <param name="old_color">The color before.</param>
         /// <param name="new_color">The new color.</param>
-        public static void SafeCheckPoint(ref Bitmap bm, ref Bitmap background, ref Stack<Point> pts, int x, int y, Color old_color, Color new_color)
+        public static void SafeCheckPoint(ref Bitmap bm, Bitmap background, ref Stack<Point> pts, int x, int y, Color old_color, Color new_color)
         {
             Color clr = background.GetPixel(x, y);
             if (clr.Equals(old_color))
