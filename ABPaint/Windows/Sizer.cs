@@ -13,6 +13,7 @@ namespace ABPaint
     public partial class Sizer : Form
     {
         public Size returnSize;
+        public bool Cancelled = true;
 
         public Sizer()
         {
@@ -47,6 +48,7 @@ namespace ABPaint
         private void button1_Click(object sender, EventArgs e)
         {
             returnSize = new Size(Convert.ToInt32(txtWidth.Text), Convert.ToInt32(txtHeight.Text));
+            Cancelled = false;
             this.Close();
         }
 
@@ -67,6 +69,11 @@ namespace ABPaint
                     e.Handled = true;
                 }
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -328,13 +328,16 @@ namespace ABPaint
             Sizer sz = new Sizer();
             sz.ShowDialog();
 
-            imageSize = sz.returnSize;
+            if (!sz.Cancelled)
+            {
+                imageSize = sz.returnSize;
 
-            ReloadImage();
+                ReloadImage();
 
-            imageElements = new List<Element>();
+                imageElements = new List<Element>();
 
-            PaintPreview();
+                PaintPreview();
+            }
         }
 
         /// <summary>
@@ -420,6 +423,8 @@ namespace ABPaint
         {
             //Point mouseLoc = new Point((int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)), (int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)));
             Point mouseLoc = new Point(e.X / MagnificationLevel, e.Y / MagnificationLevel);
+            mousePoint = mouseLoc;
+
             if (selectedTool == 0)
             {
                 if (selectedElement != null)
@@ -591,6 +596,7 @@ namespace ABPaint
         {
             //Point mouseLoc = new Point((int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)), (int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)));
             Point mouseLoc = new Point(e.X / MagnificationLevel, e.Y / MagnificationLevel);
+            mousePoint = mouseLoc;
 
             if (e.Button == MouseButtons.Left)
             {
@@ -731,7 +737,7 @@ namespace ABPaint
                     DrawingMin.X = mouseLoc.X;
                     DrawingMin.Y = mouseLoc.Y;
 
-                    startPoint = e.Location;
+                    startPoint = mouseLoc;
 
                     ((RectangleE)currentDrawingElement).IsFilled = true;
                     ((RectangleE)currentDrawingElement).borderColor = clrBord.BackColor;
@@ -751,7 +757,7 @@ namespace ABPaint
                     DrawingMin.X = mouseLoc.X;
                     DrawingMin.Y = mouseLoc.Y;
 
-                    startPoint = e.Location;
+                    startPoint = mouseLoc;
 
                     ((Ellipse)currentDrawingElement).IsFilled = true;
                     ((Ellipse)currentDrawingElement).borderColor = clrBord.BackColor;
@@ -771,7 +777,7 @@ namespace ABPaint
                     DrawingMin.X = mouseLoc.X;
                     DrawingMin.Y = mouseLoc.Y;
 
-                    startPoint = e.Location;
+                    startPoint = mouseLoc;
 
                     ((Line)currentDrawingElement).color = clrNorm.BackColor;
                     ((Line)currentDrawingElement).Thickness = Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);

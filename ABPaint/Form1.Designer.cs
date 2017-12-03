@@ -390,7 +390,7 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
-            this.label11.Location = new System.Drawing.Point(44, 3);
+            this.label11.Location = new System.Drawing.Point(47, 3);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(37, 25);
             this.label11.TabIndex = 2;
@@ -524,7 +524,7 @@
             // canvaspre
             // 
             this.canvaspre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.canvaspre.Location = new System.Drawing.Point(183, 122);
+            this.canvaspre.Location = new System.Drawing.Point(-3, 42);
             this.canvaspre.Name = "canvaspre";
             this.canvaspre.Size = new System.Drawing.Size(330, 202);
             this.canvaspre.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
