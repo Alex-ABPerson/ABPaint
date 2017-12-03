@@ -705,6 +705,8 @@ namespace ABPaint
                     currentDrawingGraphics = Graphics.FromImage(((Pencil)currentDrawingElement).pencilPoints);
 
                     currentDrawingGraphics.Clear(Color.Transparent);
+
+                    currentDrawingGraphics.FillRectangle(sb101, mouseLoc.X, mouseLoc.Y, 1, 1); // (mouseLoc.X, mouseLoc.Y, Color.FromArgb(1, 0, 1));
                 }
 
                 if (selectedTool == Tool.Brush)
@@ -718,10 +720,13 @@ namespace ABPaint
                     };
 
                     ((Elements.Brush)currentDrawingElement).brushPoints = new Bitmap(currentDrawingElement.Width, currentDrawingElement.Height);
-
+                    
+                    DrawingMin = new Point(mouseLoc.X, mouseLoc.Y);
+                    DrawingMax = new Point(mouseLoc.X, mouseLoc.Y);
+                    
                     currentDrawingGraphics = Graphics.FromImage(((Elements.Brush)currentDrawingElement).brushPoints);
 
-                    currentDrawingGraphics.Clear(Color.Transparent);
+                    currentDrawingGraphics.Clear(Color.Transparent);                 
                 }
 
                 if (selectedTool == Tool.Rectangle)

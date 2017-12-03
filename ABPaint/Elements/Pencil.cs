@@ -16,7 +16,7 @@ namespace ABPaint.Elements
 
         public override Bitmap ProcessImage()
         {
-            Bitmap ret = new Bitmap(Width, Height);
+            Bitmap ret = new Bitmap(Width + 1, Height + 1);
 
             //for (int y = 0; y < pencilPoints.Height; y++)
             //{
