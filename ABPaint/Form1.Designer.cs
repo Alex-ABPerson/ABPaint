@@ -512,8 +512,8 @@
             // 
             this.appcenter.AutoScroll = true;
             this.appcenter.AutoSize = true;
-            this.appcenter.Controls.Add(this.canvaspre);
             this.appcenter.Controls.Add(this.welcomeScreen);
+            this.appcenter.Controls.Add(this.canvaspre);
             this.appcenter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.appcenter.Location = new System.Drawing.Point(60, 41);
             this.appcenter.Name = "appcenter";
@@ -524,7 +524,7 @@
             // canvaspre
             // 
             this.canvaspre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.canvaspre.Location = new System.Drawing.Point(-3, 42);
+            this.canvaspre.Location = new System.Drawing.Point(179, 111);
             this.canvaspre.Name = "canvaspre";
             this.canvaspre.Size = new System.Drawing.Size(330, 202);
             this.canvaspre.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
