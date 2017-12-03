@@ -1163,7 +1163,7 @@ namespace ABPaint
             e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
             e.Graphics.ScaleTransform(MagnificationLevel, MagnificationLevel); // Transform anything drawn to the zoom!
 
-            e.Graphics.DrawImage(endImage, 0, 0);
+            try { e.Graphics.DrawImage(endImage, 0, 0); } catch { }
 
             //try { e.Graphics.DrawImage(canvaspre.Image, 0, 0, canvaspre.Width, canvaspre.Height); } catch { }
             //if (canvaspre.Image != null) canvaspre.Image = null;
