@@ -24,12 +24,27 @@ namespace ABPaint
         public Element currentDrawingElement;
         public Graphics currentDrawingGraphics;
         public bool MouseDownOnCanvas = false;
-        Task<Image> tskPP = null;
+        Task<Bitmap> tskPP = null;
 
         public Point mousePoint = new Point(0, 0);
 
         // The image + Extra SolidBrush
-        public Bitmap endImage;
+
+        private Bitmap endimg; // Just because you have to...
+
+        public Bitmap endImage
+        {
+            get
+            {
+                return endimg;
+            }
+            set
+            {
+                endimg = value;
+                canvaspre.Invalidate();
+            }
+        }
+
         public Size imageSize = new Size(800, 600);
         public SolidBrush sb101 = new SolidBrush(Color.FromArgb(1, 0, 1));
 
@@ -95,6 +110,7 @@ namespace ABPaint
             }
 
             imageElements = new List<Element>();
+            endImage = new Bitmap(imageSize.Width, imageSize.Height);
         }
 
         public void SelectTool(ref PictureBox toSelect)
@@ -342,7 +358,7 @@ namespace ABPaint
         /// Draws the preview. (Probably the most crucial method in the whole application!)
         /// </summary>
         /// <returns>An image for the result.</returns>
-        public Image PaintPreview()
+        public Bitmap PaintPreview()
         {
             //try
             //{
@@ -402,7 +418,8 @@ namespace ABPaint
 
         private void canvaspre_MouseMove(object sender, MouseEventArgs e)
         {
-            Point mouseLoc = e.Location;
+            //Point mouseLoc = new Point((int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)), (int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)));
+            Point mouseLoc = new Point(e.X / MagnificationLevel, e.Y / MagnificationLevel);
             if (selectedTool == 0)
             {
                 if (selectedElement != null)
@@ -508,7 +525,7 @@ namespace ABPaint
 
                     // We now need to use the element
 
-                    currentDrawingGraphics.DrawPath(new Pen(Color.FromArgb(1, 0, 1), 10), grph);
+                    currentDrawingGraphics.DrawPath(new Pen(Color.FromArgb(1, 0, 1)), grph);
 
                     if (mouseLoc.X > DrawingMax.X) DrawingMax.X = mouseLoc.X;
                     if (mouseLoc.Y > DrawingMax.Y) DrawingMax.Y = mouseLoc.Y;
@@ -572,7 +589,8 @@ namespace ABPaint
 
         private async void canvaspre_MouseDown(object sender, MouseEventArgs e)
         {
-            Point mouseLoc = e.Location;
+            //Point mouseLoc = new Point((int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)), (int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)));
+            Point mouseLoc = new Point(e.X / MagnificationLevel, e.Y / MagnificationLevel);
 
             if (e.Button == MouseButtons.Left)
             {
@@ -600,7 +618,7 @@ namespace ABPaint
 
                     if (selectedElement != null)
                     {
-                        if (new Rectangle(selectedElement.X - 10, selectedElement.Y - 10, selectedElement.Width + 20, selectedElement.Height + 20).Contains(mouseLoc))
+                        if (new Rectangle(selectedElement.X - (10 / MagnificationLevel), selectedElement.Y - (10 / MagnificationLevel), selectedElement.Width + (20 / MagnificationLevel), selectedElement.Height + (20 / MagnificationLevel)).Contains(mouseLoc))
                         {
                             // The mouse is in this element!
 
@@ -613,10 +631,10 @@ namespace ABPaint
                                 CornerSelected = 0;
 
                                 // First point
-                                if (new Rectangle(((Line)selectedElement).StartPoint.X + selectedElement.X - 10, ((Line)selectedElement).StartPoint.Y + selectedElement.Y - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 1;
+                                if (new Rectangle(((Line)selectedElement).StartPoint.X + selectedElement.X - (10 / MagnificationLevel), ((Line)selectedElement).StartPoint.Y + selectedElement.Y - (10 / MagnificationLevel), (20 / MagnificationLevel), (20 / MagnificationLevel)).Contains(mouseLoc)) CornerSelected = 1;
 
                                 // Second point
-                                if (new Rectangle(((Line)selectedElement).EndPoint.X + selectedElement.X - 10, ((Line)selectedElement).EndPoint.Y + selectedElement.Y - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 2;
+                                if (new Rectangle(((Line)selectedElement).EndPoint.X + selectedElement.X - (10 / MagnificationLevel), ((Line)selectedElement).EndPoint.Y + selectedElement.Y - (10 / MagnificationLevel), (20 / MagnificationLevel), (20 / MagnificationLevel)).Contains(mouseLoc)) CornerSelected = 2;
                             }
                             else
                             {
@@ -625,16 +643,16 @@ namespace ABPaint
                                 CornerSelected = 0;
 
                                 // Top left corner
-                                if (new Rectangle(selectedElement.X - 10, selectedElement.Y - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 1;
+                                if (new Rectangle(selectedElement.X - (10 / MagnificationLevel), selectedElement.Y - (10 / MagnificationLevel), (20 / MagnificationLevel), (20 / MagnificationLevel)).Contains(mouseLoc)) CornerSelected = 1;
 
                                 // Top Right Corner
-                                if (new Rectangle(selectedElement.Right - 10, selectedElement.Y - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 2;
+                                if (new Rectangle(selectedElement.Right - (10 / MagnificationLevel), selectedElement.Y - (10 / MagnificationLevel), (20 / MagnificationLevel), (20 / MagnificationLevel)).Contains(mouseLoc)) CornerSelected = 2;
 
                                 // Bottom Left corner
-                                if (new Rectangle(selectedElement.X - 10, selectedElement.Bottom - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 3;
+                                if (new Rectangle(selectedElement.X - (10 / MagnificationLevel), selectedElement.Bottom - (10 / MagnificationLevel), (20 / MagnificationLevel), (20 / MagnificationLevel)).Contains(mouseLoc)) CornerSelected = 3;
 
                                 // Bottom Right corner
-                                if (new Rectangle(selectedElement.Right - 10, selectedElement.Bottom - 10, 20, 20).Contains(mouseLoc)) CornerSelected = 4;
+                                if (new Rectangle(selectedElement.Right - (10 / MagnificationLevel), selectedElement.Bottom - (10 / MagnificationLevel), (20 / MagnificationLevel), (20 / MagnificationLevel)).Contains(mouseLoc)) CornerSelected = 4;
                             }
 
                             if (CornerSelected == 0)
@@ -799,7 +817,7 @@ namespace ABPaint
                     if (currentDrawingGraphics != null) currentDrawingGraphics.Dispose();
                     currentDrawingElement = null;
 
-                    canvaspre.Image = PaintPreview();
+                    endImage = PaintPreview();
 
                     lblProcess.Hide();
                 }
@@ -843,6 +861,9 @@ namespace ABPaint
 
         private async void canvaspre_MouseUp(object sender, MouseEventArgs e)
         {
+            //Point mouseLoc = new Point((int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)), (int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)));
+            Point mouseLoc = new Point(e.X / MagnificationLevel, e.Y / MagnificationLevel);
+
             if (MouseDownOnCanvas)
             {
                 movingRefresh.Stop();
@@ -890,8 +911,8 @@ namespace ABPaint
                 if (currentDrawingElement is RectangleE || currentDrawingElement is Ellipse)
                 {
                     currentDrawingElement.zindex = topZIndex++;
-                    currentDrawingElement.Width = mousePoint.X - startPoint.X + Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
-                    currentDrawingElement.Height = mousePoint.Y - startPoint.Y + Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
+                    currentDrawingElement.Width = mouseLoc.X - startPoint.X + Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
+                    currentDrawingElement.Height = mouseLoc.Y - startPoint.Y + Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
                     if (currentDrawingElement.Width < 0) currentDrawingElement.X = startPoint.X - Math.Abs(currentDrawingElement.Width); else currentDrawingElement.X = startPoint.X;
                     if (currentDrawingElement.Height < 0) currentDrawingElement.Y = startPoint.Y - Math.Abs(currentDrawingElement.Height); else currentDrawingElement.Y = startPoint.Y;
                     currentDrawingElement.Width = Math.Abs(currentDrawingElement.Width);
@@ -920,7 +941,7 @@ namespace ABPaint
                     ((Line)currentDrawingElement).BeforeResizeHeight = currentDrawingElement.Height;
                     
                     ((Line)currentDrawingElement).StartPoint = new Point((startPoint.X - DrawingMin.X) + (thickness * 2), (startPoint.Y - DrawingMin.Y) + (thickness * 2));
-                    ((Line)currentDrawingElement).EndPoint = new Point((mousePoint.X - DrawingMin.X) + (thickness * 2), (mousePoint.Y - DrawingMin.Y) + (thickness * 2));
+                    ((Line)currentDrawingElement).EndPoint = new Point((mouseLoc.X - DrawingMin.X) + (thickness * 2), (mouseLoc.Y - DrawingMin.Y) + (thickness * 2));
 
                     ((Line)currentDrawingElement).BeforeResizeStart = ((Line)currentDrawingElement).StartPoint;
                     ((Line)currentDrawingElement).BeforeResizeEnd = ((Line)currentDrawingElement).EndPoint;
@@ -962,10 +983,10 @@ namespace ABPaint
                 currentDrawingElement = null;
             }
 
-            tskPP = new Task<Image>(PaintPreview);
+            tskPP = new Task<Bitmap>(PaintPreview);
             tskPP.Start();
 
-            canvaspre.Image = await tskPP;
+            endImage = await tskPP;
 
             if (selectedElement != null)
             {
@@ -1122,28 +1143,33 @@ namespace ABPaint
 
         private async void timer1_Tick(object sender, EventArgs e)
         {
-            Task<Image> tskPP = new Task<Image>(PaintPreview);
+            Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
             tskPP.Start();
 
-            canvaspre.Image = await tskPP;
+            endImage = await tskPP;
         }
 
         private void canvaspre_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+            e.Graphics.ScaleTransform(MagnificationLevel, MagnificationLevel); // Transform anything drawn to the zoom!
+
+            e.Graphics.DrawImage(endImage, 0, 0);
+
+            //try { e.Graphics.DrawImage(canvaspre.Image, 0, 0, canvaspre.Width, canvaspre.Height); } catch { }
+            //if (canvaspre.Image != null) canvaspre.Image = null;
+
             // This is to preview what you are drawing!
 
             if (MouseDownOnCanvas)
             {
                 if (currentDrawingElement is Pencil)
-                {
                     e.Graphics.DrawPath(new Pen(Color.FromArgb(0, 0, 0)), grph);
-                }
 
                 if (currentDrawingElement is Elements.Brush)
-                {
                     e.Graphics.DrawImage(((Elements.Brush)currentDrawingElement).brushPoints, 0, 0);
-                }
 
                 if (currentDrawingElement is RectangleE)
                 {
@@ -1223,7 +1249,7 @@ namespace ABPaint
 
             if (selectedElement != null)
             {
-                // Check if it's moved
+                // Check if it hasn't moved
 
                 if (selectedElement.X == IsMovingOld.X && selectedElement.Y == IsMovingOld.Y)
                 {
@@ -1250,13 +1276,13 @@ namespace ABPaint
                     {
                         if (selectedElement is Line)
                         {
-                            if (CornerSelected == 1) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - 10, ((Line)selectedElement).StartPoint.Y + selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - 10, ((Line)selectedElement).StartPoint.Y + selectedElement.Y - 10, 20, 20);
-                            if (CornerSelected == 2) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - 10, ((Line)selectedElement).EndPoint.Y + selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - 10, ((Line)selectedElement).EndPoint.Y + selectedElement.Y - 10, 20, 20);
+                            if (CornerSelected == 1) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - (10 / MagnificationLevel), ((Line)selectedElement).StartPoint.Y + selectedElement.Y - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - (10 / MagnificationLevel), ((Line)selectedElement).StartPoint.Y + selectedElement.Y - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel);
+                            if (CornerSelected == 2) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - (10 / MagnificationLevel), ((Line)selectedElement).EndPoint.Y + selectedElement.Y - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - (10 / MagnificationLevel), ((Line)selectedElement).EndPoint.Y + selectedElement.Y - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel);
                         } else {
-                            if (CornerSelected == 1) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - widthamount - 10, selectedElement.Y - heightamount - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X - widthamount - 10, selectedElement.Y - heightamount - 10, 20, 20);
-                            if (CornerSelected == 2) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - 10, selectedElement.Y - heightamount - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - 10, selectedElement.Y - heightamount - 10, 20, 20);
-                            if (CornerSelected == 3) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - widthamount - 10, ((selectedElement.Y - heightamount) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X - widthamount - 10, ((selectedElement.Y - heightamount) + selectedElement.Height) - 10, 20, 20);
-                            if (CornerSelected == 4) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - 10, ((selectedElement.Y - heightamount) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - 10, ((selectedElement.Y - heightamount) + selectedElement.Height) - 10, 20, 20);
+                            if (CornerSelected == 1) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - widthamount - (10 / MagnificationLevel), selectedElement.Y - heightamount - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X - widthamount - (10 / MagnificationLevel), selectedElement.Y - heightamount - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel);
+                            if (CornerSelected == 2) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - (10 / MagnificationLevel), selectedElement.Y - heightamount - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - (10 / MagnificationLevel), selectedElement.Y - heightamount - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel);
+                            if (CornerSelected == 3) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - widthamount - (10 / MagnificationLevel), ((selectedElement.Y - heightamount) + selectedElement.Height) - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X - widthamount - (10 / MagnificationLevel), ((selectedElement.Y - heightamount) + selectedElement.Height) - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel);
+                            if (CornerSelected == 4) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - (10 / MagnificationLevel), ((selectedElement.Y - heightamount) + selectedElement.Height) - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X - widthamount) + selectedElement.Width) - (10 / MagnificationLevel), ((selectedElement.Y - heightamount) + selectedElement.Height) - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel);
                         }
                     }
                 }
@@ -1332,10 +1358,10 @@ namespace ABPaint
                 if (selectedElement is Elements.Fill) ((Elements.Fill)selectedElement).fillColor = clrNorm.BackColor;
                 if (selectedElement is Elements.Text) ((Elements.Text)selectedElement).clr = clrNorm.BackColor;
 
-                Task<Image> tskPP = new Task<Image>(PaintPreview);
+                Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
                 tskPP.Start();
 
-                canvaspre.Image = await tskPP;
+                endImage = await tskPP;
             }
         }
 
@@ -1348,10 +1374,10 @@ namespace ABPaint
                 if (selectedElement is RectangleE) ((RectangleE)selectedElement).fillColor = clrFill.BackColor;
                 if (selectedElement is Ellipse) ((Ellipse)selectedElement).fillColor = clrFill.BackColor;
 
-                Task<Image> tskPP = new Task<Image>(PaintPreview);
+                Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
                 tskPP.Start();
 
-                canvaspre.Image = await tskPP;
+                endImage = await tskPP;
             }
         }
 
@@ -1364,10 +1390,10 @@ namespace ABPaint
                 if (selectedElement is RectangleE) ((RectangleE)selectedElement).borderColor = clrBord.BackColor;
                 if (selectedElement is Ellipse) ((Ellipse)selectedElement).borderColor = clrBord.BackColor;
 
-                Task<Image> tskPP = new Task<Image>(PaintPreview);
+                Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
                 tskPP.Start();
 
-                canvaspre.Image = await tskPP;
+                endImage = await tskPP;
             }
         }
 
@@ -1381,10 +1407,10 @@ namespace ABPaint
                 if (selectedElement is RectangleE) ((RectangleE)selectedElement).BorderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
                 if (selectedElement is Ellipse) ((Ellipse)selectedElement).BorderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
 
-                Task<Image> tskPP = new Task<Image>(PaintPreview);
+                Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
                 tskPP.Start();
 
-                canvaspre.Image = await tskPP;
+                endImage = await tskPP;
             }
         }
 
@@ -1400,10 +1426,10 @@ namespace ABPaint
                     else
                         ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Bold | currentFont.Style);
                 }
-                Task<Image> tskPP = new Task<Image>(PaintPreview);
+                Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
                 tskPP.Start();
 
-                canvaspre.Image = await tskPP;
+                endImage = await tskPP;
             }
 
             if (BoldSelected)
@@ -1438,10 +1464,10 @@ namespace ABPaint
                     else
                         ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Italic | currentFont.Style);
                 }
-                Task<Image> tskPP = new Task<Image>(PaintPreview);
+                Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
                 tskPP.Start();
 
-                canvaspre.Image = await tskPP;
+                endImage = await tskPP;
             }
 
             if (ItalicSelected)
@@ -1470,10 +1496,10 @@ namespace ABPaint
                     else
                         ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Underline | currentFont.Style);
                 }
-                Task<Image> tskPP = new Task<Image>(PaintPreview);
+                Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
                 tskPP.Start();
 
-                canvaspre.Image = await tskPP;
+                endImage = await tskPP;
             }
 
             if (UnderlineSelected)
@@ -1523,7 +1549,7 @@ namespace ABPaint
 
         private void movingRefresh_Tick(object sender, EventArgs e)
         {
-            canvaspre.Image = PaintPreview();
+            endImage = PaintPreview();
         }
 
         private async void txtBThick_TextChanged(object sender, EventArgs e)
@@ -1542,10 +1568,10 @@ namespace ABPaint
                     selectedElement.Height += ((Line)selectedElement).Thickness - beforeThickness;
                 }
 
-                Task<Image> tskPP = new Task<Image>(PaintPreview);
+                Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
                 tskPP.Start();
 
-                canvaspre.Image = await tskPP;
+                endImage = await tskPP;
             }
         }
 
@@ -1567,7 +1593,7 @@ namespace ABPaint
                             selectedElement = null;
                             selectElementByLocation(0, 0); // Deselects everything.
                             canvaspre.Invalidate();
-                            canvaspre.Image = PaintPreview();
+                            endImage = PaintPreview();
                         }
                     }
 
@@ -1591,6 +1617,7 @@ namespace ABPaint
             {
                 MagnificationLevel = MagnificationLevel / 2;
                 label11.Text = "X" + MagnificationLevel;
+                ReloadImage();
             }
         }
 
@@ -1600,6 +1627,7 @@ namespace ABPaint
             {
                 MagnificationLevel = MagnificationLevel * 2;
                 label11.Text = "X" + MagnificationLevel;
+                ReloadImage();
             }
         }
     }

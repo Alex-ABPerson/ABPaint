@@ -50,6 +50,11 @@
             this.toolText = new System.Windows.Forms.Panel();
             this.timgText = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.label11 = new System.Windows.Forms.Label();
+            this.zoomUp = new System.Windows.Forms.Button();
+            this.zoomDown = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.barNew = new System.Windows.Forms.Panel();
             this.picNew = new System.Windows.Forms.PictureBox();
@@ -87,11 +92,6 @@
             this.btnUline = new System.Windows.Forms.Button();
             this.propertiesLbl = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.movingRefresh = new System.Windows.Forms.Timer(this.components);
-            this.lblProcess = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.cl8 = new ABPaint.RightMenu.ColorBox();
             this.cl4 = new ABPaint.RightMenu.ColorBox();
             this.cl7 = new ABPaint.RightMenu.ColorBox();
@@ -100,10 +100,10 @@
             this.cl5 = new ABPaint.RightMenu.ColorBox();
             this.cl2 = new ABPaint.RightMenu.ColorBox();
             this.cl1 = new ABPaint.RightMenu.ColorBox();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.zoomDown = new System.Windows.Forms.Button();
-            this.zoomUp = new System.Windows.Forms.Button();
-            this.label11 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.movingRefresh = new System.Windows.Forms.Timer(this.components);
+            this.lblProcess = new System.Windows.Forms.Label();
             this.toolbox.SuspendLayout();
             this.toolCursorN.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timgCursorN)).BeginInit();
@@ -124,6 +124,7 @@
             this.toolText.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timgText)).BeginInit();
             this.panel1.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.barNew.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picNew)).BeginInit();
@@ -142,7 +143,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.clrNorm)).BeginInit();
             this.pnlFont.SuspendLayout();
             this.panel3.SuspendLayout();
-            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolbox
@@ -375,6 +375,67 @@
             this.panel1.Size = new System.Drawing.Size(784, 41);
             this.panel1.TabIndex = 2;
             // 
+            // panel4
+            // 
+            this.panel4.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.panel4.Controls.Add(this.label11);
+            this.panel4.Controls.Add(this.zoomUp);
+            this.panel4.Controls.Add(this.zoomDown);
+            this.panel4.Location = new System.Drawing.Point(537, 3);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(146, 32);
+            this.panel4.TabIndex = 2;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
+            this.label11.Location = new System.Drawing.Point(44, 3);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(37, 25);
+            this.label11.TabIndex = 2;
+            this.label11.Text = "X1";
+            // 
+            // zoomUp
+            // 
+            this.zoomUp.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.zoomUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.zoomUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.zoomUp.Location = new System.Drawing.Point(110, 3);
+            this.zoomUp.Name = "zoomUp";
+            this.zoomUp.Size = new System.Drawing.Size(33, 26);
+            this.zoomUp.TabIndex = 1;
+            this.zoomUp.Text = "+";
+            this.zoomUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.zoomUp.UseVisualStyleBackColor = true;
+            this.zoomUp.Click += new System.EventHandler(this.zoomUp_Click);
+            // 
+            // zoomDown
+            // 
+            this.zoomDown.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.zoomDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.zoomDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.zoomDown.Location = new System.Drawing.Point(3, 3);
+            this.zoomDown.Name = "zoomDown";
+            this.zoomDown.Size = new System.Drawing.Size(33, 26);
+            this.zoomDown.TabIndex = 1;
+            this.zoomDown.Text = "--";
+            this.zoomDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.zoomDown.UseVisualStyleBackColor = true;
+            this.zoomDown.Click += new System.EventHandler(this.zoomDown_Click);
+            // 
+            // button1
+            // 
+            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Location = new System.Drawing.Point(689, 3);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(84, 32);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "About";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Controls.Add(this.barNew);
@@ -466,6 +527,7 @@
             this.canvaspre.Location = new System.Drawing.Point(183, 122);
             this.canvaspre.Name = "canvaspre";
             this.canvaspre.Size = new System.Drawing.Size(330, 202);
+            this.canvaspre.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.canvaspre.TabIndex = 1;
             this.canvaspre.TabStop = false;
             this.canvaspre.Click += new System.EventHandler(this.CanvasAnywhereClick);
@@ -796,45 +858,6 @@
             this.panel3.Size = new System.Drawing.Size(139, 117);
             this.panel3.TabIndex = 0;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(9, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(65, 25);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Color:";
-            // 
-            // movingRefresh
-            // 
-            this.movingRefresh.Interval = 10;
-            this.movingRefresh.Tick += new System.EventHandler(this.movingRefresh_Tick);
-            // 
-            // lblProcess
-            // 
-            this.lblProcess.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lblProcess.Font = new System.Drawing.Font("Monotype Corsiva", 50F, System.Drawing.FontStyle.Italic);
-            this.lblProcess.Location = new System.Drawing.Point(60, 430);
-            this.lblProcess.Name = "lblProcess";
-            this.lblProcess.Size = new System.Drawing.Size(724, 82);
-            this.lblProcess.TabIndex = 3;
-            this.lblProcess.Text = "Processing...";
-            this.lblProcess.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblProcess.Visible = false;
-            // 
-            // button1
-            // 
-            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(689, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(84, 32);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "About";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // cl8
             // 
             this.cl8.BackColor = System.Drawing.Color.Blue;
@@ -907,54 +930,32 @@
             this.cl1.TabIndex = 2;
             this.cl1.ToSelect = 1;
             // 
-            // panel4
+            // label1
             // 
-            this.panel4.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.panel4.Controls.Add(this.label11);
-            this.panel4.Controls.Add(this.zoomUp);
-            this.panel4.Controls.Add(this.zoomDown);
-            this.panel4.Location = new System.Drawing.Point(537, 3);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(146, 32);
-            this.panel4.TabIndex = 2;
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(9, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(65, 25);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Color:";
             // 
-            // zoomDown
+            // movingRefresh
             // 
-            this.zoomDown.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.zoomDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.zoomDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.zoomDown.Location = new System.Drawing.Point(3, 3);
-            this.zoomDown.Name = "zoomDown";
-            this.zoomDown.Size = new System.Drawing.Size(33, 26);
-            this.zoomDown.TabIndex = 1;
-            this.zoomDown.Text = "--";
-            this.zoomDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.zoomDown.UseVisualStyleBackColor = true;
-            this.zoomDown.Click += new System.EventHandler(this.zoomDown_Click);
+            this.movingRefresh.Interval = 10;
+            this.movingRefresh.Tick += new System.EventHandler(this.movingRefresh_Tick);
             // 
-            // zoomUp
+            // lblProcess
             // 
-            this.zoomUp.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.zoomUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.zoomUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.zoomUp.Location = new System.Drawing.Point(110, 3);
-            this.zoomUp.Name = "zoomUp";
-            this.zoomUp.Size = new System.Drawing.Size(33, 26);
-            this.zoomUp.TabIndex = 1;
-            this.zoomUp.Text = "+";
-            this.zoomUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.zoomUp.UseVisualStyleBackColor = true;
-            this.zoomUp.Click += new System.EventHandler(this.zoomUp_Click);
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
-            this.label11.Location = new System.Drawing.Point(44, 3);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(37, 25);
-            this.label11.TabIndex = 2;
-            this.label11.Text = "X1";
+            this.lblProcess.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lblProcess.Font = new System.Drawing.Font("Monotype Corsiva", 50F, System.Drawing.FontStyle.Italic);
+            this.lblProcess.Location = new System.Drawing.Point(60, 430);
+            this.lblProcess.Name = "lblProcess";
+            this.lblProcess.Size = new System.Drawing.Size(724, 82);
+            this.lblProcess.TabIndex = 3;
+            this.lblProcess.Text = "Processing...";
+            this.lblProcess.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lblProcess.Visible = false;
             // 
             // Form1
             // 
@@ -994,6 +995,8 @@
             this.toolText.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.timgText)).EndInit();
             this.panel1.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.barNew.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picNew)).EndInit();
@@ -1014,8 +1017,6 @@
             this.pnlFont.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

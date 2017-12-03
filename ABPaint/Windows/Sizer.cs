@@ -20,8 +20,7 @@ namespace ABPaint
         }
 
         public void StartSizer(bool ForNew, Size oldSize)
-        {            
-
+        {
             if (ForNew)
             {
                 Size clipboardSize = new Size(0, 0);
