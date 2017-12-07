@@ -13,6 +13,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using static ABPaint.Tools.Backend.SaveSystem;
+
 namespace ABPaint
 {
     public partial class Form1 : Form
@@ -83,7 +85,7 @@ namespace ABPaint
         public bool ItalicSelected = false;
         public bool UnderlineSelected = false;
 
-        public List<Element> imageElements = new List<Element>();
+        //public List<Element> savedata.imageElements = new List<Element>();
 
         public Form1()
         {
@@ -110,7 +112,7 @@ namespace ABPaint
 
             }
 
-            imageElements = new List<Element>();
+            savedata.imageElements = new List<Element>();
             endImage = new Bitmap(imageSize.Width, imageSize.Height);
         }
 
@@ -356,11 +358,11 @@ namespace ABPaint
             Graphics g = Graphics.FromImage(endResult);
 
             // Order them by zindex:
-            imageElements = imageElements.OrderBy(o => o.zindex).ToList();
+            savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).ToList();
 
             // Now draw them all!
 
-            foreach (Element ele in imageElements)
+            foreach (Element ele in savedata.imageElements)
             {
                 if (ele.Visible)
                 {
@@ -385,9 +387,9 @@ namespace ABPaint
         {
             Element ret = null;
             // Order the list based on zindex!
-            imageElements = imageElements.OrderBy(o => o.zindex).ToList();
+            savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).ToList();
 
-            foreach (Element ele in imageElements)
+            foreach (Element ele in savedata.imageElements)
             {
                 if (new Rectangle(ele.X - 10, ele.Y - 10, ele.Width + 20, ele.Height + 20).Contains(new Point(x, y)))
                 {
@@ -807,7 +809,7 @@ namespace ABPaint
                         currentDrawingElement.zindex = topZIndex++;
 
                         ((Fill)currentDrawingElement).fillPoints = ImageCropping.CropImage(((Fill)currentDrawingElement).fillPoints, currentDrawingElement.X, currentDrawingElement.Y, currentDrawingElement.Width, currentDrawingElement.Height);
-                        imageElements.Add(currentDrawingElement);
+                        savedata.imageElements.Add(currentDrawingElement);
 
                         if (currentDrawingGraphics != null) currentDrawingGraphics.Dispose();
                         currentDrawingElement = null;
@@ -880,8 +882,8 @@ namespace ABPaint
                     //    selectedElement.Y = NewMovingY;
                     //    selectedElement.Visible = true;
 
-                    //    var i = imageElements.FindIndex(x => x == selectedElement);
-                    //    imageElements[i] = selectedElement;
+                    //    var i = savedata.imageElements.FindIndex(x => x == selectedElement);
+                    //    savedata.imageElements[i] = selectedElement;
 
                     //    IsMovingSelectionInPlace = false;
                     //}
@@ -914,7 +916,7 @@ namespace ABPaint
                     currentDrawingElement.Width = Math.Abs(currentDrawingElement.Width);
                     currentDrawingElement.Height = Math.Abs(currentDrawingElement.Height);
 
-                    imageElements.Add(currentDrawingElement);
+                    savedata.imageElements.Add(currentDrawingElement);
                 }
 
                 if (currentDrawingElement is Line)
@@ -944,7 +946,7 @@ namespace ABPaint
 
                     ((Line)currentDrawingElement).color = clrNorm.BackColor;
 
-                    imageElements.Add(currentDrawingElement);
+                    savedata.imageElements.Add(currentDrawingElement);
 
                     canvaspre.Invalidate();
                 }
@@ -956,7 +958,7 @@ namespace ABPaint
                     currentDrawingElement.X = e.X;
                     currentDrawingElement.Y = e.Y;
 
-                    imageElements.Add(currentDrawingElement);
+                    savedata.imageElements.Add(currentDrawingElement);
                 }
 
                 if (currentDrawingElement is Pencil || currentDrawingElement is Elements.Brush)
@@ -972,7 +974,7 @@ namespace ABPaint
                     if (currentDrawingElement.Width < 0) currentDrawingElement.Width = 1;
                     if (currentDrawingElement.Height < 0) currentDrawingElement.Height = 1;
 
-                    imageElements.Add(currentDrawingElement);
+                    savedata.imageElements.Add(currentDrawingElement);
                 }
 
                 if (currentDrawingGraphics != null) currentDrawingGraphics.Dispose();
@@ -1607,7 +1609,7 @@ namespace ABPaint
                     if (selectedElement != null)
                         if (selectedTool == 0)
                         {
-                            imageElements.Remove(selectedElement);
+                            savedata.imageElements.Remove(selectedElement);
                             selectedElement = null;
                             selectElementByLocation(0, 0); // Deselects everything.
                             canvaspre.Invalidate();
@@ -1668,11 +1670,35 @@ namespace ABPaint
 
                 ReloadImage();
 
-                imageElements = new List<Element>();
+                savedata.imageElements = new List<Element>();
 
                 PaintPreview();
             }
         }
         #endregion
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (openFileDialogOPEN.ShowDialog() == DialogResult.OK)
+                SaveSystem.LoadFile(openFileDialogOPEN.FileName);
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialogSAVE.ShowDialog() == DialogResult.OK)
+                SaveSystem.SaveFile(saveFileDialogSAVE.FileName);
+        }
+
+        private void importToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (openFileDialogIMPORT.ShowDialog() == DialogResult.OK)
+                SaveSystem.LoadFile(openFileDialogIMPORT.FileName);
+        }
+
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialogEXPORT.ShowDialog() == DialogResult.OK)
+                SaveSystem.SaveFile(saveFileDialogEXPORT.FileName);
+        }
     }
 }

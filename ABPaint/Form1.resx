@@ -160,4 +160,22 @@ Click anywhere on the canvas to begin!</value>
   <metadata name="movingRefresh.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>225, 17</value>
   </metadata>
+  <metadata name="openFileDialogOPEN.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>473, 17</value>
+  </metadata>
+  <metadata name="saveFileDialogSAVE.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>638, 17</value>
+  </metadata>
+  <metadata name="openFileDialogIMPORT.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>796, 17</value>
+  </metadata>
+  <data name="openFileDialogIMPORT.Filter" xml:space="preserve">
+    <value>All Image Files (*.abpt, *.bmp, *.gif, *.jpg, *.jpeg, *.jpe, *.jfif, *.png, *.tif, *.tiff, *.tga)|*.abpt, *.bmp, *.gif, *.jpg, *.jpeg, *.jpe, *.jfif, *.png, *.tif, *.tiff, *.tga|GIF (*.gif)|*.gif|JPG (*.jpg, *.jpeg, *.jpe, *.jfif)|*.jpg, *.jpeg, *.jpe, *.jfif|PNG (*.png)|*.png|TIFF (*.tif, *.tiff)|*.tif, *.tiff|TGA (*.tga)|*.tga|All files|*.*</value>
+  </data>
+  <metadata name="saveFileDialogEXPORT.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>974, 17</value>
+  </metadata>
+  <data name="saveFileDialogEXPORT.Filter" xml:space="preserve">
+    <value>All Image Files (*.abpt, *.bmp, *.gif, *.jpg, *.jpeg, *.jpe, *.jfif, *.png, *.tif, *.tiff, *.tga)|*.abpt, *.bmp, *.gif, *.jpg, *.jpeg, *.jpe, *.jfif, *.png, *.tif, *.tiff, *.tga|GIF (*.gif)|*.gif|JPG (*.jpg, *.jpeg, *.jpe, *.jfif)|*.jpg, *.jpeg, *.jpe, *.jfif|PNG (*.png)|*.png|TIFF (*.tif, *.tiff)|*.tif, *.tiff|TGA (*.tga)|*.tga|All files|*.*</value>
+  </data>
 </root>

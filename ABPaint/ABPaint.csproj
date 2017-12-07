@@ -95,6 +95,7 @@
     <Compile Include="Tools\Backend\ImageFilling.cs" />
     <Compile Include="Tools\Backend\ImageFormer.cs" />
     <Compile Include="Tools\Backend\ImageInverting.cs" />
+    <Compile Include="Tools\Backend\SaveSystem.cs" />
     <Compile Include="Windows\About.cs">
       <SubType>Form</SubType>
     </Compile>
