@@ -324,22 +324,6 @@ namespace ABPaint
             ShowProperties("Text Tool Settings", false, false, true, false, false, true, GetCurrentColor(), "");
         }
         #endregion
-        private void picNew_Click(object sender, EventArgs e)
-        {
-            Sizer sz = new Sizer();
-            sz.ShowDialog();
-
-            if (!sz.Cancelled)
-            {
-                imageSize = sz.returnSize;
-
-                ReloadImage();
-
-                imageElements = new List<Element>();
-
-                PaintPreview();
-            }
-        }
 
         /// <summary>
         /// Resizes and repositions the canvaspre.
@@ -1671,5 +1655,24 @@ namespace ABPaint
                 ReloadImage();
             }
         }
+
+        #region MenuStrip
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Sizer sz = new Sizer();
+            sz.ShowDialog();
+
+            if (!sz.Cancelled)
+            {
+                imageSize = sz.returnSize;
+
+                ReloadImage();
+
+                imageElements = new List<Element>();
+
+                PaintPreview();
+            }
+        }
+        #endregion
     }
 }

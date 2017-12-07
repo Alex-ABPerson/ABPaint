@@ -55,18 +55,13 @@
             this.zoomUp = new System.Windows.Forms.Button();
             this.zoomDown = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.barNew = new System.Windows.Forms.Panel();
-            this.picNew = new System.Windows.Forms.PictureBox();
-            this.barOpen = new System.Windows.Forms.Panel();
-            this.picOpen = new System.Windows.Forms.PictureBox();
-            this.barSave = new System.Windows.Forms.Panel();
-            this.picSave = new System.Windows.Forms.PictureBox();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.appcenter = new System.Windows.Forms.Panel();
-            this.canvaspre = new System.Windows.Forms.PictureBox();
             this.welcomeScreen = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.canvaspre = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel2 = new System.Windows.Forms.Panel();
             this.properties = new System.Windows.Forms.Panel();
@@ -104,6 +99,14 @@
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.movingRefresh = new System.Windows.Forms.Timer(this.components);
             this.lblProcess = new System.Windows.Forms.Label();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolbox.SuspendLayout();
             this.toolCursorN.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timgCursorN)).BeginInit();
@@ -125,16 +128,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.timgText)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
-            this.barNew.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picNew)).BeginInit();
-            this.barOpen.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picOpen)).BeginInit();
-            this.barSave.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picSave)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.appcenter.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).BeginInit();
             this.welcomeScreen.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).BeginInit();
             this.panel2.SuspendLayout();
             this.properties.SuspendLayout();
             this.propertiesProps.SuspendLayout();
@@ -368,7 +365,7 @@
             this.panel1.BackColor = System.Drawing.Color.Gray;
             this.panel1.Controls.Add(this.panel4);
             this.panel1.Controls.Add(this.button1);
-            this.panel1.Controls.Add(this.flowLayoutPanel1);
+            this.panel1.Controls.Add(this.menuStrip1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
@@ -436,77 +433,33 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // flowLayoutPanel1
+            // menuStrip1
             // 
-            this.flowLayoutPanel1.Controls.Add(this.barNew);
-            this.flowLayoutPanel1.Controls.Add(this.barOpen);
-            this.flowLayoutPanel1.Controls.Add(this.barSave);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(170, 41);
-            this.flowLayoutPanel1.TabIndex = 0;
+            this.menuStrip1.BackColor = System.Drawing.Color.Gray;
+            this.menuStrip1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.editToolStripMenuItem,
+            this.toolsToolStripMenuItem});
+            this.menuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(223, 41);
+            this.menuStrip1.TabIndex = 3;
+            this.menuStrip1.Text = "menuStrip1";
             // 
-            // barNew
+            // fileToolStripMenuItem
             // 
-            this.barNew.BackColor = System.Drawing.Color.White;
-            this.barNew.Controls.Add(this.picNew);
-            this.barNew.Location = new System.Drawing.Point(3, 3);
-            this.barNew.Name = "barNew";
-            this.barNew.Size = new System.Drawing.Size(37, 35);
-            this.barNew.TabIndex = 1;
-            // 
-            // picNew
-            // 
-            this.picNew.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.picNew.Image = global::ABPaint.Properties.Resources._new;
-            this.picNew.Location = new System.Drawing.Point(0, 0);
-            this.picNew.Name = "picNew";
-            this.picNew.Size = new System.Drawing.Size(37, 35);
-            this.picNew.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.picNew.TabIndex = 1;
-            this.picNew.TabStop = false;
-            this.picNew.Click += new System.EventHandler(this.picNew_Click);
-            // 
-            // barOpen
-            // 
-            this.barOpen.BackColor = System.Drawing.Color.White;
-            this.barOpen.Controls.Add(this.picOpen);
-            this.barOpen.Location = new System.Drawing.Point(46, 3);
-            this.barOpen.Name = "barOpen";
-            this.barOpen.Size = new System.Drawing.Size(37, 35);
-            this.barOpen.TabIndex = 2;
-            // 
-            // picOpen
-            // 
-            this.picOpen.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.picOpen.Image = global::ABPaint.Properties.Resources.open;
-            this.picOpen.Location = new System.Drawing.Point(0, 0);
-            this.picOpen.Name = "picOpen";
-            this.picOpen.Size = new System.Drawing.Size(37, 35);
-            this.picOpen.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.picOpen.TabIndex = 2;
-            this.picOpen.TabStop = false;
-            // 
-            // barSave
-            // 
-            this.barSave.BackColor = System.Drawing.Color.White;
-            this.barSave.Controls.Add(this.picSave);
-            this.barSave.Location = new System.Drawing.Point(89, 3);
-            this.barSave.Name = "barSave";
-            this.barSave.Size = new System.Drawing.Size(37, 35);
-            this.barSave.TabIndex = 3;
-            // 
-            // picSave
-            // 
-            this.picSave.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.picSave.Image = global::ABPaint.Properties.Resources.save;
-            this.picSave.Location = new System.Drawing.Point(0, 0);
-            this.picSave.Name = "picSave";
-            this.picSave.Size = new System.Drawing.Size(37, 35);
-            this.picSave.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.picSave.TabIndex = 2;
-            this.picSave.TabStop = false;
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.openToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.saveToolStripMenuItem,
+            this.saveAsToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 37);
+            this.fileToolStripMenuItem.Text = "File";
             // 
             // appcenter
             // 
@@ -520,21 +473,6 @@
             this.appcenter.Size = new System.Drawing.Size(724, 471);
             this.appcenter.TabIndex = 3;
             this.appcenter.Click += new System.EventHandler(this.CanvasAnywhereClick);
-            // 
-            // canvaspre
-            // 
-            this.canvaspre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.canvaspre.Location = new System.Drawing.Point(179, 111);
-            this.canvaspre.Name = "canvaspre";
-            this.canvaspre.Size = new System.Drawing.Size(330, 202);
-            this.canvaspre.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.canvaspre.TabIndex = 1;
-            this.canvaspre.TabStop = false;
-            this.canvaspre.Click += new System.EventHandler(this.CanvasAnywhereClick);
-            this.canvaspre.Paint += new System.Windows.Forms.PaintEventHandler(this.canvaspre_Paint);
-            this.canvaspre.MouseDown += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseDown);
-            this.canvaspre.MouseMove += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseMove);
-            this.canvaspre.MouseUp += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseUp);
             // 
             // welcomeScreen
             // 
@@ -568,6 +506,21 @@
             this.label3.Text = "Welcome!";
             this.label3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.label3.Click += new System.EventHandler(this.CanvasAnywhereClick);
+            // 
+            // canvaspre
+            // 
+            this.canvaspre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.canvaspre.Location = new System.Drawing.Point(179, 111);
+            this.canvaspre.Name = "canvaspre";
+            this.canvaspre.Size = new System.Drawing.Size(330, 202);
+            this.canvaspre.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.canvaspre.TabIndex = 1;
+            this.canvaspre.TabStop = false;
+            this.canvaspre.Click += new System.EventHandler(this.CanvasAnywhereClick);
+            this.canvaspre.Paint += new System.Windows.Forms.PaintEventHandler(this.canvaspre_Paint);
+            this.canvaspre.MouseDown += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseDown);
+            this.canvaspre.MouseMove += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseMove);
+            this.canvaspre.MouseUp += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseUp);
             // 
             // timer1
             // 
@@ -957,6 +910,53 @@
             this.lblProcess.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.lblProcess.Visible = false;
             // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 37);
+            this.editToolStripMenuItem.Text = "Edit";
+            // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 37);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // newToolStripMenuItem
+            // 
+            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newToolStripMenuItem.Text = "New...";
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
+            // 
+            // openToolStripMenuItem
+            // 
+            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Text = "Open...";
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Text = "Save";
+            // 
+            // saveAsToolStripMenuItem
+            // 
+            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveAsToolStripMenuItem.Text = "Save As...";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -969,6 +969,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel2);
             this.KeyPreview = true;
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "ABPaint";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -995,18 +996,14 @@
             this.toolText.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.timgText)).EndInit();
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
-            this.flowLayoutPanel1.ResumeLayout(false);
-            this.barNew.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picNew)).EndInit();
-            this.barOpen.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picOpen)).EndInit();
-            this.barSave.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picSave)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.appcenter.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).EndInit();
             this.welcomeScreen.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).EndInit();
             this.panel2.ResumeLayout(false);
             this.properties.ResumeLayout(false);
             this.propertiesProps.ResumeLayout(false);
@@ -1043,13 +1040,6 @@
         private System.Windows.Forms.PictureBox timgFill;
         private System.Windows.Forms.PictureBox canvaspre;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private System.Windows.Forms.Panel barNew;
-        private System.Windows.Forms.Panel barOpen;
-        private System.Windows.Forms.Panel barSave;
-        private System.Windows.Forms.PictureBox picNew;
-        private System.Windows.Forms.PictureBox picOpen;
-        private System.Windows.Forms.PictureBox picSave;
         private System.Windows.Forms.Panel appcenter;
         private System.Windows.Forms.Panel toolText;
         private System.Windows.Forms.PictureBox timgText;
@@ -1098,6 +1088,16 @@
         private System.Windows.Forms.Button zoomUp;
         private System.Windows.Forms.Label label11;
         public System.Windows.Forms.ComboBox cmbSize;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }
 
