@@ -9,8 +9,10 @@ namespace ABPaint.Elements
 {
     class Ellipse : Element
     {
-        public Color fillColor;
-        public Color borderColor;
+        // The two variables below have capitals at the start UNLIKE the rectangle so that the Serializer (The thing that saves it to a file)
+        // Knows whether the data Serialized is an ellipse or rectangle.
+        public Color FillColor;
+        public Color BorderColor;
         public int BorderSize;
         public bool IsFilled;
 
@@ -29,9 +31,9 @@ namespace ABPaint.Elements
             //if (width < 0) currentDrawingElement.Width = 1;
             //if (height < 0) currentDrawingElement.Height = 1;
 
-            if (IsFilled) g.FillEllipse(new SolidBrush(fillColor), 0, 0, Math.Abs(Width), Math.Abs(Height)); // Fill
+            if (IsFilled) g.FillEllipse(new SolidBrush(FillColor), 0, 0, Math.Abs(Width), Math.Abs(Height)); // Fill
 
-            g.DrawEllipse(new Pen(borderColor, BorderSize), BorderSize / 2, BorderSize / 2, Math.Abs(Width - (BorderSize)), Math.Abs(Height - (BorderSize)));
+            g.DrawEllipse(new Pen(BorderColor, BorderSize), BorderSize / 2, BorderSize / 2, Math.Abs(Width - (BorderSize)), Math.Abs(Height - (BorderSize)));
 
             //g.FillRectangle(new SolidBrush(borderColor), 0, 0, BorderSize, Height); // Left border
             //g.FillRectangle(new SolidBrush(borderColor), 0, 0, Width, BorderSize); // Top border

@@ -47,7 +47,7 @@ namespace ABPaint
             }
         }
 
-        public Size imageSize = new Size(800, 600);
+        
         public SolidBrush sb101 = new SolidBrush(Color.FromArgb(1, 0, 1));
 
         // Magnification level.
@@ -113,7 +113,7 @@ namespace ABPaint
             }
 
             savedata.imageElements = new List<Element>();
-            endImage = new Bitmap(imageSize.Width, imageSize.Height);
+            endImage = new Bitmap(savedata.imageSize.Width, savedata.imageSize.Height);
         }
 
         public void SelectTool(ref PictureBox toSelect)
@@ -332,8 +332,8 @@ namespace ABPaint
         /// </summary>
         void ReloadImage()
         {
-            canvaspre.Width = (imageSize.Width * MagnificationLevel) + 2;
-            canvaspre.Height = (imageSize.Height * MagnificationLevel) + 2;
+            canvaspre.Width = (savedata.imageSize.Width * MagnificationLevel) + 2;
+            canvaspre.Height = (savedata.imageSize.Height * MagnificationLevel) + 2;
             canvaspre.Left = appcenter.Width / 2 - canvaspre.Width / 2;
             canvaspre.Top = appcenter.Height / 2 - canvaspre.Height / 2;
 
@@ -354,7 +354,7 @@ namespace ABPaint
             //{
             // Draw the elements in order
 
-            Bitmap endResult = new Bitmap(imageSize.Width, imageSize.Height);
+            Bitmap endResult = new Bitmap(savedata.imageSize.Width, savedata.imageSize.Height);
             Graphics g = Graphics.FromImage(endResult);
 
             // Order them by zindex:
@@ -598,7 +598,7 @@ namespace ABPaint
                     if (selectedElement is Pencil) ShowProperties("Selection Tool - Pencil", false, false, true, false, false, false, ((Pencil)selectedElement).pencilColor);
                     if (selectedElement is Elements.Brush) ShowProperties("Selection Tool - Brush", false, false, true, false, false, false, ((Elements.Brush)selectedElement).brushColor);
                     if (selectedElement is RectangleE) ShowProperties("Selection Tool - Rectangle", true, true, false, true, false, false, ((RectangleE)selectedElement).fillColor);
-                    if (selectedElement is Ellipse) ShowProperties("Selection Tool - Ellipse", true, true, false, true, false, false, ((Ellipse)selectedElement).fillColor);
+                    if (selectedElement is Ellipse) ShowProperties("Selection Tool - Ellipse", true, true, false, true, false, false, ((Ellipse)selectedElement).FillColor);
                     if (selectedElement is Line) ShowProperties("Selection Tool - Line", false, false, true, false, true, false, ((Line)selectedElement).color);
                     if (selectedElement is Fill) ShowProperties("Selection Tool - Fill", false, false, true, false, false, false, ((Fill)selectedElement).fillColor);
                     if (selectedElement is Text) ShowProperties("Selection Tool - Text", false, false, true, false, false, true, ((Text)selectedElement).clr, ((Text)selectedElement).mainText, ((Text)selectedElement).fnt);
@@ -682,8 +682,8 @@ namespace ABPaint
 
                     currentDrawingElement = new Pencil()
                     {
-                        Width = imageSize.Width,
-                        Height = imageSize.Height
+                        Width = savedata.imageSize.Width,
+                        Height = savedata.imageSize.Height
                     };
 
                     grph.StartFigure();
@@ -701,8 +701,8 @@ namespace ABPaint
 
                     currentDrawingElement = new Elements.Brush()
                     {
-                        Width = imageSize.Width,
-                        Height = imageSize.Height
+                        Width = savedata.imageSize.Width,
+                        Height = savedata.imageSize.Height
                     };
 
                     ((Elements.Brush)currentDrawingElement).brushPoints = new Bitmap(currentDrawingElement.Width, currentDrawingElement.Height);
@@ -719,8 +719,8 @@ namespace ABPaint
                 {
                     currentDrawingElement = new RectangleE()
                     {
-                        Width = imageSize.Width,
-                        Height = imageSize.Height
+                        Width = savedata.imageSize.Width,
+                        Height = savedata.imageSize.Height
                     };
 
                     DrawingMin.X = mouseLoc.X;
@@ -739,8 +739,8 @@ namespace ABPaint
 
                     currentDrawingElement = new Ellipse()
                     {
-                        Width = imageSize.Width,
-                        Height = imageSize.Height
+                        Width = savedata.imageSize.Width,
+                        Height = savedata.imageSize.Height
                     };
 
                     DrawingMin.X = mouseLoc.X;
@@ -749,8 +749,8 @@ namespace ABPaint
                     startPoint = mouseLoc;
 
                     ((Ellipse)currentDrawingElement).IsFilled = true;
-                    ((Ellipse)currentDrawingElement).borderColor = clrBord.BackColor;
-                    ((Ellipse)currentDrawingElement).fillColor = clrFill.BackColor;
+                    ((Ellipse)currentDrawingElement).BorderColor = clrBord.BackColor;
+                    ((Ellipse)currentDrawingElement).FillColor = clrFill.BackColor;
                     ((Ellipse)currentDrawingElement).BorderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
                 }
 
@@ -759,8 +759,8 @@ namespace ABPaint
 
                     currentDrawingElement = new Line()
                     {
-                        Width = imageSize.Width,
-                        Height = imageSize.Height
+                        Width = savedata.imageSize.Width,
+                        Height = savedata.imageSize.Height
                     };
 
                     DrawingMin.X = mouseLoc.X;
@@ -782,8 +782,8 @@ namespace ABPaint
                         {
                             X = mouseLoc.X,
                             Y = mouseLoc.Y,
-                            Width = imageSize.Width,
-                            Height = imageSize.Height
+                            Width = savedata.imageSize.Width,
+                            Height = savedata.imageSize.Height
                         };
 
                         DrawingMin.X = mouseLoc.X;
@@ -1227,9 +1227,9 @@ namespace ABPaint
                     //if (height < 0) currentDrawingElement.Height = 1;
 
                     int borderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
-                    if (ele.IsFilled) e.Graphics.FillEllipse(new SolidBrush(ele.fillColor), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height)); // Fill
+                    if (ele.IsFilled) e.Graphics.FillEllipse(new SolidBrush(ele.FillColor), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height)); // Fill
 
-                    e.Graphics.DrawEllipse(new Pen(ele.borderColor, borderSize), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height));
+                    e.Graphics.DrawEllipse(new Pen(ele.BorderColor, borderSize), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height));
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, ele.BorderSize, height); // Left border
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, width, ele.BorderSize); // Top border
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), (ele.Width - ele.BorderSize) + DrawingMin.X, DrawingMin.Y, ele.BorderSize, Height); // Right border
@@ -1370,7 +1370,7 @@ namespace ABPaint
             if (selectedElement != null)
             {
                 if (selectedElement is RectangleE) ((RectangleE)selectedElement).fillColor = clrFill.BackColor;
-                if (selectedElement is Ellipse) ((Ellipse)selectedElement).fillColor = clrFill.BackColor;
+                if (selectedElement is Ellipse) ((Ellipse)selectedElement).FillColor = clrFill.BackColor;
 
                 Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
                 tskPP.Start();
@@ -1386,7 +1386,7 @@ namespace ABPaint
             if (selectedElement != null)
             {
                 if (selectedElement is RectangleE) ((RectangleE)selectedElement).borderColor = clrBord.BackColor;
-                if (selectedElement is Ellipse) ((Ellipse)selectedElement).borderColor = clrBord.BackColor;
+                if (selectedElement is Ellipse) ((Ellipse)selectedElement).BorderColor = clrBord.BackColor;
 
                 Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
                 tskPP.Start();
@@ -1666,7 +1666,7 @@ namespace ABPaint
 
             if (!sz.Cancelled)
             {
-                imageSize = sz.returnSize;
+                savedata.imageSize = sz.returnSize;
 
                 ReloadImage();
 
@@ -1681,24 +1681,36 @@ namespace ABPaint
         {
             if (openFileDialogOPEN.ShowDialog() == DialogResult.OK)
                 SaveSystem.LoadFile(openFileDialogOPEN.FileName);
+
+            ReloadImage();
+            PaintPreview();
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (saveFileDialogSAVE.ShowDialog() == DialogResult.OK)
                 SaveSystem.SaveFile(saveFileDialogSAVE.FileName);
+
+            ReloadImage();
+            PaintPreview();
         }
 
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (openFileDialogIMPORT.ShowDialog() == DialogResult.OK)
                 SaveSystem.LoadFile(openFileDialogIMPORT.FileName);
+
+            ReloadImage();
+            PaintPreview();
         }
 
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (saveFileDialogEXPORT.ShowDialog() == DialogResult.OK)
                 SaveSystem.SaveFile(saveFileDialogEXPORT.FileName);
+
+            ReloadImage();
+            PaintPreview();
         }
     }
 }
