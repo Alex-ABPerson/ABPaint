@@ -340,8 +340,12 @@ namespace ABPaint
         {
             canvaspre.Width = (savedata.imageSize.Width * MagnificationLevel) + 2;
             canvaspre.Height = (savedata.imageSize.Height * MagnificationLevel) + 2;
-            canvaspre.Left = appcenter.Width / 2 - canvaspre.Width / 2;
-            canvaspre.Top = appcenter.Height / 2 - canvaspre.Height / 2;
+
+            int ProposedLeft = appcenter.Width / 2 - canvaspre.Width / 2;
+            int ProposedTop = appcenter.Height / 2 - canvaspre.Height / 2;
+
+            canvaspre.Left = (ProposedLeft < 0) ? 0 : ProposedLeft;
+            canvaspre.Top = (ProposedTop < 0) ? 0 : ProposedTop;
 
             //if (canvaspre.Width + canvaspre.Left > appcenter.Width) appcenter.HorizontalScroll.Visible = true;
             //else appcenter.HorizontalScroll.Visible = false;
@@ -1642,13 +1646,6 @@ namespace ABPaint
             ReloadImage();
             Core.PaintPreview();
         }
-        #endregion
-
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            Core.HandleKeyPress(keyData);
-            return base.ProcessCmdKey(ref msg, keyData);
-        }
 
         private void cutToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1664,5 +1661,17 @@ namespace ABPaint
         {
             Core.HandlePaste();
         }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Core.HandleDelete();
+        }
+        #endregion
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            Core.HandleKeyPress(keyData);
+            return base.ProcessCmdKey(ref msg, keyData);
+        }       
     }
 }

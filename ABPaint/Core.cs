@@ -78,27 +78,39 @@ namespace ABPaint
             switch (key)
             {
                 case Keys.Delete:
-                    if (Program.mainForm.selectedElement != null)
-                        if (Program.mainForm.selectedTool == Objects.Tool.Selection)
-                        {
-                            savedata.imageElements.Remove(Program.mainForm.selectedElement);
-
-                            Program.mainForm.selectedElement = null;
-
-                            Program.mainForm.canvaspre.Invalidate();
-                            Program.mainForm.endImage = PaintPreview();
-                        }
+                    HandleDelete();
 
                     break;
-                    //case Keys.ShiftKey: THIS FEATURE IS CURRENTLY UN-NEEDED AND ISN'T REALLY NECESSARY, MAYBE IN BETA 1 OR SOMETHING! 
-                    //    if (selectedElement != null)
-                    //        if (CornerSelected != 0)
-                    //            LimitMouse = true;
+                case Keys.X:
+                    if (Control.ModifierKeys == Keys.Control)
+                        HandleCut();
 
-                    //    canvaspre.Invalidate();
+                    break;
+                case Keys.C:
+                    if (Control.ModifierKeys == Keys.Control)
+                        HandleCopy();
 
-                    //    break;
+                    break;
+                case Keys.V:
+                    if (Control.ModifierKeys == Keys.Control)
+                        HandlePaste();
+
+                    break;
             }
+        }
+
+        public static void HandleDelete()
+        {
+            if (Program.mainForm.selectedElement != null)
+                if (Program.mainForm.selectedTool == Objects.Tool.Selection)
+                {
+                    savedata.imageElements.Remove(Program.mainForm.selectedElement);
+
+                    Program.mainForm.selectedElement = null;
+
+                    Program.mainForm.canvaspre.Invalidate();
+                    Program.mainForm.endImage = PaintPreview();
+                }
         }
 
         public static void HandleCut()
