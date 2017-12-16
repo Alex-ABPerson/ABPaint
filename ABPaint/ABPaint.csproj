@@ -212,5 +212,56 @@
   <ItemGroup>
     <None Include="Resources\ABJson.GDISupport.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\new_graphics\CutIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\new_graphics\EllipseIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\new_graphics\Export.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\new_graphics\FillBucket.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\new_graphics\Import.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\new_graphics\NewImage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\new_graphics\Open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\new_graphics\PaintBrush.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\new_graphics\Paste.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\new_graphics\PencilTool.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\new_graphics\Rectangle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\new_graphics\SaveAsIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\new_graphics\SaveIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\new_graphics\SelectIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\new_graphics\TextIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\new_graphics\TrashCan.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\new_graphics\Copy.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

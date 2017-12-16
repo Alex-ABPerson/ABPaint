@@ -47,7 +47,8 @@ namespace ABPaint.Elements
             float ScaleFontSize = fnt.Size * ScaleRatio;
 
             //fnt = new Font(fnt.FontFamily, Convert.ToSingle(Height / 2.5) + Convert.ToSingle(Width / 2.5), fnt.Style);
-            fnt = new Font(fnt.FontFamily, ScaleFontSize - 5, fnt.Style);
+            //fnt = new Font(fnt.FontFamily, ScaleFontSize - 5, fnt.Style);
+            fnt = new Font(fnt.FontFamily, ((ScaleFontSize - 5) > 0) ? ScaleFontSize - 5 : fnt.Size , fnt.Style);
 
             Program.mainForm.cmbSize.Text = fnt.Size.ToString();
         }

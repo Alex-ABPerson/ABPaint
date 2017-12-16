@@ -32,23 +32,14 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.toolbox = new System.Windows.Forms.FlowLayoutPanel();
             this.toolCursorN = new System.Windows.Forms.Panel();
-            this.timgCursorN = new System.Windows.Forms.PictureBox();
             this.toolCursorS = new System.Windows.Forms.Panel();
-            this.timgCursorS = new System.Windows.Forms.PictureBox();
             this.toolPencil = new System.Windows.Forms.Panel();
-            this.timgPencil = new System.Windows.Forms.PictureBox();
             this.toolBrush = new System.Windows.Forms.Panel();
-            this.timgBrush = new System.Windows.Forms.PictureBox();
             this.toolRect = new System.Windows.Forms.Panel();
-            this.timgRect = new System.Windows.Forms.PictureBox();
             this.toolElli = new System.Windows.Forms.Panel();
-            this.timgElli = new System.Windows.Forms.PictureBox();
             this.toolLine = new System.Windows.Forms.Panel();
-            this.timgLine = new System.Windows.Forms.PictureBox();
             this.toolFill = new System.Windows.Forms.Panel();
-            this.timgFill = new System.Windows.Forms.PictureBox();
             this.toolText = new System.Windows.Forms.Panel();
-            this.timgText = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
@@ -57,15 +48,9 @@
             this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -74,7 +59,6 @@
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.appcenter = new System.Windows.Forms.Panel();
-            this.canvaspre = new System.Windows.Forms.PictureBox();
             this.welcomeScreen = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -83,11 +67,8 @@
             this.properties = new System.Windows.Forms.Panel();
             this.propertiesProps = new System.Windows.Forms.FlowLayoutPanel();
             this.label4 = new System.Windows.Forms.Label();
-            this.clrFill = new System.Windows.Forms.PictureBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.clrBord = new System.Windows.Forms.PictureBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.clrNorm = new System.Windows.Forms.PictureBox();
             this.label7 = new System.Windows.Forms.Label();
             this.txtBWidth = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -98,9 +79,6 @@
             this.pnlFont = new System.Windows.Forms.FlowLayoutPanel();
             this.cmbFont = new System.Windows.Forms.ComboBox();
             this.cmbSize = new System.Windows.Forms.ComboBox();
-            this.btnBold = new System.Windows.Forms.Button();
-            this.btnItl = new System.Windows.Forms.Button();
-            this.btnUline = new System.Windows.Forms.Button();
             this.propertiesLbl = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.cl8 = new ABPaint.RightMenu.ColorBox();
@@ -119,39 +97,61 @@
             this.saveFileDialogSAVE = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialogIMPORT = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialogEXPORT = new System.Windows.Forms.SaveFileDialog();
+            this.canvaspre = new System.Windows.Forms.PictureBox();
+            this.timgCursorN = new System.Windows.Forms.PictureBox();
+            this.timgCursorS = new System.Windows.Forms.PictureBox();
+            this.timgPencil = new System.Windows.Forms.PictureBox();
+            this.timgBrush = new System.Windows.Forms.PictureBox();
+            this.timgRect = new System.Windows.Forms.PictureBox();
+            this.timgElli = new System.Windows.Forms.PictureBox();
+            this.timgLine = new System.Windows.Forms.PictureBox();
+            this.timgFill = new System.Windows.Forms.PictureBox();
+            this.timgText = new System.Windows.Forms.PictureBox();
+            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clrFill = new System.Windows.Forms.PictureBox();
+            this.clrBord = new System.Windows.Forms.PictureBox();
+            this.clrNorm = new System.Windows.Forms.PictureBox();
+            this.btnBold = new System.Windows.Forms.Button();
+            this.btnItl = new System.Windows.Forms.Button();
+            this.btnUline = new System.Windows.Forms.Button();
             this.toolbox.SuspendLayout();
             this.toolCursorN.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.timgCursorN)).BeginInit();
             this.toolCursorS.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.timgCursorS)).BeginInit();
             this.toolPencil.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.timgPencil)).BeginInit();
             this.toolBrush.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.timgBrush)).BeginInit();
             this.toolRect.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.timgRect)).BeginInit();
             this.toolElli.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.timgElli)).BeginInit();
             this.toolLine.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.timgLine)).BeginInit();
             this.toolFill.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.timgFill)).BeginInit();
             this.toolText.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.timgText)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.appcenter.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).BeginInit();
             this.welcomeScreen.SuspendLayout();
             this.panel2.SuspendLayout();
             this.properties.SuspendLayout();
             this.propertiesProps.SuspendLayout();
+            this.pnlFont.SuspendLayout();
+            this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timgCursorN)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timgCursorS)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timgPencil)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timgBrush)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timgRect)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timgElli)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timgLine)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timgFill)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timgText)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.clrFill)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.clrBord)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.clrNorm)).BeginInit();
-            this.pnlFont.SuspendLayout();
-            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolbox
@@ -183,19 +183,6 @@
             this.toolCursorN.Size = new System.Drawing.Size(47, 43);
             this.toolCursorN.TabIndex = 1;
             // 
-            // timgCursorN
-            // 
-            this.timgCursorN.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.timgCursorN.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.timgCursorN.Image = ((System.Drawing.Image)(resources.GetObject("timgCursorN.Image")));
-            this.timgCursorN.Location = new System.Drawing.Point(0, 0);
-            this.timgCursorN.Name = "timgCursorN";
-            this.timgCursorN.Size = new System.Drawing.Size(45, 41);
-            this.timgCursorN.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.timgCursorN.TabIndex = 1;
-            this.timgCursorN.TabStop = false;
-            this.timgCursorN.Click += new System.EventHandler(this.timgCursorN_Click);
-            // 
             // toolCursorS
             // 
             this.toolCursorS.BackColor = System.Drawing.Color.White;
@@ -205,18 +192,6 @@
             this.toolCursorS.Name = "toolCursorS";
             this.toolCursorS.Size = new System.Drawing.Size(47, 43);
             this.toolCursorS.TabIndex = 2;
-            // 
-            // timgCursorS
-            // 
-            this.timgCursorS.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.timgCursorS.Image = ((System.Drawing.Image)(resources.GetObject("timgCursorS.Image")));
-            this.timgCursorS.Location = new System.Drawing.Point(0, 0);
-            this.timgCursorS.Name = "timgCursorS";
-            this.timgCursorS.Size = new System.Drawing.Size(45, 41);
-            this.timgCursorS.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.timgCursorS.TabIndex = 2;
-            this.timgCursorS.TabStop = false;
-            this.timgCursorS.Click += new System.EventHandler(this.timgCursorS_Click);
             // 
             // toolPencil
             // 
@@ -228,18 +203,6 @@
             this.toolPencil.Size = new System.Drawing.Size(47, 43);
             this.toolPencil.TabIndex = 3;
             // 
-            // timgPencil
-            // 
-            this.timgPencil.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.timgPencil.Image = global::ABPaint.Properties.Resources.pencil;
-            this.timgPencil.Location = new System.Drawing.Point(0, 0);
-            this.timgPencil.Name = "timgPencil";
-            this.timgPencil.Size = new System.Drawing.Size(45, 41);
-            this.timgPencil.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.timgPencil.TabIndex = 2;
-            this.timgPencil.TabStop = false;
-            this.timgPencil.Click += new System.EventHandler(this.timgPencil_Click);
-            // 
             // toolBrush
             // 
             this.toolBrush.BackColor = System.Drawing.Color.White;
@@ -249,18 +212,6 @@
             this.toolBrush.Name = "toolBrush";
             this.toolBrush.Size = new System.Drawing.Size(47, 43);
             this.toolBrush.TabIndex = 4;
-            // 
-            // timgBrush
-            // 
-            this.timgBrush.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.timgBrush.Image = global::ABPaint.Properties.Resources.brush;
-            this.timgBrush.Location = new System.Drawing.Point(0, 0);
-            this.timgBrush.Name = "timgBrush";
-            this.timgBrush.Size = new System.Drawing.Size(45, 41);
-            this.timgBrush.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.timgBrush.TabIndex = 2;
-            this.timgBrush.TabStop = false;
-            this.timgBrush.Click += new System.EventHandler(this.timgBrush_Click);
             // 
             // toolRect
             // 
@@ -272,18 +223,6 @@
             this.toolRect.Size = new System.Drawing.Size(47, 43);
             this.toolRect.TabIndex = 5;
             // 
-            // timgRect
-            // 
-            this.timgRect.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.timgRect.Image = global::ABPaint.Properties.Resources.rectangle;
-            this.timgRect.Location = new System.Drawing.Point(0, 0);
-            this.timgRect.Name = "timgRect";
-            this.timgRect.Size = new System.Drawing.Size(45, 41);
-            this.timgRect.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.timgRect.TabIndex = 2;
-            this.timgRect.TabStop = false;
-            this.timgRect.Click += new System.EventHandler(this.timgRect_Click);
-            // 
             // toolElli
             // 
             this.toolElli.BackColor = System.Drawing.Color.White;
@@ -293,18 +232,6 @@
             this.toolElli.Name = "toolElli";
             this.toolElli.Size = new System.Drawing.Size(47, 43);
             this.toolElli.TabIndex = 6;
-            // 
-            // timgElli
-            // 
-            this.timgElli.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.timgElli.Image = global::ABPaint.Properties.Resources.ellipse;
-            this.timgElli.Location = new System.Drawing.Point(0, 0);
-            this.timgElli.Name = "timgElli";
-            this.timgElli.Size = new System.Drawing.Size(45, 41);
-            this.timgElli.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.timgElli.TabIndex = 2;
-            this.timgElli.TabStop = false;
-            this.timgElli.Click += new System.EventHandler(this.timgElli_Click);
             // 
             // toolLine
             // 
@@ -316,18 +243,6 @@
             this.toolLine.Size = new System.Drawing.Size(47, 43);
             this.toolLine.TabIndex = 7;
             // 
-            // timgLine
-            // 
-            this.timgLine.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.timgLine.Image = global::ABPaint.Properties.Resources.line;
-            this.timgLine.Location = new System.Drawing.Point(0, 0);
-            this.timgLine.Name = "timgLine";
-            this.timgLine.Size = new System.Drawing.Size(45, 41);
-            this.timgLine.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.timgLine.TabIndex = 2;
-            this.timgLine.TabStop = false;
-            this.timgLine.Click += new System.EventHandler(this.timgLine_Click);
-            // 
             // toolFill
             // 
             this.toolFill.BackColor = System.Drawing.Color.White;
@@ -338,18 +253,6 @@
             this.toolFill.Size = new System.Drawing.Size(47, 43);
             this.toolFill.TabIndex = 8;
             // 
-            // timgFill
-            // 
-            this.timgFill.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.timgFill.Image = global::ABPaint.Properties.Resources.fill_bucket;
-            this.timgFill.Location = new System.Drawing.Point(0, 0);
-            this.timgFill.Name = "timgFill";
-            this.timgFill.Size = new System.Drawing.Size(45, 41);
-            this.timgFill.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.timgFill.TabIndex = 2;
-            this.timgFill.TabStop = false;
-            this.timgFill.Click += new System.EventHandler(this.timgFill_Click);
-            // 
             // toolText
             // 
             this.toolText.BackColor = System.Drawing.Color.White;
@@ -359,18 +262,6 @@
             this.toolText.Name = "toolText";
             this.toolText.Size = new System.Drawing.Size(47, 43);
             this.toolText.TabIndex = 9;
-            // 
-            // timgText
-            // 
-            this.timgText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.timgText.Image = global::ABPaint.Properties.Resources.text;
-            this.timgText.Location = new System.Drawing.Point(0, 0);
-            this.timgText.Name = "timgText";
-            this.timgText.Size = new System.Drawing.Size(45, 41);
-            this.timgText.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.timgText.TabIndex = 2;
-            this.timgText.TabStop = false;
-            this.timgText.Click += new System.EventHandler(this.timgText_Click);
             // 
             // panel1
             // 
@@ -476,62 +367,20 @@
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 37);
             this.fileToolStripMenuItem.Text = "File";
             // 
-            // newToolStripMenuItem
-            // 
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
-            this.newToolStripMenuItem.Text = "New...";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
-            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(120, 6);
-            // 
-            // openToolStripMenuItem
-            // 
-            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
-            this.openToolStripMenuItem.Text = "Open...";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(120, 6);
-            // 
-            // saveToolStripMenuItem
-            // 
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
-            this.saveToolStripMenuItem.Text = "Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
-            // 
-            // saveAsToolStripMenuItem
-            // 
-            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
-            this.saveAsToolStripMenuItem.Text = "Save As...";
-            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(120, 6);
-            // 
-            // importToolStripMenuItem
-            // 
-            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
-            this.importToolStripMenuItem.Text = "Import...";
-            this.importToolStripMenuItem.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
-            // 
-            // exportToolStripMenuItem
-            // 
-            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
-            this.exportToolStripMenuItem.Text = "Export...";
-            this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
             // 
             // editToolStripMenuItem
             // 
@@ -547,6 +396,7 @@
             // 
             // cutToolStripMenuItem
             // 
+            this.cutToolStripMenuItem.Image = global::ABPaint.Properties.Resources.CutIcon;
             this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
             this.cutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
             this.cutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
@@ -555,6 +405,7 @@
             // 
             // copyToolStripMenuItem
             // 
+            this.copyToolStripMenuItem.Image = global::ABPaint.Properties.Resources.Copy;
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
             this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
             this.copyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
@@ -563,6 +414,7 @@
             // 
             // pasteToolStripMenuItem
             // 
+            this.pasteToolStripMenuItem.Image = global::ABPaint.Properties.Resources.Paste;
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
             this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
             this.pasteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
@@ -572,10 +424,11 @@
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(141, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
             // 
             // deleteToolStripMenuItem
             // 
+            this.deleteToolStripMenuItem.Image = global::ABPaint.Properties.Resources.TrashCan;
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
             this.deleteToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
             this.deleteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
@@ -600,21 +453,6 @@
             this.appcenter.Size = new System.Drawing.Size(724, 471);
             this.appcenter.TabIndex = 3;
             this.appcenter.Click += new System.EventHandler(this.CanvasAnywhereClick);
-            // 
-            // canvaspre
-            // 
-            this.canvaspre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.canvaspre.Location = new System.Drawing.Point(179, 111);
-            this.canvaspre.Name = "canvaspre";
-            this.canvaspre.Size = new System.Drawing.Size(330, 202);
-            this.canvaspre.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.canvaspre.TabIndex = 1;
-            this.canvaspre.TabStop = false;
-            this.canvaspre.Click += new System.EventHandler(this.CanvasAnywhereClick);
-            this.canvaspre.Paint += new System.Windows.Forms.PaintEventHandler(this.canvaspre_Paint);
-            this.canvaspre.MouseDown += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseDown);
-            this.canvaspre.MouseMove += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseMove);
-            this.canvaspre.MouseUp += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseUp);
             // 
             // welcomeScreen
             // 
@@ -707,17 +545,6 @@
             this.label4.TabIndex = 0;
             this.label4.Text = "Fill Color:";
             // 
-            // clrFill
-            // 
-            this.clrFill.BackColor = System.Drawing.Color.Black;
-            this.clrFill.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.clrFill.Location = new System.Drawing.Point(82, 3);
-            this.clrFill.Name = "clrFill";
-            this.clrFill.Size = new System.Drawing.Size(24, 22);
-            this.clrFill.TabIndex = 1;
-            this.clrFill.TabStop = false;
-            this.clrFill.MouseClick += new System.Windows.Forms.MouseEventHandler(this.clrFill_MouseClick);
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -728,17 +555,6 @@
             this.label5.TabIndex = 0;
             this.label5.Text = "Border Color:";
             // 
-            // clrBord
-            // 
-            this.clrBord.BackColor = System.Drawing.Color.Black;
-            this.clrBord.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.clrBord.Location = new System.Drawing.Point(220, 3);
-            this.clrBord.Name = "clrBord";
-            this.clrBord.Size = new System.Drawing.Size(24, 22);
-            this.clrBord.TabIndex = 1;
-            this.clrBord.TabStop = false;
-            this.clrBord.MouseClick += new System.Windows.Forms.MouseEventHandler(this.clrBord_MouseClick);
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -748,17 +564,6 @@
             this.label6.Size = new System.Drawing.Size(50, 20);
             this.label6.TabIndex = 0;
             this.label6.Text = "Color:";
-            // 
-            // clrNorm
-            // 
-            this.clrNorm.BackColor = System.Drawing.Color.Black;
-            this.clrNorm.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.clrNorm.Location = new System.Drawing.Point(306, 3);
-            this.clrNorm.Name = "clrNorm";
-            this.clrNorm.Size = new System.Drawing.Size(24, 22);
-            this.clrNorm.TabIndex = 1;
-            this.clrNorm.TabStop = false;
-            this.clrNorm.MouseClick += new System.Windows.Forms.MouseEventHandler(this.clrNorm_MouseClick);
             // 
             // label7
             // 
@@ -879,36 +684,6 @@
             this.cmbSize.TabIndex = 0;
             this.cmbSize.Text = "12";
             this.cmbSize.SelectedIndexChanged += new System.EventHandler(this.cmbSize_SelectedIndexChanged);
-            // 
-            // btnBold
-            // 
-            this.btnBold.Image = global::ABPaint.Properties.Resources.bold;
-            this.btnBold.Location = new System.Drawing.Point(3, 30);
-            this.btnBold.Name = "btnBold";
-            this.btnBold.Size = new System.Drawing.Size(30, 23);
-            this.btnBold.TabIndex = 1;
-            this.btnBold.UseVisualStyleBackColor = true;
-            this.btnBold.Click += new System.EventHandler(this.btnBold_Click);
-            // 
-            // btnItl
-            // 
-            this.btnItl.Image = global::ABPaint.Properties.Resources.italic;
-            this.btnItl.Location = new System.Drawing.Point(39, 30);
-            this.btnItl.Name = "btnItl";
-            this.btnItl.Size = new System.Drawing.Size(30, 23);
-            this.btnItl.TabIndex = 1;
-            this.btnItl.UseVisualStyleBackColor = true;
-            this.btnItl.Click += new System.EventHandler(this.btnItl_Click);
-            // 
-            // btnUline
-            // 
-            this.btnUline.Image = global::ABPaint.Properties.Resources.underline;
-            this.btnUline.Location = new System.Drawing.Point(75, 30);
-            this.btnUline.Name = "btnUline";
-            this.btnUline.Size = new System.Drawing.Size(30, 23);
-            this.btnUline.TabIndex = 1;
-            this.btnUline.UseVisualStyleBackColor = true;
-            this.btnUline.Click += new System.EventHandler(this.btnUline_Click);
             // 
             // propertiesLbl
             // 
@@ -1061,6 +836,241 @@
             this.saveFileDialogEXPORT.Filter = resources.GetString("saveFileDialogEXPORT.Filter");
             this.saveFileDialogEXPORT.Title = "Export...";
             // 
+            // canvaspre
+            // 
+            this.canvaspre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.canvaspre.Location = new System.Drawing.Point(179, 111);
+            this.canvaspre.Name = "canvaspre";
+            this.canvaspre.Size = new System.Drawing.Size(330, 202);
+            this.canvaspre.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.canvaspre.TabIndex = 1;
+            this.canvaspre.TabStop = false;
+            this.canvaspre.Click += new System.EventHandler(this.CanvasAnywhereClick);
+            this.canvaspre.Paint += new System.Windows.Forms.PaintEventHandler(this.canvaspre_Paint);
+            this.canvaspre.MouseDown += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseDown);
+            this.canvaspre.MouseMove += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseMove);
+            this.canvaspre.MouseUp += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseUp);
+            // 
+            // timgCursorN
+            // 
+            this.timgCursorN.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.timgCursorN.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.timgCursorN.Image = ((System.Drawing.Image)(resources.GetObject("timgCursorN.Image")));
+            this.timgCursorN.Location = new System.Drawing.Point(0, 0);
+            this.timgCursorN.Name = "timgCursorN";
+            this.timgCursorN.Size = new System.Drawing.Size(45, 41);
+            this.timgCursorN.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.timgCursorN.TabIndex = 1;
+            this.timgCursorN.TabStop = false;
+            this.timgCursorN.Click += new System.EventHandler(this.timgCursorN_Click);
+            // 
+            // timgCursorS
+            // 
+            this.timgCursorS.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.timgCursorS.Image = ((System.Drawing.Image)(resources.GetObject("timgCursorS.Image")));
+            this.timgCursorS.Location = new System.Drawing.Point(0, 0);
+            this.timgCursorS.Name = "timgCursorS";
+            this.timgCursorS.Size = new System.Drawing.Size(45, 41);
+            this.timgCursorS.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.timgCursorS.TabIndex = 2;
+            this.timgCursorS.TabStop = false;
+            this.timgCursorS.Click += new System.EventHandler(this.timgCursorS_Click);
+            // 
+            // timgPencil
+            // 
+            this.timgPencil.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.timgPencil.Image = global::ABPaint.Properties.Resources.PencilTool;
+            this.timgPencil.Location = new System.Drawing.Point(0, 0);
+            this.timgPencil.Name = "timgPencil";
+            this.timgPencil.Size = new System.Drawing.Size(45, 41);
+            this.timgPencil.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.timgPencil.TabIndex = 2;
+            this.timgPencil.TabStop = false;
+            this.timgPencil.Click += new System.EventHandler(this.timgPencil_Click);
+            // 
+            // timgBrush
+            // 
+            this.timgBrush.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.timgBrush.Image = global::ABPaint.Properties.Resources.PaintBrush;
+            this.timgBrush.Location = new System.Drawing.Point(0, 0);
+            this.timgBrush.Name = "timgBrush";
+            this.timgBrush.Size = new System.Drawing.Size(45, 41);
+            this.timgBrush.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.timgBrush.TabIndex = 2;
+            this.timgBrush.TabStop = false;
+            this.timgBrush.Click += new System.EventHandler(this.timgBrush_Click);
+            // 
+            // timgRect
+            // 
+            this.timgRect.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.timgRect.Image = global::ABPaint.Properties.Resources.Rectangle;
+            this.timgRect.Location = new System.Drawing.Point(0, 0);
+            this.timgRect.Name = "timgRect";
+            this.timgRect.Size = new System.Drawing.Size(45, 41);
+            this.timgRect.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.timgRect.TabIndex = 2;
+            this.timgRect.TabStop = false;
+            this.timgRect.Click += new System.EventHandler(this.timgRect_Click);
+            // 
+            // timgElli
+            // 
+            this.timgElli.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.timgElli.Image = global::ABPaint.Properties.Resources.EllipseIcon;
+            this.timgElli.Location = new System.Drawing.Point(0, 0);
+            this.timgElli.Name = "timgElli";
+            this.timgElli.Size = new System.Drawing.Size(45, 41);
+            this.timgElli.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.timgElli.TabIndex = 2;
+            this.timgElli.TabStop = false;
+            this.timgElli.Click += new System.EventHandler(this.timgElli_Click);
+            // 
+            // timgLine
+            // 
+            this.timgLine.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.timgLine.Image = global::ABPaint.Properties.Resources.LineIcon;
+            this.timgLine.Location = new System.Drawing.Point(0, 0);
+            this.timgLine.Name = "timgLine";
+            this.timgLine.Size = new System.Drawing.Size(45, 41);
+            this.timgLine.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.timgLine.TabIndex = 2;
+            this.timgLine.TabStop = false;
+            this.timgLine.Click += new System.EventHandler(this.timgLine_Click);
+            // 
+            // timgFill
+            // 
+            this.timgFill.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.timgFill.Image = global::ABPaint.Properties.Resources.FillBucket;
+            this.timgFill.Location = new System.Drawing.Point(0, 0);
+            this.timgFill.Name = "timgFill";
+            this.timgFill.Size = new System.Drawing.Size(45, 41);
+            this.timgFill.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.timgFill.TabIndex = 2;
+            this.timgFill.TabStop = false;
+            this.timgFill.Click += new System.EventHandler(this.timgFill_Click);
+            // 
+            // timgText
+            // 
+            this.timgText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.timgText.Image = global::ABPaint.Properties.Resources.TextIcon;
+            this.timgText.Location = new System.Drawing.Point(0, 0);
+            this.timgText.Name = "timgText";
+            this.timgText.Size = new System.Drawing.Size(45, 41);
+            this.timgText.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.timgText.TabIndex = 2;
+            this.timgText.TabStop = false;
+            this.timgText.Click += new System.EventHandler(this.timgText_Click);
+            // 
+            // newToolStripMenuItem
+            // 
+            this.newToolStripMenuItem.Image = global::ABPaint.Properties.Resources.NewImage;
+            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newToolStripMenuItem.Text = "New...";
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
+            // 
+            // openToolStripMenuItem
+            // 
+            this.openToolStripMenuItem.Image = global::ABPaint.Properties.Resources.Open;
+            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Text = "Open...";
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Image = global::ABPaint.Properties.Resources.SaveIcon;
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // saveAsToolStripMenuItem
+            // 
+            this.saveAsToolStripMenuItem.Image = global::ABPaint.Properties.Resources.SaveAsIcon;
+            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveAsToolStripMenuItem.Text = "Save As...";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
+            // 
+            // importToolStripMenuItem
+            // 
+            this.importToolStripMenuItem.Image = global::ABPaint.Properties.Resources.Import;
+            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.importToolStripMenuItem.Text = "Import...";
+            this.importToolStripMenuItem.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
+            // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.Image = global::ABPaint.Properties.Resources.Export;
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exportToolStripMenuItem.Text = "Export...";
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
+            // 
+            // clrFill
+            // 
+            this.clrFill.BackColor = System.Drawing.Color.Black;
+            this.clrFill.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.clrFill.Location = new System.Drawing.Point(82, 3);
+            this.clrFill.Name = "clrFill";
+            this.clrFill.Size = new System.Drawing.Size(24, 22);
+            this.clrFill.TabIndex = 1;
+            this.clrFill.TabStop = false;
+            this.clrFill.MouseClick += new System.Windows.Forms.MouseEventHandler(this.clrFill_MouseClick);
+            // 
+            // clrBord
+            // 
+            this.clrBord.BackColor = System.Drawing.Color.Black;
+            this.clrBord.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.clrBord.Location = new System.Drawing.Point(220, 3);
+            this.clrBord.Name = "clrBord";
+            this.clrBord.Size = new System.Drawing.Size(24, 22);
+            this.clrBord.TabIndex = 1;
+            this.clrBord.TabStop = false;
+            this.clrBord.MouseClick += new System.Windows.Forms.MouseEventHandler(this.clrBord_MouseClick);
+            // 
+            // clrNorm
+            // 
+            this.clrNorm.BackColor = System.Drawing.Color.Black;
+            this.clrNorm.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.clrNorm.Location = new System.Drawing.Point(306, 3);
+            this.clrNorm.Name = "clrNorm";
+            this.clrNorm.Size = new System.Drawing.Size(24, 22);
+            this.clrNorm.TabIndex = 1;
+            this.clrNorm.TabStop = false;
+            this.clrNorm.MouseClick += new System.Windows.Forms.MouseEventHandler(this.clrNorm_MouseClick);
+            // 
+            // btnBold
+            // 
+            this.btnBold.Image = global::ABPaint.Properties.Resources.bold;
+            this.btnBold.Location = new System.Drawing.Point(3, 30);
+            this.btnBold.Name = "btnBold";
+            this.btnBold.Size = new System.Drawing.Size(30, 23);
+            this.btnBold.TabIndex = 1;
+            this.btnBold.UseVisualStyleBackColor = true;
+            this.btnBold.Click += new System.EventHandler(this.btnBold_Click);
+            // 
+            // btnItl
+            // 
+            this.btnItl.Image = global::ABPaint.Properties.Resources.italic;
+            this.btnItl.Location = new System.Drawing.Point(39, 30);
+            this.btnItl.Name = "btnItl";
+            this.btnItl.Size = new System.Drawing.Size(30, 23);
+            this.btnItl.TabIndex = 1;
+            this.btnItl.UseVisualStyleBackColor = true;
+            this.btnItl.Click += new System.EventHandler(this.btnItl_Click);
+            // 
+            // btnUline
+            // 
+            this.btnUline.Image = global::ABPaint.Properties.Resources.underline;
+            this.btnUline.Location = new System.Drawing.Point(75, 30);
+            this.btnUline.Name = "btnUline";
+            this.btnUline.Size = new System.Drawing.Size(30, 23);
+            this.btnUline.TabIndex = 1;
+            this.btnUline.UseVisualStyleBackColor = true;
+            this.btnUline.Click += new System.EventHandler(this.btnUline_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1080,23 +1090,14 @@
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.toolbox.ResumeLayout(false);
             this.toolCursorN.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.timgCursorN)).EndInit();
             this.toolCursorS.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.timgCursorS)).EndInit();
             this.toolPencil.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.timgPencil)).EndInit();
             this.toolBrush.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.timgBrush)).EndInit();
             this.toolRect.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.timgRect)).EndInit();
             this.toolElli.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.timgElli)).EndInit();
             this.toolLine.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.timgLine)).EndInit();
             this.toolFill.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.timgFill)).EndInit();
             this.toolText.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.timgText)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel4.ResumeLayout(false);
@@ -1104,18 +1105,27 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.appcenter.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).EndInit();
             this.welcomeScreen.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.properties.ResumeLayout(false);
             this.propertiesProps.ResumeLayout(false);
             this.propertiesProps.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.clrFill)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clrBord)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clrNorm)).EndInit();
             this.pnlFont.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timgCursorN)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timgCursorS)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timgPencil)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timgBrush)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timgRect)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timgElli)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timgLine)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timgFill)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timgText)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.clrFill)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.clrBord)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.clrNorm)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

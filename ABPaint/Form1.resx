@@ -117,30 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="timgCursorN.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAgCAYAAAAbifjMAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wQAADsEBuJFr7QAAABl0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4xNzNun2MAAAEFSURBVEhLpZRB
-        EkUwDIadwAFcgrVxBTaGjQVv6Rbu6iB5/Vsx0ddXDYsvIU2+qU5HRkSvCBY1BIsaXDAJyIVUXDCpKApq
-        25a2bav9phgumHQM0zRNKokLQqCVuOAJNBIXAoJUiQt/BOCQfPxBxoWIAMQkSQLwT5IsAMMwIF/ORCUA
-        vkQtAE3TIFvJIwHoug65fiwA2EmSYF1XWpbF0vc9VVVlyfM8TRA6fSYqmOf5fC7L0rQqBLg44zhe3k1O
-        u0hoxvft+86DFvTIYTtrgxDwMDf4YpMvuzgF/EuTw+BuF6eAkYuM3EVUIBckt4I7zOAHg4fo9wzeECxq
-        CBY1BIsagsV0KPsCuTgxxghaAWcAAAAASUVORK5CYII=
-</value>
-  </data>
-  <data name="timgCursorS.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAgCAYAAAAbifjMAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wgAADsIBFShKgAAAABl0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4xNzNun2MAAAEjSURBVEhLpZQx
-        DoMwDEV7Gg7Rgct06B1Y6NSJu7CDBANiQrAiJMQlOICbbyVSaA049EvfMQ5+CiHKjYj+slgMsVgMMYco
-        iihNU5PS3U1ozcE2U9/3GJ7GPy/umYMDQOM4YlBDOPgAKATC4RsAaSEcJACkgXDYA0CAzPP8NulPM8zh
-        CAAdQVQAaA+iBkD2nGwOWxAA6rqOmqZ5mPQaAKrrmqZpepn0GgAqyxLD/TIAAkQFwB+oqoratqWiKChJ
-        EsrznLIs0wGk3Xc+BCzLYjNy94UegGUPw2CfAg8SXo7jmNZ15dwJ+2B0DHDNRjxnm1jSKjYAbJbfDJ+t
-        goO7VDH6k87+KkSAEcJmwvcp4Mz4bjTC4h78Y7EYYrEYYrEYYrGoN90+RuZ6lnLvvuEAAAAASUVORK5C
-        YII=
-</value>
-  </data>
   <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>358, 17</value>
   </metadata>
@@ -177,5 +153,29 @@ Click anywhere on the canvas to begin!</value>
   </metadata>
   <data name="saveFileDialogEXPORT.Filter" xml:space="preserve">
     <value>All Image Files (*.abpt, *.bmp, *.gif, *.jpg, *.jpeg, *.png, *.tif, *.tiff)|*.abpt, *.bmp, *.gif, *.jpg, *.jpeg, *.png, *.tif, *.tiff|GIF (*.gif)|*.gif|JPG (*.jpg, *.jpeg)|*.jpg, *.jpeg|PNG (*.png)|*.png|TIFF (*.tif, *.tiff)|*.tif, *.tiff|All files|*.*</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="timgCursorN.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAgCAYAAAAbifjMAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wQAADsEBuJFr7QAAABl0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4xNzNun2MAAAEFSURBVEhLpZRB
+        EkUwDIadwAFcgrVxBTaGjQVv6Rbu6iB5/Vsx0ddXDYsvIU2+qU5HRkSvCBY1BIsaXDAJyIVUXDCpKApq
+        25a2bav9phgumHQM0zRNKokLQqCVuOAJNBIXAoJUiQt/BOCQfPxBxoWIAMQkSQLwT5IsAMMwIF/ORCUA
+        vkQtAE3TIFvJIwHoug65fiwA2EmSYF1XWpbF0vc9VVVlyfM8TRA6fSYqmOf5fC7L0rQqBLg44zhe3k1O
+        u0hoxvft+86DFvTIYTtrgxDwMDf4YpMvuzgF/EuTw+BuF6eAkYuM3EVUIBckt4I7zOAHg4fo9wzeECxq
+        CBY1BIsagsV0KPsCuTgxxghaAWcAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="timgCursorS.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAgCAYAAAAbifjMAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wgAADsIBFShKgAAAABl0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4xNzNun2MAAAEjSURBVEhLpZQx
+        DoMwDEV7Gg7Rgct06B1Y6NSJu7CDBANiQrAiJMQlOICbbyVSaA049EvfMQ5+CiHKjYj+slgMsVgMMYco
+        iihNU5PS3U1ozcE2U9/3GJ7GPy/umYMDQOM4YlBDOPgAKATC4RsAaSEcJACkgXDYA0CAzPP8NulPM8zh
+        CAAdQVQAaA+iBkD2nGwOWxAA6rqOmqZ5mPQaAKrrmqZpepn0GgAqyxLD/TIAAkQFwB+oqoratqWiKChJ
+        EsrznLIs0wGk3Xc+BCzLYjNy94UegGUPw2CfAg8SXo7jmNZ15dwJ+2B0DHDNRjxnm1jSKjYAbJbfDJ+t
+        goO7VDH6k87+KkSAEcJmwvcp4Mz4bjTC4h78Y7EYYrEYYrEYYrGoN90+RuZ6lnLvvuEAAAAASUVORK5C
+        YII=
+</value>
   </data>
 </root>
