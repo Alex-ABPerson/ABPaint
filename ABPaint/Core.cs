@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using static ABPaint.Tools.Backend.SaveSystem;
 
 namespace ABPaint
@@ -70,6 +71,33 @@ namespace ABPaint
             }
 
             return ret;
+        }
+
+        public static void HandleKeyPress(Keys key)
+        {
+            switch (key)
+            {
+                case Keys.Delete:
+                    if (Program.mainForm.selectedElement != null)
+                        if (Program.mainForm.selectedTool == Objects.Tool.Selection)
+                        {
+                            savedata.imageElements.Remove(Program.mainForm.selectedElement);
+                            Program.mainForm.selectedElement = null;
+                            Core.selectElementByLocation(0, 0); // Deselects everything.
+                            Program.mainForm.canvaspre.Invalidate();
+                            Program.mainForm.endImage = Core.PaintPreview();
+                        }
+
+                    break;
+                    //case Keys.ShiftKey: THIS FEATURE IS CURRENTLY UN-NEEDED AND ISN'T REALLY NECESSARY, MAYBE IN BETA 1 OR SOMETHING! 
+                    //    if (selectedElement != null)
+                    //        if (CornerSelected != 0)
+                    //            LimitMouse = true;
+
+                    //    canvaspre.Invalidate();
+
+                    //    break;
+            }
         }
     }
 }

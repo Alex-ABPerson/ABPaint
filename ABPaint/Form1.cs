@@ -90,6 +90,12 @@ namespace ABPaint
         public Form1()
         {
             InitializeComponent();
+
+            //canvaspre.PreviewKeyDown += new PreviewKeyDownEventHandler((sender, e) => {
+            //    Core.HandleKeyPress(e.KeyCode); });
+            //this.KeyDown += new KeyEventHandler((sender, e) => {
+            //    Core.HandleKeyPress(e.KeyCode); });
+
             ReloadImage();
         }
         #region General Code
@@ -1541,33 +1547,6 @@ namespace ABPaint
             welcomeScreen.Hide();
         }
 
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.KeyCode)
-            {
-                case Keys.Delete:
-                    if (selectedElement != null)
-                        if (selectedTool == 0)
-                        {
-                            savedata.imageElements.Remove(selectedElement);
-                            selectedElement = null;
-                            Core.selectElementByLocation(0, 0); // Deselects everything.
-                            canvaspre.Invalidate();
-                            endImage = Core.PaintPreview();
-                        }
-
-                    break;
-                //case Keys.ShiftKey: THIS FEATURE IS CURRENTLY UN-NEEDED AND ISN'T REALLY NECESSARY, MAYBE IN BETA 1 OR SOMETHING! 
-                //    if (selectedElement != null)
-                //        if (CornerSelected != 0)
-                //            LimitMouse = true;
-
-                //    canvaspre.Invalidate();
-
-                //    break;
-            }
-        }
-
         private void Form1_Resize(object sender, EventArgs e)
         {
             ReloadImage();
@@ -1664,5 +1643,11 @@ namespace ABPaint
             Core.PaintPreview();
         }
         #endregion
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            Core.HandleKeyPress(keyData);
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
     }
 }
