@@ -1,3 +1,5 @@
+<a href="
+https://ci.appveyor.com/project/Alex-TIMEHACK/abpaint"><img src="https://ci.appveyor.com/api/projects/status/7prcw4k29bkg1cp6?svg=true" style="border: 0;" alt="AppVeyor Badge"></a>
 
 # ABPaint
 An open-source paint program that is designed to ensure that the user does not need to manually create layers etc.
