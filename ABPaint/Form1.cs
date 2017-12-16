@@ -344,67 +344,7 @@ namespace ABPaint
             //else appcenter.VerticalScroll.Visible = false;
         }
 
-        /// <summary>
-        /// Draws the preview. (Probably the most crucial method in the whole application!)
-        /// </summary>
-        /// <returns>An image for the result.</returns>
-        public Bitmap PaintPreview()
-        {
-            //try
-            //{
-            // Draw the elements in order
-
-            Bitmap endResult = new Bitmap(savedata.imageSize.Width, savedata.imageSize.Height);
-            Graphics g = Graphics.FromImage(endResult);
-
-            // Order them by zindex:
-            savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).ToList();
-
-            // Now draw them all!
-
-            foreach (Element ele in savedata.imageElements)
-            {
-                if (ele.Visible)
-                {
-                    Bitmap bmp = ele.ProcessImage();
-                    g.DrawImage(bmp, ele.X, ele.Y);
-                    bmp.Dispose();
-                }
-            }
-
-            endImage = endResult;
-            return endResult;
-            //} catch { return endImage; }
-        }
         
-        /// <summary>
-        /// Selects the element at the specified X and Y.
-        /// </summary>
-        /// <param name="x">The X to search for the element.</param>
-        /// <param name="y">The Y to search for the element.</param>
-        /// <returns>The element found at the location.</returns>
-        public Element selectElementByLocation(int x, int y)
-        {
-            Element ret = null;
-            // Order the list based on zindex!
-            savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).ToList();
-
-            foreach (Element ele in savedata.imageElements)
-            {
-                if (new Rectangle(ele.X - 10, ele.Y - 10, ele.Width + 20, ele.Height + 20).Contains(new Point(x, y)))
-                {
-                    // The mouse is in this element!
-
-                    ele.zindex = topZIndex++; // Brings to front
-
-                    ret = ele;
-
-                    continue;
-                }
-            }
-
-            return ret;
-        }
 
         private void canvaspre_MouseMove(object sender, MouseEventArgs e)
         {
@@ -592,7 +532,7 @@ namespace ABPaint
                 if (selectedTool == 0)
                 { // Selection tool! This one is really complex!                        
 
-                    selectedElement = selectElementByLocation(mouseLoc.X, mouseLoc.Y);
+                    selectedElement = Core.selectElementByLocation(mouseLoc.X, mouseLoc.Y);
 
                     if (selectedElement == null) ShowProperties("Selection Tool - Nothing selected!", false, false, false, false, false, false, GetCurrentColor());
                     if (selectedElement is Pencil) ShowProperties("Selection Tool - Pencil", false, false, true, false, false, false, ((Pencil)selectedElement).pencilColor);
@@ -794,7 +734,7 @@ namespace ABPaint
                         lblProcess.Show();
                         fill = new Task<Bitmap>(() =>
                         {
-                            return ImageFilling.SafeFloodFill(ImageFormer.ImageToByteArray(PaintPreview()), mouseLoc.X, mouseLoc.Y, Color.FromArgb(1, 0, 1));
+                            return ImageFilling.SafeFloodFill(ImageFormer.ImageToByteArray(Core.PaintPreview()), mouseLoc.X, mouseLoc.Y, Color.FromArgb(1, 0, 1));
                         });
 
                         fill.Start();
@@ -814,7 +754,7 @@ namespace ABPaint
                         if (currentDrawingGraphics != null) currentDrawingGraphics.Dispose();
                         currentDrawingElement = null;
 
-                        endImage = PaintPreview();
+                        endImage = Core.PaintPreview();
 
                         lblProcess.Hide();
                     } catch { lblProcess.Hide(); }
@@ -981,7 +921,7 @@ namespace ABPaint
                 currentDrawingElement = null;
             }
 
-            tskPP = new Task<Bitmap>(PaintPreview);
+            tskPP = new Task<Bitmap>(Core.PaintPreview);
             tskPP.Start();
 
             endImage = await tskPP;
@@ -1141,7 +1081,7 @@ namespace ABPaint
 
         private async void timer1_Tick(object sender, EventArgs e)
         {
-            Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
+            Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
             tskPP.Start();
 
             endImage = await tskPP;
@@ -1356,7 +1296,7 @@ namespace ABPaint
                 if (selectedElement is Elements.Fill) ((Elements.Fill)selectedElement).fillColor = clrNorm.BackColor;
                 if (selectedElement is Elements.Text) ((Elements.Text)selectedElement).clr = clrNorm.BackColor;
 
-                Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
+                Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
                 tskPP.Start();
 
                 endImage = await tskPP;
@@ -1372,7 +1312,7 @@ namespace ABPaint
                 if (selectedElement is RectangleE) ((RectangleE)selectedElement).fillColor = clrFill.BackColor;
                 if (selectedElement is Ellipse) ((Ellipse)selectedElement).FillColor = clrFill.BackColor;
 
-                Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
+                Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
                 tskPP.Start();
 
                 endImage = await tskPP;
@@ -1388,7 +1328,7 @@ namespace ABPaint
                 if (selectedElement is RectangleE) ((RectangleE)selectedElement).borderColor = clrBord.BackColor;
                 if (selectedElement is Ellipse) ((Ellipse)selectedElement).BorderColor = clrBord.BackColor;
 
-                Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
+                Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
                 tskPP.Start();
 
                 endImage = await tskPP;
@@ -1405,7 +1345,7 @@ namespace ABPaint
                 if (selectedElement is RectangleE) ((RectangleE)selectedElement).BorderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
                 if (selectedElement is Ellipse) ((Ellipse)selectedElement).BorderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
 
-                Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
+                Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
                 tskPP.Start();
 
                 endImage = await tskPP;
@@ -1424,7 +1364,7 @@ namespace ABPaint
                     else
                         ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Bold | currentFont.Style);
                 }
-                Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
+                Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
                 tskPP.Start();
 
                 endImage = await tskPP;
@@ -1449,7 +1389,7 @@ namespace ABPaint
             if (selectedElement != null)
                 ((Text)selectedElement).mainText = txtTText.Text;
 
-            Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
+            Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
             tskPP.Start();
 
             endImage = await tskPP;
@@ -1467,7 +1407,7 @@ namespace ABPaint
                     else
                         ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Italic | currentFont.Style);
                 }
-                Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
+                Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
                 tskPP.Start();
 
                 endImage = await tskPP;
@@ -1499,7 +1439,7 @@ namespace ABPaint
                     else
                         ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Underline | currentFont.Style);
                 }
-                Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
+                Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
                 tskPP.Start();
 
                 endImage = await tskPP;
@@ -1533,7 +1473,7 @@ namespace ABPaint
                         ((Text)selectedElement).fnt = new Font(cmbFont.Text, ((Text)selectedElement).fnt.Size, ((Text)selectedElement).fnt.Style);
                     }
 
-            Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
+            Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
             tskPP.Start();
 
             endImage = await tskPP;
@@ -1561,7 +1501,7 @@ namespace ABPaint
                         ((Text)selectedElement).Height = (int)Math.Round(TextSize.Height);
                     }
 
-            Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
+            Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
             tskPP.Start();
 
             endImage = await tskPP;
@@ -1583,7 +1523,7 @@ namespace ABPaint
                     selectedElement.Height += ((Line)selectedElement).Thickness - beforeThickness;
                 }
 
-                Task<Bitmap> tskPP = new Task<Bitmap>(PaintPreview);
+                Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
                 tskPP.Start();
 
                 endImage = await tskPP;
@@ -1593,7 +1533,7 @@ namespace ABPaint
 
         private void movingRefresh_Tick(object sender, EventArgs e)
         {
-            endImage = PaintPreview();
+            endImage = Core.PaintPreview();
         }
 
         private void CanvasAnywhereClick(object sender, EventArgs e)
@@ -1611,9 +1551,9 @@ namespace ABPaint
                         {
                             savedata.imageElements.Remove(selectedElement);
                             selectedElement = null;
-                            selectElementByLocation(0, 0); // Deselects everything.
+                            Core.selectElementByLocation(0, 0); // Deselects everything.
                             canvaspre.Invalidate();
-                            endImage = PaintPreview();
+                            endImage = Core.PaintPreview();
                         }
 
                     break;
@@ -1672,7 +1612,7 @@ namespace ABPaint
 
                 savedata.imageElements = new List<Element>();
 
-                PaintPreview();
+                Core.PaintPreview();
             }
         }
 
@@ -1682,7 +1622,7 @@ namespace ABPaint
                 LoadFile(openFileDialogOPEN.FileName);
 
             ReloadImage();
-            PaintPreview();
+            Core.PaintPreview();
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1691,25 +1631,25 @@ namespace ABPaint
                 SaveFile(saveFileDialogSAVE.FileName);
 
             ReloadImage();
-            PaintPreview();
+            Core.PaintPreview();
         }
 
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (openFileDialogIMPORT.ShowDialog() == DialogResult.OK)
-                LoadFile(openFileDialogIMPORT.FileName);
+                ImportFile(openFileDialogIMPORT.FileName);
 
             ReloadImage();
-            PaintPreview();
+            Core.PaintPreview();
         }
 
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (saveFileDialogEXPORT.ShowDialog() == DialogResult.OK)
-                SaveFile(saveFileDialogEXPORT.FileName);
+                ExportFile(saveFileDialogEXPORT.FileName);
 
             ReloadImage();
-            PaintPreview();
+            Core.PaintPreview();
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1721,7 +1661,7 @@ namespace ABPaint
                     SaveFile(currentFile);
 
             ReloadImage();
-            PaintPreview();
+            Core.PaintPreview();
         }
         #endregion
     }

@@ -144,6 +144,9 @@
   <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>358, 17</value>
   </metadata>
+  <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>358, 17</value>
+  </metadata>
   <data name="label9.Text" xml:space="preserve">
     <value>This is a fairly unique paint program that allows you to create image in an easier way, without having to deal with layers and things like that.
 
@@ -170,12 +173,12 @@ Click anywhere on the canvas to begin!</value>
     <value>796, 17</value>
   </metadata>
   <data name="openFileDialogIMPORT.Filter" xml:space="preserve">
-    <value>All Image Files (*.abpt, *.bmp, *.gif, *.jpg, *.jpeg, *.jpe, *.jfif, *.png, *.tif, *.tiff, *.tga)|*.abpt, *.bmp, *.gif, *.jpg, *.jpeg, *.jpe, *.jfif, *.png, *.tif, *.tiff, *.tga|GIF (*.gif)|*.gif|JPG (*.jpg, *.jpeg, *.jpe, *.jfif)|*.jpg, *.jpeg, *.jpe, *.jfif|PNG (*.png)|*.png|TIFF (*.tif, *.tiff)|*.tif, *.tiff|TGA (*.tga)|*.tga|All files|*.*</value>
+    <value>All Image Files (*.abpt, *.bmp, *.gif, *.jpg, *.jpeg, *.png, *.tif, *.tiff)|*.abpt, *.bmp, *.gif, *.jpg, *.jpeg, *.png, *.tif, *.tiff|GIF (*.gif)|*.gif|JPG (*.jpg, *.jpeg)|*.jpg, *.jpeg|PNG (*.png)|*.png|TIFF (*.tif, *.tiff)|*.tif, *.tiff|All files|*.*</value>
   </data>
   <metadata name="saveFileDialogEXPORT.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>974, 17</value>
   </metadata>
   <data name="saveFileDialogEXPORT.Filter" xml:space="preserve">
-    <value>All Image Files (*.abpt, *.bmp, *.gif, *.jpg, *.jpeg, *.jpe, *.jfif, *.png, *.tif, *.tiff, *.tga)|*.abpt, *.bmp, *.gif, *.jpg, *.jpeg, *.jpe, *.jfif, *.png, *.tif, *.tiff, *.tga|GIF (*.gif)|*.gif|JPG (*.jpg, *.jpeg, *.jpe, *.jfif)|*.jpg, *.jpeg, *.jpe, *.jfif|PNG (*.png)|*.png|TIFF (*.tif, *.tiff)|*.tif, *.tiff|TGA (*.tga)|*.tga|All files|*.*</value>
+    <value>All Image Files (*.abpt, *.bmp, *.gif, *.jpg, *.jpeg, *.png, *.tif, *.tiff)|*.abpt, *.bmp, *.gif, *.jpg, *.jpeg, *.png, *.tif, *.tiff|GIF (*.gif)|*.gif|JPG (*.jpg, *.jpeg)|*.jpg, *.jpeg|PNG (*.png)|*.png|TIFF (*.tif, *.tiff)|*.tif, *.tiff|All files|*.*</value>
   </data>
 </root>

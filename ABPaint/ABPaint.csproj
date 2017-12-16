@@ -70,7 +70,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Action.cs" />
+    <Compile Include="Core.cs" />
+    <Compile Include="Objects\Action.cs" />
     <Compile Include="Objects\Element.cs" />
     <Compile Include="Elements\Brush.cs" />
     <Compile Include="Elements\Ellipse.cs" />
