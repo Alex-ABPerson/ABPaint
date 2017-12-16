@@ -18,6 +18,9 @@ namespace ABPaint
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            if (!System.IO.File.Exists("ABJson.GDISupport.dll"))
+                System.IO.File.WriteAllBytes("ABJson.GDISupport.dll", Properties.Resources.ABJson_GDISupport);
+
             mainForm = new Form1();
             Application.Run(mainForm);
         }

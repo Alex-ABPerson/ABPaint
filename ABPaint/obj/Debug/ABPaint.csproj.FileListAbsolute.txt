@@ -33,4 +33,3 @@ I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.pdb
 I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.RightMenu.ColorBox.resources
 I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.Windows.About.resources
 I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.csprojResolveAssemblyReference.cache
-I:\Desktop\HistamcomVB\ABPaint\ABPaint\bin\Debug\ABJson.GDISupport.dll

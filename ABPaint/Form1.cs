@@ -1590,7 +1590,7 @@ namespace ABPaint
 
         private void zoomUp_Click(object sender, EventArgs e)
         {
-            if (MagnificationLevel < 512)
+            if (MagnificationLevel < 16)
             {
                 MagnificationLevel = MagnificationLevel * 2;
                 label11.Text = "X" + MagnificationLevel;
