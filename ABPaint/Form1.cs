@@ -1649,5 +1649,20 @@ namespace ABPaint
             Core.HandleKeyPress(keyData);
             return base.ProcessCmdKey(ref msg, keyData);
         }
+
+        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Core.HandleCut();
+        }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Core.HandleCopy();
+        }
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Core.HandlePaste();
+        }
     }
 }
