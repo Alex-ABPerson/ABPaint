@@ -16,15 +16,18 @@ namespace ABPaint.Tools.Backend
     public static class SaveSystem
     {
         public static SaveData savedata = new SaveData();
+        public static string currentFile = "";
 
         public static void LoadFile(string path)
         {
             LoadData(System.IO.File.ReadAllText(path));
+            currentFile = path;
         }
 
         public static void SaveFile(string path)
         {
             System.IO.File.WriteAllText(path, SaveData());
+            currentFile = path;
         }
 
         public static void LoadData(string data)
@@ -34,7 +37,7 @@ namespace ABPaint.Tools.Backend
 
         public static string SaveData()
         {
-            return ABJson.GDISupport.JsonClassConverter.ConvertObjectToJson(savedata, ABJson.GDISupport.JsonFormatting.Indented);
+            return ABJson.GDISupport.JsonClassConverter.ConvertObjectToJson(savedata, ABJson.GDISupport.JsonFormatting.Compact);
         }
     }
 }

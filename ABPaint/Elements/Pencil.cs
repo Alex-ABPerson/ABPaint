@@ -10,7 +10,7 @@ using ABPaint.Tools.Backend;
 namespace ABPaint.Elements
 {
     class Pencil : Element
-    {
+    {       
         public Bitmap pencilPoints;
         public Color pencilColor = Color.Blue;
 
@@ -28,22 +28,26 @@ namespace ABPaint.Elements
             //    }
             //}
 
-            // THE CODE ABOVE IS INCREDIBLY OLD AND SLOW - WE ARE CHANGING THE BITMAP'S COLOR MAPPINGS INSTEAD!
-            // Set the image attribute's color mappings
+            try
+            {
+                // THE CODE ABOVE IS INCREDIBLY OLD AND SLOW - WE ARE CHANGING THE BITMAP'S COLOR MAPPINGS INSTEAD!
+                // Set the image attribute's color mappings
 
-            Graphics g = Graphics.FromImage(ret);
+                Graphics g = Graphics.FromImage(ret);
 
-            ColorMap[] colorMap = new ColorMap[1];
-            colorMap[0] = new ColorMap();
-            colorMap[0].OldColor = Color.FromArgb(1, 0, 1);
-            colorMap[0].NewColor = pencilColor;
-            ImageAttributes attr = new ImageAttributes();
-            attr.SetRemapTable(colorMap);
-            // Draw using the color map
-            Rectangle rect = new Rectangle(0, 0, pencilPoints.Width, pencilPoints.Height);
-            g.DrawImage(pencilPoints, rect, 0, 0, rect.Width, rect.Height, GraphicsUnit.Pixel, attr);
+                ColorMap[] colorMap = new ColorMap[1];
+                colorMap[0] = new ColorMap();
+                colorMap[0].OldColor = Color.FromArgb(1, 0, 1);
+                colorMap[0].NewColor = pencilColor;
+                ImageAttributes attr = new ImageAttributes();
+                attr.SetRemapTable(colorMap);
+                // Draw using the color map
+                Rectangle rect = new Rectangle(0, 0, pencilPoints.Width, pencilPoints.Height);
+                g.DrawImage(pencilPoints, rect, 0, 0, rect.Width, rect.Height, GraphicsUnit.Pixel, attr);
 
-            //Graphics g = Graphics.FromImage(ret);
+                //Graphics g = Graphics.FromImage(ret);
+
+            } catch { }
 
             return ret;
         }

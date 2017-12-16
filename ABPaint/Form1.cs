@@ -1675,12 +1675,11 @@ namespace ABPaint
                 PaintPreview();
             }
         }
-        #endregion
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (openFileDialogOPEN.ShowDialog() == DialogResult.OK)
-                SaveSystem.LoadFile(openFileDialogOPEN.FileName);
+                LoadFile(openFileDialogOPEN.FileName);
 
             ReloadImage();
             PaintPreview();
@@ -1689,7 +1688,7 @@ namespace ABPaint
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (saveFileDialogSAVE.ShowDialog() == DialogResult.OK)
-                SaveSystem.SaveFile(saveFileDialogSAVE.FileName);
+                SaveFile(saveFileDialogSAVE.FileName);
 
             ReloadImage();
             PaintPreview();
@@ -1698,7 +1697,7 @@ namespace ABPaint
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (openFileDialogIMPORT.ShowDialog() == DialogResult.OK)
-                SaveSystem.LoadFile(openFileDialogIMPORT.FileName);
+                LoadFile(openFileDialogIMPORT.FileName);
 
             ReloadImage();
             PaintPreview();
@@ -1707,10 +1706,23 @@ namespace ABPaint
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (saveFileDialogEXPORT.ShowDialog() == DialogResult.OK)
-                SaveSystem.SaveFile(saveFileDialogEXPORT.FileName);
+                SaveFile(saveFileDialogEXPORT.FileName);
 
             ReloadImage();
             PaintPreview();
         }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (currentFile == "")
+                if (saveFileDialogSAVE.ShowDialog() == DialogResult.OK)
+                    SaveFile(saveFileDialogSAVE.FileName);
+                else
+                    SaveFile(currentFile);
+
+            ReloadImage();
+            PaintPreview();
+        }
+        #endregion
     }
 }
