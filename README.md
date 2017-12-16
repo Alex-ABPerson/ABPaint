@@ -4,7 +4,7 @@ https://ci.appveyor.com/project/Alex-TIMEHACK/abpaint"><img src="https://ci.appv
 # ABPaint
 An open-source paint program that is designed to ensure that the user does not need to manually create layers etc.
 
-This paint program is designed to ensure you do not need to worry about bitmap things but using Vectors.
+This paint program is designed to ensure you do not need to worry about bitmap things by using Vectors.
 
 However, this program isn't just a vector program - it is designed to work with bitmaps SEAMLESSLY AS WELL.
 
@@ -14,7 +14,7 @@ Obviously as said above, ABPaint is all about the ability of drawing things each
 
 The application uses "Elements" which you can move around, resize and easily manipulate with the properties panel.
 
-The big thing (for me) is the fact that you can draw a Rectangle and change it's colour later in about 1 second!
+The big thing (for me) is that that you can draw a rectangle and change it's colour later in about 1 second!
 
 #### Advantages of vectors over bitmaps:
 
@@ -27,13 +27,13 @@ The big thing (for me) is the fact that you can draw a Rectangle and change it's
 
 NOTE: RIGHT NOW, BITMAPS ARE NOT SUPPORTED
 
-People have bitmaps everywhere and they will want to take existing bitmaps or put something into a Bitmap to achieve a certain effect. And that's fine - there are lots of traditional bitmap tools for you to use.
+People have bitmaps everywhere and they will want to take existing bitmaps or put something into a Bitmap to achieve a certain effect. That's fine - there are lots of traditional bitmap tools for you to use.
 
 Here are some bitmap tools the program has:
-- "Bitmap Selection Tool" which allows you to drag a selection
-- "Magic Wand Tool" which allows you to select an area with a color in one single click!
+- Bitmap Selection Tool - which allows you to drag a selection
+- Magic Wand Tool - which allows you to select an area with a color in one single click!
 
-You don't have to use Bitmaps but if you have to or want to for a certain thing you can do so.
+You don't have to use Bitmaps but if you have to (or want to for a certain thing) you can do so.
 
 #### Advantages of bitmaps over vectors:
 
@@ -43,13 +43,13 @@ You don't have to use Bitmaps but if you have to or want to for a certain thing 
 
 ## How do I use it?
 
-As of now there is not website however when there is there will be a link here for full in-depth detail on it, with a search feature etc.
+As of now there is not a website however when there is there will be a link here for full in-depth detail on it.
 
 ## What does the license say?
 
 This project is licensed under the MIT license. Read the LICENSE file for it in-depth. 
 
-It essentially says that you are allowed to use this software, redistribute it, modify it and decompile it (because it's already open source)
+It essentially says that you are allowed to use this software, redistribute it, modify it and decompile it (because it's already open source.)
 
 You CAN NOT, however, claim it as yours...
 
