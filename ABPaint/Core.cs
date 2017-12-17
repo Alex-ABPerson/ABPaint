@@ -11,17 +11,20 @@ namespace ABPaint
 {
     public static class Core
     {
+        public static bool InOperation = false;
         /// <summary>
         /// Draws the preview. (Probably the most crucial method in the whole application!)
         /// </summary>
         /// <returns>An image for the result.</returns>
         public static Bitmap PaintPreview()
         {
+            Bitmap endResult = new Bitmap(savedata.imageSize.Width, savedata.imageSize.Height);
+
             //try
             //{
             // Draw the elements in order
 
-            Bitmap endResult = new Bitmap(savedata.imageSize.Width, savedata.imageSize.Height);
+                
             Graphics g = Graphics.FromImage(endResult);
 
             // Order them by zindex:
@@ -40,7 +43,9 @@ namespace ABPaint
             }
 
             Program.mainForm.endImage = endResult;
-            return endResult;
+
+            return endResult;              
+            
             //} catch { return endImage; }
         }
 
@@ -53,6 +58,7 @@ namespace ABPaint
         public static Element selectElementByLocation(int x, int y)
         {
             Element ret = null;
+
             // Order the list based on zindex!
             savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).ToList();
 
@@ -96,58 +102,114 @@ namespace ABPaint
                         HandlePaste();
 
                     break;
+                case Keys.OemMinus:
+                case Keys.Subtract:
+                    //if (Control.ModifierKeys == Keys.Control)
+                        HandleZoomOut();
+
+                    break;
+                case Keys.Oemplus:
+                case Keys.Add:
+                    //if (Control.ModifierKeys == Keys.Control)
+                        HandleZoomIn();
+
+                    break;
             }
         }
 
         public static void HandleDelete()
         {
-            if (Program.mainForm.selectedElement != null)
-                if (Program.mainForm.selectedTool == Objects.Tool.Selection)
-                {
-                    savedata.imageElements.Remove(Program.mainForm.selectedElement);
+            if (!InOperation)
+            {
+                InOperation = true;
+                if (Program.mainForm.selectedElement != null)
+                    if (Program.mainForm.selectedTool == Objects.Tool.Selection)
+                    {
+                        savedata.imageElements.Remove(Program.mainForm.selectedElement);
 
-                    Program.mainForm.selectedElement = null;
+                        Program.mainForm.selectedElement = null;
 
-                    Program.mainForm.canvaspre.Invalidate();
-                    Program.mainForm.endImage = PaintPreview();
-                }
+                        Program.mainForm.canvaspre.Invalidate();
+                        Program.mainForm.endImage = PaintPreview();
+                    }
+
+                InOperation = false;
+            }
         }
 
         public static void HandleCut()
         {
-            HandleCopy();
+            if (!InOperation)
+            {
+                InOperation = true;
 
-            savedata.imageElements.Remove(Program.mainForm.selectedElement);
-            Program.mainForm.selectedElement = null;
+                HandleCopy();
 
-            Program.mainForm.canvaspre.Invalidate();
-            Program.mainForm.endImage = Core.PaintPreview();
+                savedata.imageElements.Remove(Program.mainForm.selectedElement);
+                Program.mainForm.selectedElement = null;
+
+                Program.mainForm.canvaspre.Invalidate();
+                Program.mainForm.endImage = Core.PaintPreview();
+
+                InOperation = false;
+            }
         }
 
         public static void HandleCopy()
         {
-            Clipboard.SetDataObject("ABPAINTELEMENT" + ABJson.GDISupport.JsonSerializer.Serialize("", Program.mainForm.selectedElement, ABJson.GDISupport.JsonFormatting.Compact, 0, true).TrimEnd(','), true);
+            if (!InOperation)
+            {
+                InOperation = true;
+                Clipboard.SetDataObject("ABPAINTELEMENT" + ABJson.GDISupport.JsonSerializer.Serialize("", Program.mainForm.selectedElement, ABJson.GDISupport.JsonFormatting.Compact, 0, true).TrimEnd(','), true);
+
+                InOperation = false;
+            }
             //Clipboard.SetDataObject(Program.mainForm.selectedElement, true);
         }
 
         public static void HandlePaste()
         {
-            //Clipboard.SetDataObject("ABPAINTELEMENT" + ABJson.GDISupport.JsonSerializer.Serialize("", Program.mainForm.selectedElement, ABJson.GDISupport.JsonFormatting.Compact, 0, true).TrimEnd(','), true);
-            IDataObject data = Clipboard.GetDataObject();
-
-            if (Clipboard.GetDataObject().GetDataPresent(DataFormats.Text) && Clipboard.GetDataObject().GetData(DataFormats.Text).ToString().StartsWith("ABPAINTELEMENT"))
+            if (!InOperation)
             {
+                InOperation = true;
+                //Clipboard.SetDataObject("ABPAINTELEMENT" + ABJson.GDISupport.JsonSerializer.Serialize("", Program.mainForm.selectedElement, ABJson.GDISupport.JsonFormatting.Compact, 0, true).TrimEnd(','), true);
+                IDataObject data = Clipboard.GetDataObject();
+
+                if (Clipboard.GetDataObject().GetDataPresent(DataFormats.Text) && Clipboard.GetDataObject().GetData(DataFormats.Text).ToString().StartsWith("ABPAINTELEMENT"))
+                {
                 
-                Element ele = ABJson.GDISupport.JsonClassConverter.ConvertJsonToObject<Element>(Clipboard.GetDataObject().GetData(DataFormats.Text).ToString().Remove(0, 14), true);
+                    Element ele = ABJson.GDISupport.JsonClassConverter.ConvertJsonToObject<Element>(Clipboard.GetDataObject().GetData(DataFormats.Text).ToString().Remove(0, 14), true);
 
-                ele.zindex = Program.mainForm.topZIndex++;
-                savedata.imageElements.Add(ele);
+                    ele.zindex = Program.mainForm.topZIndex++;
+                    savedata.imageElements.Add(ele);
 
-                Program.mainForm.selectedElement = ele;
+                    Program.mainForm.selectedElement = ele;
+                }
+
+                Program.mainForm.canvaspre.Invalidate();
+                Program.mainForm.endImage = Core.PaintPreview();
+                InOperation = false;
             }
+        }
 
-            Program.mainForm.canvaspre.Invalidate();
-            Program.mainForm.endImage = Core.PaintPreview();
+        public static void HandleZoomIn()
+        {
+            if (Program.mainForm.MagnificationLevel < 16)
+            {
+                Program.mainForm.MagnificationLevel = Program.mainForm.MagnificationLevel * 2;
+                Program.mainForm.label11.Text = "X" + Program.mainForm.MagnificationLevel;
+                Program.mainForm.ReloadImage();
+            }
+        }
+
+        public static void HandleZoomOut()
+        {
+            if (Program.mainForm.MagnificationLevel > 1)
+            {
+                Program.mainForm.MagnificationLevel = Program.mainForm.MagnificationLevel / 2;
+                Program.mainForm.label11.Text = "X" + Program.mainForm.MagnificationLevel;
+                Program.mainForm.ReloadImage();
+            }
         }
     }
 }
