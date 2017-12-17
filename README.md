@@ -1,3 +1,5 @@
+
+
 [<img src="https://ci.appveyor.com/api/projects/status/7prcw4k29bkg1cp6?svg=true" style="border: 0;" alt="AppVeyor Badge">](https://ci.appveyor.com/project/Alex-TIMEHACK/abpaint)
 
 # ABPaint
@@ -43,6 +45,14 @@ You don't have to use Bitmaps but if you have to (or want to for a certain thing
 ## How do I use it?
 
 As of now there is not a website however when there is there will be a link here for full in-depth detail on it.
+
+## Contributers
+
+[https://github.com/Alex-TIMEHACK](**Alex-TimeHACK**) - The lead developer of the project. Currently the only person who does any programming :P
+
+**[https://github.com/jtsshieh](jtsshieh)** - The lead artist of the project. Makes a lot of the artwork for the program but has also made the wiki and tested the application several times.
+
+[https://github.com/RogueAI42](**RogueAI**) - The main tester. Tests the program and gives lots of feedback. Has also with lots of problems **Alex-TimeHACK** has had.
 
 ## What does the license say?
 
