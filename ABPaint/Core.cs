@@ -102,14 +102,14 @@ namespace ABPaint
                         HandlePaste();
 
                     break;
-                case Keys.OemMinus:
-                case Keys.Subtract:
-                    //if (Control.ModifierKeys == Keys.Control)
+                case (Keys.Control | Keys.OemMinus):
+                case (Keys.Control | Keys.Subtract):
+                    //if (follControl.ModifierKeys == Keys.Control)
                         HandleZoomOut();
 
                     break;
-                case Keys.Oemplus:
-                case Keys.Add:
+                case (Keys.Control | Keys.Oemplus):
+                case (Keys.Control | Keys.Add):
                     //if (Control.ModifierKeys == Keys.Control)
                         HandleZoomIn();
 

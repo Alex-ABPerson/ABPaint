@@ -863,10 +863,21 @@ namespace ABPaint
                 if (currentDrawingElement is RectangleE || currentDrawingElement is Ellipse)
                 {
                     currentDrawingElement.zindex = topZIndex++;
-                    currentDrawingElement.Width = mouseLoc.X - startPoint.X + Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
-                    currentDrawingElement.Height = mouseLoc.Y - startPoint.Y + Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
+
+                    int borderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
+
+                    currentDrawingElement.Width = mouseLoc.X - startPoint.X + borderSize;
+                    currentDrawingElement.Height = mouseLoc.Y - startPoint.Y + borderSize;
+
+                    if (currentDrawingElement.Width < 0) currentDrawingElement.Width = currentDrawingElement.Width - borderSize;
+                    if (currentDrawingElement.Height < 0) currentDrawingElement.Height = currentDrawingElement.Height - borderSize;
+
                     if (currentDrawingElement.Width < 0) currentDrawingElement.X = startPoint.X - Math.Abs(currentDrawingElement.Width); else currentDrawingElement.X = startPoint.X;
                     if (currentDrawingElement.Height < 0) currentDrawingElement.Y = startPoint.Y - Math.Abs(currentDrawingElement.Height); else currentDrawingElement.Y = startPoint.Y;
+
+                    if (currentDrawingElement.Width < 0) currentDrawingElement.Width = currentDrawingElement.Width - borderSize;
+                    if (currentDrawingElement.Height < 0) currentDrawingElement.Height = currentDrawingElement.Height - borderSize;
+
                     currentDrawingElement.Width = Math.Abs(currentDrawingElement.Width);
                     currentDrawingElement.Height = Math.Abs(currentDrawingElement.Height);
 
