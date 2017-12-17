@@ -50,7 +50,7 @@ As of now there is not a website however when there is there will be a link here
 
 [**jtsshieh**](https://www.github.com/jtsshieh) - The lead artist of the project. Makes a lot of the artwork for the program but has also made the wiki and tested the application several times.
 
-[**RogueAI**](https://www.github.com/RogueAI42) - The main tester. Tests the program and gives lots of feedback. Has also with lots of problems **Alex-TimeHACK** has had.
+[**RogueAI**](https://www.github.com/RogueAI42) - The main tester. Tests the program and gives lots of feedback. Has also helped with lots of problems **Alex-TimeHACK** has had.
 
 ## What does the license say?
 
