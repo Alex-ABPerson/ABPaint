@@ -21,7 +21,7 @@ namespace ABPaint
     {
         // General Variables
         public Tool selectedTool = Tool.Selection;
-        public int topZIndex = 0;
+        
         public int selectedPalette = 1;
         public Element currentDrawingElement;
         public Graphics currentDrawingGraphics;
@@ -760,7 +760,7 @@ namespace ABPaint
 
                         currentDrawingElement.Width = (DrawingMax.X - DrawingMin.X) + 1;
                         currentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y) + 1;
-                        currentDrawingElement.zindex = topZIndex++;
+                        currentDrawingElement.zindex = savedata.topZIndex++;
 
                         ((Fill)currentDrawingElement).fillPoints = ImageCropping.CropImage(((Fill)currentDrawingElement).fillPoints, currentDrawingElement.X, currentDrawingElement.Y, currentDrawingElement.Width, currentDrawingElement.Height);
                         savedata.imageElements.Add(currentDrawingElement);
@@ -862,7 +862,7 @@ namespace ABPaint
 
                 if (currentDrawingElement is RectangleE || currentDrawingElement is Ellipse)
                 {
-                    currentDrawingElement.zindex = topZIndex++;
+                    currentDrawingElement.zindex = savedata.topZIndex++;
 
                     int borderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
 
@@ -886,7 +886,7 @@ namespace ABPaint
 
                 if (currentDrawingElement is Line)
                 {
-                    currentDrawingElement.zindex = topZIndex++;
+                    currentDrawingElement.zindex = savedata.topZIndex++;
 
                     int thickness = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
                     currentDrawingElement.Width = (DrawingMax.X - DrawingMin.X) + (thickness * 3);
@@ -918,7 +918,7 @@ namespace ABPaint
 
                 if (currentDrawingElement is Elements.Text)
                 {
-                    currentDrawingElement.zindex = topZIndex++;
+                    currentDrawingElement.zindex = savedata.topZIndex++;
 
                     currentDrawingElement.X = e.X;
                     currentDrawingElement.Y = e.Y;
@@ -930,7 +930,7 @@ namespace ABPaint
                 {
                     // Reset everything back
 
-                    currentDrawingElement.zindex = topZIndex++;
+                    currentDrawingElement.zindex = savedata.topZIndex++;
                     currentDrawingElement.X = DrawingMin.X;
                     currentDrawingElement.Y = DrawingMin.Y;
                     currentDrawingElement.Width = (DrawingMax.X - DrawingMin.X) + Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
@@ -1581,7 +1581,7 @@ namespace ABPaint
 
         private void zoomDown_Click(object sender, EventArgs e)
         {
-            
+            Core.HandleZoomOut();
         }
 
         private void zoomUp_Click(object sender, EventArgs e)
@@ -1646,10 +1646,12 @@ namespace ABPaint
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (currentFile == "")
+            {
                 if (saveFileDialogSAVE.ShowDialog() == DialogResult.OK)
                     SaveFile(saveFileDialogSAVE.FileName);
-                else
-                    SaveFile(currentFile);
+            }
+            else
+                SaveFile(currentFile);
 
             ReloadImage();
             Core.PaintPreview();
@@ -1674,6 +1676,11 @@ namespace ABPaint
         {
             Core.HandleDelete();
         }
+
+        private void redrawToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            endImage = Core.PaintPreview();
+        }
         #endregion
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -1682,9 +1689,6 @@ namespace ABPaint
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        private void redrawToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            endImage = Core.PaintPreview();
-        }
+        
     }
 }

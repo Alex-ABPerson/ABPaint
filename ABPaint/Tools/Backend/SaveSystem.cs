@@ -11,8 +11,10 @@ namespace ABPaint.Tools.Backend
 {
     public class SaveData
     {
+        public int topZIndex = 0;
         public List<Element> imageElements = new List<Element>();
         public Size imageSize = new Size(800, 600);
+        
     }
 
     public static class SaveSystem

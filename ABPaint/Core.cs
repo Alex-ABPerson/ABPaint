@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ABPaint.Tools.Backend;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -59,8 +60,8 @@ namespace ABPaint
         {
             Element ret = null;
 
-            // Order the list based on zindex!
-            savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).ToList();
+            // Order the list based on zindex! But backwards so that the foreach picks up the top one!
+            savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).Reverse().ToList();
 
             foreach (Element ele in savedata.imageElements)
             {
@@ -68,13 +69,16 @@ namespace ABPaint
                 {
                     // The mouse is in this element!
 
-                    ele.zindex = Program.mainForm.topZIndex++; // Brings to front
+                    ele.zindex = SaveSystem.savedata.topZIndex++; // Brings to front
 
                     ret = ele;
 
-                    continue;
+                    break;
                 }
             }
+
+            // Order the list based on zindex!
+            savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).ToList();
 
             return ret;
         }
@@ -180,7 +184,7 @@ namespace ABPaint
                 
                     Element ele = ABJson.GDISupport.JsonClassConverter.ConvertJsonToObject<Element>(Clipboard.GetDataObject().GetData(DataFormats.Text).ToString().Remove(0, 14), true);
 
-                    ele.zindex = Program.mainForm.topZIndex++;
+                    ele.zindex = savedata.topZIndex++;
                     savedata.imageElements.Add(ele);
 
                     Program.mainForm.selectedElement = ele;
