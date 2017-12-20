@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace ABPaint
+namespace ABPaint.Objects
 {
     /// <summary>
     /// The objects that are found within this application on the canvas. An element is one of these objects.

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ABPaint.Objects;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace ABPaint.Elements
         public int Thickness;
         public Point BeforeResizeStart;
         public Point BeforeResizeEnd;
+        public int ResizeFilledX, ResizeFilledY;
+        public int BeforeResizeX, BeforeResizeY;
         public int BeforeResizeWidth, BeforeResizeHeight;
 
         public override Bitmap ProcessImage()

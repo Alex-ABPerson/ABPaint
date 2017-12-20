@@ -277,6 +277,7 @@
     <Content Include="Resources\new_graphics\Paste.png" />
     <Content Include="Resources\new_graphics\PencilTool.png" />
     <Content Include="Resources\new_graphics\Rectangle.png" />
+    <None Include="Resources\new_graphics\RefreshIcon.png" />
     <Content Include="Resources\new_graphics\SaveAsIcon.png" />
     <Content Include="Resources\new_graphics\SaveIcon.png" />
     <Content Include="Resources\new_graphics\SelectIcon.png" />

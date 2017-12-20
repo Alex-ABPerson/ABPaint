@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Imaging;
 using ABPaint.Tools.Backend;
+using ABPaint.Objects;
 
 namespace ABPaint.Elements
 {

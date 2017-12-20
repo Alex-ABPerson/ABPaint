@@ -1,4 +1,5 @@
-﻿using ABPaint.Tools.Backend;
+﻿using ABPaint.Objects;
+using ABPaint.Tools.Backend;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

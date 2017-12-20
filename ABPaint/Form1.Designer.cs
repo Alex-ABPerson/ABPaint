@@ -72,6 +72,8 @@
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.redrawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.appcenter = new System.Windows.Forms.Panel();
             this.canvaspre = new System.Windows.Forms.PictureBox();
@@ -103,16 +105,6 @@
             this.btnUline = new System.Windows.Forms.Button();
             this.propertiesLbl = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.movingRefresh = new System.Windows.Forms.Timer(this.components);
-            this.lblProcess = new System.Windows.Forms.Label();
-            this.openFileDialogOPEN = new System.Windows.Forms.OpenFileDialog();
-            this.saveFileDialogSAVE = new System.Windows.Forms.SaveFileDialog();
-            this.openFileDialogIMPORT = new System.Windows.Forms.OpenFileDialog();
-            this.saveFileDialogEXPORT = new System.Windows.Forms.SaveFileDialog();
-            this.redrawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.cl8 = new ABPaint.RightMenu.ColorBox();
             this.cl4 = new ABPaint.RightMenu.ColorBox();
             this.cl7 = new ABPaint.RightMenu.ColorBox();
@@ -121,6 +113,14 @@
             this.cl5 = new ABPaint.RightMenu.ColorBox();
             this.cl2 = new ABPaint.RightMenu.ColorBox();
             this.cl1 = new ABPaint.RightMenu.ColorBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.movingRefresh = new System.Windows.Forms.Timer(this.components);
+            this.lblProcess = new System.Windows.Forms.Label();
+            this.openFileDialogOPEN = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialogSAVE = new System.Windows.Forms.SaveFileDialog();
+            this.openFileDialogIMPORT = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialogEXPORT = new System.Windows.Forms.SaveFileDialog();
             this.toolbox.SuspendLayout();
             this.toolCursorN.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timgCursorN)).BeginInit();
@@ -458,7 +458,7 @@
             this.menuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(131, 41);
+            this.menuStrip1.Size = new System.Drawing.Size(223, 41);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -595,6 +595,19 @@
             this.deleteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(149, 6);
+            // 
+            // redrawToolStripMenuItem
+            // 
+            this.redrawToolStripMenuItem.Image = global::ABPaint.Properties.Resources.RefreshIcon;
+            this.redrawToolStripMenuItem.Name = "redrawToolStripMenuItem";
+            this.redrawToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.redrawToolStripMenuItem.Text = "Redraw";
+            this.redrawToolStripMenuItem.Click += new System.EventHandler(this.redrawToolStripMenuItem_Click);
             // 
             // toolsToolStripMenuItem
             // 
@@ -952,69 +965,6 @@
             this.panel3.Size = new System.Drawing.Size(139, 117);
             this.panel3.TabIndex = 0;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(9, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(65, 25);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Color:";
-            // 
-            // movingRefresh
-            // 
-            this.movingRefresh.Interval = 10;
-            this.movingRefresh.Tick += new System.EventHandler(this.movingRefresh_Tick);
-            // 
-            // lblProcess
-            // 
-            this.lblProcess.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lblProcess.Font = new System.Drawing.Font("Monotype Corsiva", 50F, System.Drawing.FontStyle.Italic);
-            this.lblProcess.Location = new System.Drawing.Point(60, 430);
-            this.lblProcess.Name = "lblProcess";
-            this.lblProcess.Size = new System.Drawing.Size(724, 82);
-            this.lblProcess.TabIndex = 3;
-            this.lblProcess.Text = "Processing...";
-            this.lblProcess.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblProcess.Visible = false;
-            // 
-            // openFileDialogOPEN
-            // 
-            this.openFileDialogOPEN.FileName = "*";
-            this.openFileDialogOPEN.Filter = "ABPaint File (*.abpt)|*.adpt|All files|*.*";
-            this.openFileDialogOPEN.Title = "Open...";
-            // 
-            // saveFileDialogSAVE
-            // 
-            this.saveFileDialogSAVE.FileName = "*";
-            this.saveFileDialogSAVE.Filter = "ABPaint File (*.abpt)|*.adpt|All files|*.*";
-            this.saveFileDialogSAVE.Title = "Save...";
-            // 
-            // openFileDialogIMPORT
-            // 
-            this.openFileDialogIMPORT.FileName = "*";
-            this.openFileDialogIMPORT.Filter = resources.GetString("openFileDialogIMPORT.Filter");
-            this.openFileDialogIMPORT.Title = "Import...";
-            // 
-            // saveFileDialogEXPORT
-            // 
-            this.saveFileDialogEXPORT.FileName = "*";
-            this.saveFileDialogEXPORT.Filter = resources.GetString("saveFileDialogEXPORT.Filter");
-            this.saveFileDialogEXPORT.Title = "Export...";
-            // 
-            // redrawToolStripMenuItem
-            // 
-            this.redrawToolStripMenuItem.Name = "redrawToolStripMenuItem";
-            this.redrawToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.redrawToolStripMenuItem.Text = "Redraw";
-            this.redrawToolStripMenuItem.Click += new System.EventHandler(this.redrawToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(149, 6);
-            // 
             // cl8
             // 
             this.cl8.BackColor = System.Drawing.Color.Blue;
@@ -1086,6 +1036,57 @@
             this.cl1.Size = new System.Drawing.Size(24, 20);
             this.cl1.TabIndex = 2;
             this.cl1.ToSelect = 1;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(9, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(65, 25);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Color:";
+            // 
+            // movingRefresh
+            // 
+            this.movingRefresh.Interval = 10;
+            this.movingRefresh.Tick += new System.EventHandler(this.movingRefresh_Tick);
+            // 
+            // lblProcess
+            // 
+            this.lblProcess.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lblProcess.Font = new System.Drawing.Font("Monotype Corsiva", 50F, System.Drawing.FontStyle.Italic);
+            this.lblProcess.Location = new System.Drawing.Point(60, 430);
+            this.lblProcess.Name = "lblProcess";
+            this.lblProcess.Size = new System.Drawing.Size(724, 82);
+            this.lblProcess.TabIndex = 3;
+            this.lblProcess.Text = "Processing...";
+            this.lblProcess.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lblProcess.Visible = false;
+            // 
+            // openFileDialogOPEN
+            // 
+            this.openFileDialogOPEN.FileName = "*";
+            this.openFileDialogOPEN.Filter = "ABPaint File (*.abpt)|*.abpt|All files|*.*";
+            this.openFileDialogOPEN.Title = "Open...";
+            // 
+            // saveFileDialogSAVE
+            // 
+            this.saveFileDialogSAVE.FileName = "*";
+            this.saveFileDialogSAVE.Filter = "ABPaint File (*.abpt)|*.abpt|All files|*.*";
+            this.saveFileDialogSAVE.Title = "Save...";
+            // 
+            // openFileDialogIMPORT
+            // 
+            this.openFileDialogIMPORT.FileName = "*";
+            this.openFileDialogIMPORT.Filter = resources.GetString("openFileDialogIMPORT.Filter");
+            this.openFileDialogIMPORT.Title = "Import...";
+            // 
+            // saveFileDialogEXPORT
+            // 
+            this.saveFileDialogEXPORT.FileName = "*";
+            this.saveFileDialogEXPORT.Filter = resources.GetString("saveFileDialogEXPORT.Filter");
+            this.saveFileDialogEXPORT.Title = "Export...";
             // 
             // Form1
             // 

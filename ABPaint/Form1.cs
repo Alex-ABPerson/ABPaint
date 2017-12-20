@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ABPaint.Objects;
 
 using static ABPaint.Tools.Backend.SaveSystem;
 
@@ -20,6 +21,7 @@ namespace ABPaint
     public partial class Form1 : Form
     {
         // General Variables
+
         public Tool selectedTool = Tool.Selection;
         
         public int selectedPalette = 1;
@@ -382,25 +384,52 @@ namespace ABPaint
                         }
                         else
                         {
-                            if (selectedElement is Line)
-                            {
-                                int proposedWidth = (((Line)selectedElement).StartPoint.X > ((Line)selectedElement).EndPoint.X) ? ((Line)selectedElement).StartPoint.X : ((Line)selectedElement).EndPoint.X;
-                                int proposedHeight = (((Line)selectedElement).StartPoint.Y > ((Line)selectedElement).EndPoint.Y) ? ((Line)selectedElement).StartPoint.Y : ((Line)selectedElement).EndPoint.Y;
-                                if (proposedWidth > 0) selectedElement.Width = proposedWidth + Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
-                                if (proposedHeight > 0) selectedElement.Height = proposedHeight + Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
+                            if (selectedElement is Line) {
 
                                 //selectedElement.X = BeforeResizePoint.X + ((((Line)selectedElement).StartPoint.X < ((Line)selectedElement).EndPoint.X) ? ((Line)selectedElement).StartPoint.X : ((Line)selectedElement).EndPoint.X);
                                 //selectedElement.Y = BeforeResizePoint.X + ((((Line)selectedElement).StartPoint.Y < ((Line)selectedElement).EndPoint.Y) ? ((Line)selectedElement).StartPoint.Y : ((Line)selectedElement).EndPoint.Y);
 
-                                if (CornerSelected == 1) {                                   
-                                    ((Line)selectedElement).StartPoint = new Point(mouseLoc.X - selectedElement.X, mouseLoc.Y - selectedElement.Y);
-                                    
-                                    movingRefresh.Start();
-                                } else if (CornerSelected == 2) {                                 
-                                    ((Line)selectedElement).EndPoint = new Point(mouseLoc.X - selectedElement.X, mouseLoc.Y - selectedElement.Y);
+                                //int proposedX = (((Line)selectedElement).StartPoint.X < ((Line)selectedElement).EndPoint.X) ? ((Line)selectedElement).StartPoint.X + ((Line)selectedElement).BeforeResizeX : ((Line)selectedElement).EndPoint.X + ((Line)selectedElement).BeforeResizeX;
+                                //int proposedY = (((Line)selectedElement).StartPoint.Y < ((Line)selectedElement).EndPoint.Y) ? ((Line)selectedElement).StartPoint.Y + ((Line)selectedElement).BeforeResizeY : ((Line)selectedElement).EndPoint.Y + ((Line)selectedElement).BeforeResizeY;
+
+                                if (CornerSelected == 1)
+                                {
+                                    ((Line)selectedElement).StartPoint = new Point(mouseLoc.X - ((Line)selectedElement).BeforeResizeX, mouseLoc.Y - ((Line)selectedElement).BeforeResizeY);
 
                                     movingRefresh.Start();
                                 }
+                                else if (CornerSelected == 2)
+                                {
+                                    ((Line)selectedElement).EndPoint = new Point(mouseLoc.X - ((Line)selectedElement).BeforeResizeX, mouseLoc.Y - ((Line)selectedElement).BeforeResizeY);
+
+                                    movingRefresh.Start();
+                                }
+
+                                int proposedX = 0, proposedY = 0;
+
+                                int proposedWidth = (((Line)selectedElement).StartPoint.X > ((Line)selectedElement).EndPoint.X) ? ((Line)selectedElement).StartPoint.X : ((Line)selectedElement).EndPoint.X;
+                                int proposedHeight = (((Line)selectedElement).StartPoint.Y > ((Line)selectedElement).EndPoint.Y) ? ((Line)selectedElement).StartPoint.Y : ((Line)selectedElement).EndPoint.Y;
+
+                                //if (proposedX > 0) selectedElement.X = proposedX - Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
+                                //if (proposedY > 0) selectedElement.Y = proposedY - Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
+
+                                if (((Line)selectedElement).StartPoint.X < 0) proposedX = selectedElement.X + (((Line)selectedElement).StartPoint.X - ((Line)selectedElement).ResizeFilledX);
+                                if (((Line)selectedElement).StartPoint.Y < 0) proposedY = selectedElement.Y + (((Line)selectedElement).StartPoint.Y - ((Line)selectedElement).ResizeFilledY);
+
+                                if (proposedWidth > 0) selectedElement.Width = proposedWidth + Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
+                                if (proposedHeight > 0) selectedElement.Height = proposedHeight + Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
+
+                                if (proposedX != 0) selectedElement.X = proposedX - Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
+                                if (proposedY != 0) selectedElement.Y = proposedY - Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
+
+                                ((Line)selectedElement).ResizeFilledX = ((Line)selectedElement).StartPoint.X + Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
+                                ((Line)selectedElement).ResizeFilledY = ((Line)selectedElement).StartPoint.Y + Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
+
+                                //if (((Line)selectedElement).StartPoint.X > 0) ((Line)selectedElement).StartPoint.X = 0;
+                                //if (((Line)selectedElement).StartPoint.Y > 0) ((Line)selectedElement).StartPoint.Y = 0;
+
+                                //if (((Line)selectedElement).EndPoint.X > 0) ((Line)selectedElement).EndPoint.X = 0;
+                                //if (((Line)selectedElement).EndPoint.Y > 0) ((Line)selectedElement).EndPoint.Y = 0;
                             } else {
                                 if (!(selectedElement is Pencil) && !(selectedElement is Elements.Brush) && !(selectedElement is Fill))
                                     switch (CornerSelected)
@@ -828,6 +857,16 @@ namespace ABPaint
 
                     if (CornerSelected != 0)
                         CornerSelected = 0;
+
+                    if (selectedElement is Line)
+                    {
+                        ((Line)selectedElement).BeforeResizeX = selectedElement.X;
+                        ((Line)selectedElement).BeforeResizeY = selectedElement.Y;
+
+                        ((Line)selectedElement).ResizeFilledX = ((Line)selectedElement).StartPoint.X;
+                        ((Line)selectedElement).ResizeFilledY = ((Line)selectedElement).StartPoint.Y;
+                    }
+
                     //selectedElement.Width += BeforeResizeSize.Width;
                     //selectedElement.Height += BeforeResizeSize.Height;
                     //if (IsMovingSelectionInPlace)
@@ -899,6 +938,9 @@ namespace ABPaint
 
                     currentDrawingElement.X = DrawingMin.X - (thickness * 2);
                     currentDrawingElement.Y = DrawingMin.Y - (thickness * 2);
+
+                    ((Line)currentDrawingElement).BeforeResizeX = currentDrawingElement.X;
+                    ((Line)currentDrawingElement).BeforeResizeY = currentDrawingElement.Y;
 
                     ((Line)currentDrawingElement).BeforeResizeWidth = currentDrawingElement.Width;
                     ((Line)currentDrawingElement).BeforeResizeHeight = currentDrawingElement.Height;
