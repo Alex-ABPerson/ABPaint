@@ -1,4 +1,5 @@
-﻿using ABPaint.Objects;
+﻿using ABPaint.Elements;
+using ABPaint.Objects;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,8 +15,7 @@ namespace ABPaint.Tools.Backend
     {
         public int topZIndex = 0;
         public List<Element> imageElements = new List<Element>();
-        public Size imageSize = new Size(800, 600);
-        
+        public Size imageSize = new Size(800, 600);       
     }
 
     public static class SaveSystem
@@ -26,14 +26,34 @@ namespace ABPaint.Tools.Backend
         #region ABPaint Images
         public static void LoadFile(string path)
         {
-            LoadData(File.ReadAllText(path));
-            currentFile = path;
+            if (File.Exists(path))
+            {
+                LoadData(File.ReadAllText(path));
+                currentFile = path;
+            }
+            else
+                ShowPathNoExistError();
         }
 
-        public static void SaveFile(string path)
+        public static void SaveFile(string path, bool NewFile = false)
+        {
+            if (File.Exists(path))
+                SaveFilePrivate(path);
+            else if (NewFile)
+                SaveFilePrivate(path);
+            else
+                ShowPathNoExistError();         
+        }
+
+        private static void SaveFilePrivate(string path)
         {
             File.WriteAllText(path, SaveData());
             currentFile = path;
+        }
+
+        private static void ShowPathNoExistError()
+        {
+            System.Windows.Forms.MessageBox.Show("The path that this file was saved to no longer exists. As a result, it cannot be saved. If you wish to save it elsewhere, use 'Save As'. Or, insert the media required for the path to be avalible", "Error saving file", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
         }
 
         public static void LoadData(string data)
@@ -50,8 +70,12 @@ namespace ABPaint.Tools.Backend
         #region Other Images
         public static void ImportFile(string path)
         {
-            ImportData(File.ReadAllText(path));
-            currentFile = path;
+            ImageE newElement = new ImageE(ImportData(path));
+
+            newElement.Width = newElement.image.Size.Width;
+            newElement.Height = newElement.image.Size.Height;
+
+            savedata.imageElements.Add(newElement);
         }
 
         public static void ExportFile(string path)
@@ -60,9 +84,9 @@ namespace ABPaint.Tools.Backend
             currentFile = path;
         }
 
-        public static Image ImportData(string path)
+        public static Bitmap ImportData(string path)
         {
-            return Image.FromFile(path);
+            return (Bitmap)Image.FromFile(path);
         }
 
         public static void ExportData(string path)

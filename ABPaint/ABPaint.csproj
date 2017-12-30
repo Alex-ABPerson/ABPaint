@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core.cs" />
+    <Compile Include="Elements\ImageE.cs" />
     <Compile Include="Objects\Action.cs" />
     <Compile Include="Objects\Element.cs" />
     <Compile Include="Elements\Brush.cs" />

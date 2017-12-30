@@ -12,7 +12,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ABPaint.Objects;
 
 using static ABPaint.Tools.Backend.SaveSystem;
 
@@ -1661,7 +1660,7 @@ namespace ABPaint
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (saveFileDialogSAVE.ShowDialog() == DialogResult.OK)
-                SaveFile(saveFileDialogSAVE.FileName);
+                SaveFile(saveFileDialogSAVE.FileName, true);
 
             ReloadImage();
             Core.PaintPreview();
@@ -1690,7 +1689,7 @@ namespace ABPaint
             if (currentFile == "")
             {
                 if (saveFileDialogSAVE.ShowDialog() == DialogResult.OK)
-                    SaveFile(saveFileDialogSAVE.FileName);
+                    SaveFile(saveFileDialogSAVE.FileName, true);
             }
             else
                 SaveFile(currentFile);

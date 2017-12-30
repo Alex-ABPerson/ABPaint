@@ -1,10 +1,12 @@
-﻿using ABPaint.Objects;
+﻿using ABPaint.Elements;
+using ABPaint.Objects;
 using ABPaint.Tools.Backend;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static ABPaint.Tools.Backend.SaveSystem;
@@ -20,6 +22,11 @@ namespace ABPaint
         /// <returns>An image for the result.</returns>
         public static Bitmap PaintPreview()
         {
+            while (InOperation)
+                Thread.Sleep(10);
+
+            InOperation = true;
+
             Bitmap endResult = new Bitmap(savedata.imageSize.Width, savedata.imageSize.Height);
 
             //try
@@ -40,14 +47,18 @@ namespace ABPaint
                 {
                     Bitmap bmp = ele.ProcessImage();
                     g.DrawImage(bmp, ele.X, ele.Y);
-                    bmp.Dispose();
+
+                    if (!(ele is ImageE)) bmp.Dispose(); // Why don't we dispose it if it's an image? Because, for some reason Bitmaps actually reference where they came from so I dispose it here
+                    // then it will dispose it in the ImageE as well, however, this doesn't affect other elements since their image is just for the preview and usually created from the data.
                 }
             }
 
             Program.mainForm.endImage = endResult;
 
-            return endResult;              
-            
+            InOperation = false;
+
+            return endResult;
+               
             //} catch { return endImage; }
         }
 
@@ -128,7 +139,7 @@ namespace ABPaint
             {
                 InOperation = true;
                 if (Program.mainForm.selectedElement != null)
-                    if (Program.mainForm.selectedTool == Objects.Tool.Selection)
+                    if (Program.mainForm.selectedTool == Tool.Selection)
                     {
                         savedata.imageElements.Remove(Program.mainForm.selectedElement);
 
