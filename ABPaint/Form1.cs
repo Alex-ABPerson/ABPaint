@@ -27,7 +27,7 @@ namespace ABPaint
         public Element currentDrawingElement;
         public Graphics currentDrawingGraphics;
         public bool MouseDownOnCanvas = false;
-        Task<Bitmap> tskPP = null;
+        public Task<Bitmap> tskPP = null;
 
         public Point mousePoint = new Point(0, 0);
 
@@ -103,6 +103,8 @@ namespace ABPaint
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            System.Windows.Automation.AutomationElement.FromHandle(Handle);
+
             properties.Hide();
             toolCursorS.Hide();
 
@@ -839,7 +841,7 @@ namespace ABPaint
             }
         }
 
-        private async void canvaspre_MouseUp(object sender, MouseEventArgs e)
+        private void canvaspre_MouseUp(object sender, MouseEventArgs e)
         {
             //Point mouseLoc = new Point((int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)), (int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)));
             Point mouseLoc = new Point(e.X / MagnificationLevel, e.Y / MagnificationLevel);
@@ -987,18 +989,16 @@ namespace ABPaint
                 currentDrawingElement = null;
             }
 
-            tskPP = new Task<Bitmap>(Core.PaintPreview);
-            tskPP.Start();
-
-            endImage = await tskPP;
-
             if (selectedElement != null)
             {
                 IsMovingOld = new Point(selectedElement.X, selectedElement.Y);
                 canvaspre.Invalidate();
             }
 
+            Core.PaintPreviewAsync();
+
             GC.Collect();
+            
         }
 
         /// <summary>
@@ -1145,12 +1145,9 @@ namespace ABPaint
             }
         }
 
-        private async void timer1_Tick(object sender, EventArgs e)
+        private void timer1_Tick(object sender, EventArgs e)
         {
-            Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
-            tskPP.Start();
-
-            endImage = await tskPP;
+            Core.PaintPreviewAsync();
         }
 
         private void canvaspre_Paint(object sender, PaintEventArgs e)
@@ -1353,7 +1350,7 @@ namespace ABPaint
             return ret;
         }
 
-        private async void clrNorm_MouseClick(object sender, MouseEventArgs e)
+        private void clrNorm_MouseClick(object sender, MouseEventArgs e)
         {
             clrNorm.BackColor = GetCurrentColor();
 
@@ -1365,14 +1362,11 @@ namespace ABPaint
                 if (selectedElement is Elements.Fill) ((Elements.Fill)selectedElement).fillColor = clrNorm.BackColor;
                 if (selectedElement is Elements.Text) ((Elements.Text)selectedElement).clr = clrNorm.BackColor;
 
-                Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
-                tskPP.Start();
-
-                endImage = await tskPP;
+                Core.PaintPreviewAsync();
             }
         }
 
-        private async void clrFill_MouseClick(object sender, MouseEventArgs e)
+        private void clrFill_MouseClick(object sender, MouseEventArgs e)
         {
             clrFill.BackColor = GetCurrentColor();
 
@@ -1381,14 +1375,11 @@ namespace ABPaint
                 if (selectedElement is RectangleE) ((RectangleE)selectedElement).fillColor = clrFill.BackColor;
                 if (selectedElement is Ellipse) ((Ellipse)selectedElement).FillColor = clrFill.BackColor;
 
-                Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
-                tskPP.Start();
-
-                endImage = await tskPP;
+                Core.PaintPreviewAsync();
             }
         }
 
-        private async void clrBord_MouseClick(object sender, MouseEventArgs e)
+        private void clrBord_MouseClick(object sender, MouseEventArgs e)
         {
             clrBord.BackColor = GetCurrentColor();
 
@@ -1397,14 +1388,11 @@ namespace ABPaint
                 if (selectedElement is RectangleE) ((RectangleE)selectedElement).borderColor = clrBord.BackColor;
                 if (selectedElement is Ellipse) ((Ellipse)selectedElement).BorderColor = clrBord.BackColor;
 
-                Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
-                tskPP.Start();
-
-                endImage = await tskPP;
+                Core.PaintPreviewAsync();
             }
         }
 
-        private async void txtBWidth_TextChanged(object sender, EventArgs e)
+        private void txtBWidth_TextChanged(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtBWidth.Text))
                 txtBWidth.Text = "0";
@@ -1414,14 +1402,11 @@ namespace ABPaint
                 if (selectedElement is RectangleE) ((RectangleE)selectedElement).BorderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
                 if (selectedElement is Ellipse) ((Ellipse)selectedElement).BorderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
 
-                Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
-                tskPP.Start();
-
-                endImage = await tskPP;
+                Core.PaintPreviewAsync();
             }
         }
 
-        private async void btnBold_Click(object sender, EventArgs e)
+        private void btnBold_Click(object sender, EventArgs e)
         {
             if (selectedElement != null)
             {
@@ -1433,10 +1418,8 @@ namespace ABPaint
                     else
                         ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Bold | currentFont.Style);
                 }
-                Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
-                tskPP.Start();
 
-                endImage = await tskPP;
+                Core.PaintPreviewAsync();
             }
 
             if (BoldSelected)
@@ -1453,18 +1436,15 @@ namespace ABPaint
             }
         }
 
-        private async void txtTText_TextChanged(object sender, EventArgs e)
+        private void txtTText_TextChanged(object sender, EventArgs e)
         {
             if (selectedElement != null)
                 ((Text)selectedElement).mainText = txtTText.Text;
 
-            Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
-            tskPP.Start();
-
-            endImage = await tskPP;
+            Core.PaintPreviewAsync();
         }
 
-        private async void btnItl_Click(object sender, EventArgs e)
+        private void btnItl_Click(object sender, EventArgs e)
         {
             if (selectedElement != null)
             {
@@ -1476,10 +1456,8 @@ namespace ABPaint
                     else
                         ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Italic | currentFont.Style);
                 }
-                Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
-                tskPP.Start();
 
-                endImage = await tskPP;
+                Core.PaintPreviewAsync();
             }
 
             if (ItalicSelected)
@@ -1496,7 +1474,7 @@ namespace ABPaint
             }
         }
 
-        private async void btnUline_Click(object sender, EventArgs e)
+        private void btnUline_Click(object sender, EventArgs e)
         {
             if (selectedElement != null)
             {
@@ -1508,10 +1486,8 @@ namespace ABPaint
                     else
                         ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Underline | currentFont.Style);
                 }
-                Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
-                tskPP.Start();
 
-                endImage = await tskPP;
+                Core.PaintPreviewAsync();
             }
 
             if (UnderlineSelected)
@@ -1528,7 +1504,7 @@ namespace ABPaint
             }
         }
 
-        private async void cmbFont_SelectedIndexChanged(object sender, EventArgs e)
+        private void cmbFont_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (selectedElement != null)
                 if (selectedElement is Text)
@@ -1542,13 +1518,10 @@ namespace ABPaint
                         ((Text)selectedElement).fnt = new Font(cmbFont.Text, ((Text)selectedElement).fnt.Size, ((Text)selectedElement).fnt.Style);
                     }
 
-            Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
-            tskPP.Start();
-
-            endImage = await tskPP;
+            Core.PaintPreviewAsync();
         }
 
-        private async void cmbSize_SelectedIndexChanged(object sender, EventArgs e)
+        private void cmbSize_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (selectedElement != null)
                 if (selectedElement is Text)
@@ -1570,13 +1543,10 @@ namespace ABPaint
                         ((Text)selectedElement).Height = (int)Math.Round(TextSize.Height);
                     }
 
-            Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
-            tskPP.Start();
-
-            endImage = await tskPP;
+            Core.PaintPreviewAsync();
         }
 
-        private async void txtBThick_TextChanged(object sender, EventArgs e)
+        private void txtBThick_TextChanged(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtBThick.Text))
                 txtBThick.Text = "0";
@@ -1592,10 +1562,7 @@ namespace ABPaint
                     selectedElement.Height += ((Line)selectedElement).Thickness - beforeThickness;
                 }
 
-                Task<Bitmap> tskPP = new Task<Bitmap>(Core.PaintPreview);
-                tskPP.Start();
-
-                endImage = await tskPP;
+                Core.PaintPreviewAsync();
             }
         }
         #endregion

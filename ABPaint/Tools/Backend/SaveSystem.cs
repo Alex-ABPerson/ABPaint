@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace ABPaint.Tools.Backend
         {
             if (File.Exists(path))
             {
-                LoadData(File.ReadAllText(path));
+                LoadData(path);
                 currentFile = path;
             }
             else
@@ -37,6 +38,7 @@ namespace ABPaint.Tools.Backend
 
         public static void SaveFile(string path, bool NewFile = false)
         {
+
             if (File.Exists(path))
                 SaveFilePrivate(path);
             else if (NewFile)
@@ -47,7 +49,18 @@ namespace ABPaint.Tools.Backend
 
         private static void SaveFilePrivate(string path)
         {
-            File.WriteAllText(path, SaveData());
+            //string compressed;
+
+            using (var outStream = File.OpenWrite(path))
+            {
+                using (var tinyStream = new GZipStream(outStream, CompressionMode.Compress))
+                using (var mStream = new MemoryStream(Encoding.UTF8.GetBytes(SaveData())))
+                    mStream.CopyTo(tinyStream);
+
+                //compressed = Encoding.ASCII.GetString(outStream.ToArray());
+            }
+
+            //File.WriteAllText(path, compressed);
             currentFile = path;
         }
 
@@ -56,9 +69,20 @@ namespace ABPaint.Tools.Backend
             System.Windows.Forms.MessageBox.Show("The path that this file was saved to no longer exists. As a result, it cannot be saved. If you wish to save it elsewhere, use 'Save As'. Or, insert the media required for the path to be avalible", "Error saving file", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
         }
 
-        public static void LoadData(string data)
+        public static void LoadData(string path)
         {
-            savedata = ABJson.GDISupport.JsonClassConverter.ConvertJsonToObject<SaveData>(data);
+            string decompressedData = "";
+
+            using (var inStream = File.OpenRead(path))
+            using (var bigStream = new GZipStream(inStream, CompressionMode.Decompress))
+            using (var bigStreamOut = new MemoryStream())
+            {
+                bigStream.CopyTo(bigStreamOut);
+
+                decompressedData = Encoding.ASCII.GetString(bigStreamOut.ToArray());
+            }
+
+            savedata = ABJson.GDISupport.JsonClassConverter.ConvertJsonToObject<SaveData>(decompressedData);
         }
 
         public static string SaveData()
@@ -72,8 +96,8 @@ namespace ABPaint.Tools.Backend
         {
             ImageE newElement = new ImageE(ImportData(path));
 
-            newElement.Width = newElement.image.Size.Width;
-            newElement.Height = newElement.image.Size.Height;
+            newElement.Width = newElement.mainImage.Size.Width;
+            newElement.Height = newElement.mainImage.Size.Height;
 
             savedata.imageElements.Add(newElement);
         }

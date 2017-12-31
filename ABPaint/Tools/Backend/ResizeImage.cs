@@ -42,7 +42,10 @@ namespace ABPaint.Tools.Backend
             int destHeight = (int)(sourceHeight * nPercent);
 
             Bitmap b = new Bitmap(destWidth, destHeight);
-            Graphics g = Graphics.FromImage((System.Drawing.Image)b);
+            Graphics g = Graphics.FromImage(b);
+
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
             // Draw image with new width and height
             g.DrawImage(imgToResize, 0, 0, destWidth, destHeight);

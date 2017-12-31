@@ -11,21 +11,21 @@ namespace ABPaint.Elements
 {
     public class ImageE : Element
     {
-        public Bitmap image;
+        public Bitmap mainImage;
 
         public ImageE(Bitmap img = null)
         {
-            image = img;
+            mainImage = img;
         }
 
         public override Bitmap ProcessImage()
         {
-            return image;
+            return mainImage;
         }
 
         public override void Resize(int newWidth, int newHeight)
         {
-            image = ResizeImage.resizeImage(image, new Size(newWidth, newHeight));
+            mainImage = ResizeImage.resizeImage(mainImage, new Size(newWidth, newHeight));
         }
     }
 }

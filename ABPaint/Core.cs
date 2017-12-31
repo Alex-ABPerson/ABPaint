@@ -16,15 +16,23 @@ namespace ABPaint
     public static class Core
     {
         public static bool InOperation = false;
+
+        public async static void PaintPreviewAsync()
+        {
+            while (InOperation)
+                await Task.Delay(10);
+
+            Program.mainForm.tskPP = new Task<Bitmap>(Core.PaintPreview);
+            Program.mainForm.tskPP.Start();
+
+            Program.mainForm.endImage = await Program.mainForm.tskPP;
+        }
         /// <summary>
         /// Draws the preview. (Probably the most crucial method in the whole application!)
         /// </summary>
         /// <returns>An image for the result.</returns>
         public static Bitmap PaintPreview()
         {
-            while (InOperation)
-                Thread.Sleep(10);
-
             InOperation = true;
 
             Bitmap endResult = new Bitmap(savedata.imageSize.Width, savedata.imageSize.Height);

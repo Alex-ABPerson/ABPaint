@@ -23,6 +23,7 @@ namespace ABPaint.Tools.Backend
         /// <param name="newY">The end of the line in the Y.</param>
         public static void DrawLineOfEllipse(int Thickness, Graphics g, SolidBrush color, int oldX, int oldY, int newX, int newY)
         {
+            g.FillEllipse(color, newX, newY, Thickness, Thickness);
             float length = (float)Math.Sqrt(Math.Pow(newX - oldX, 2) + Math.Pow(newY - oldY, 2));
             float dx = (newX - oldX) / length;
             float dy = (newY - oldY) / length;
