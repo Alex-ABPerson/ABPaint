@@ -52,6 +52,9 @@ As of now there is not a website however when there is there will be a link here
 
 [**RogueAI**](https://www.github.com/RogueAI42) - The main tester. Tests the program and gives lots of feedback. Has also helped with lots of problems **Alex-TimeHACK** has had.
 
+[**AShifter**](https://github.com/AShifter) - uhhh... some guy?
+
+
 ## What does the license say?
 
 This project is licensed under the MIT license. Read the LICENSE file for it in-depth. 
