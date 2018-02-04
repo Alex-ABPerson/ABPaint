@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace ABPaint.Tools
 {
-    public class CropTool : MagicTool
+    public class CropTool : PowerTool
     {
         public override bool UseRegionDrag { get { return true; } }
         public override bool OnlyRegionDragBitmap { get { return false; } }

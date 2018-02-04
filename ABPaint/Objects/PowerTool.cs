@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ABPaint.Objects
 {
-    public abstract class MagicTool
+    public abstract class PowerTool
     {
         /// <summary>
         /// If true, this tool will use the drag region to select an area.

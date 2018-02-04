@@ -16,7 +16,7 @@ namespace ABPaint
     public static class Core
     {
         public static bool InOperation = false;
-        public static MagicTool currentTool;
+        public static PowerTool currentTool;
 
         public async static void PaintPreviewAsync()
         {
@@ -132,6 +132,28 @@ namespace ABPaint
                     HandleApply();
 
                     break;
+                #region Arrow Keys
+                case Keys.Left:
+                    if (Program.mainForm.selectedElement != null)
+                        if (Program.mainForm.selectedElement.X > 0) Program.mainForm.selectedElement.X -= 1;
+
+                    break;
+                case Keys.Right:
+                    if (Program.mainForm.selectedElement != null)
+                        if ((Program.mainForm.selectedElement.X + Program.mainForm.selectedElement.Width) < savedata.imageSize.Width) Program.mainForm.selectedElement.X += 1;
+
+                    break;
+                case Keys.Up:
+                    if (Program.mainForm.selectedElement != null)
+                        if (Program.mainForm.selectedElement.Y > 0) Program.mainForm.selectedElement.Y -= 1;
+
+                    break;
+                case Keys.Down:
+                    if (Program.mainForm.selectedElement != null)
+                        if ((Program.mainForm.selectedElement.Y + Program.mainForm.selectedElement.Height) < savedata.imageSize.Height) Program.mainForm.selectedElement.Y += 1;
+
+                    break;
+                #endregion
                 case (Keys.Control | Keys.OemMinus):
                 case (Keys.Control | Keys.Subtract):             
                     HandleZoomOut();
@@ -144,9 +166,11 @@ namespace ABPaint
 
                     break;
             }
+
+            PaintPreviewAsync();
         }
 
-        public static void UseTool(MagicTool tool)
+        public static void UseTool(PowerTool tool)
         {
             if (tool.UseRegionDrag)
                 Program.mainForm.IsInDragRegion = true;
@@ -212,7 +236,7 @@ namespace ABPaint
             if (!InOperation)
             {
                 InOperation = true;
-                Clipboard.SetDataObject("ABPAINTELEMENT" + ABJson.GDISupport.JsonSerializer.Serialize("", Program.mainForm.selectedElement, ABJson.GDISupport.JsonFormatting.Compact, 0, true).TrimEnd(','), true);
+                Clipboard.SetDataObject("ABPELE" + ABJson.GDISupport.JsonSerializer.Serialize("", Program.mainForm.selectedElement, ABJson.GDISupport.JsonFormatting.Compact, 0, true).TrimEnd(','), true);
 
                 InOperation = false;
             }
@@ -227,13 +251,12 @@ namespace ABPaint
                 //Clipboard.SetDataObject("ABPAINTELEMENT" + ABJson.GDISupport.JsonSerializer.Serialize("", Program.mainForm.selectedElement, ABJson.GDISupport.JsonFormatting.Compact, 0, true).TrimEnd(','), true);
                 IDataObject data = Clipboard.GetDataObject();
 
-                if (Clipboard.GetDataObject().GetDataPresent(DataFormats.Text) && Clipboard.GetDataObject().GetData(DataFormats.Text).ToString().StartsWith("ABPAINTELEMENT"))
-                {
-                
-                    Element ele = ABJson.GDISupport.JsonClassConverter.ConvertJsonToObject<Element>(Clipboard.GetDataObject().GetData(DataFormats.Text).ToString().Remove(0, 14), true);
+                if (data.GetDataPresent(DataFormats.Text) && data.GetData(DataFormats.Text).ToString().StartsWith("ABPELE"))
+                {            
+                    Element ele = ABJson.GDISupport.JsonClassConverter.ConvertJsonToObject<Element>(data.GetData(DataFormats.Text).ToString().Remove(0, 6), true);
 
                     ele.zindex = savedata.topZIndex++;
-                    savedata.imageElements.Add(ele);
+                    AddElement(ele);
 
                     Program.mainForm.selectedElement = ele;
                 }
@@ -262,6 +285,13 @@ namespace ABPaint
                 Program.mainForm.label11.Text = "X" + Program.mainForm.MagnificationLevel;
                 Program.mainForm.ReloadImage();
             }
+        }
+
+        public static void AddElement(Element element)
+        {
+            savedata.imageElements.Add(element);
+
+            // TODO: Add undo option!
         }
     }
 }

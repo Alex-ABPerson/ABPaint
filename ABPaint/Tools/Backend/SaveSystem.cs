@@ -99,7 +99,7 @@ namespace ABPaint.Tools.Backend
             newElement.Width = newElement.mainImage.Size.Width;
             newElement.Height = newElement.mainImage.Size.Height;
 
-            savedata.imageElements.Add(newElement);
+            Core.AddElement(newElement);
         }
 
         public static void ExportFile(string path)

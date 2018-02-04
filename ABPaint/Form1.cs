@@ -829,7 +829,7 @@ namespace ABPaint
                                 currentDrawingElement.zindex = savedata.topZIndex++;
 
                                 ((Fill)currentDrawingElement).fillPoints = ImageCropping.CropImage(((Fill)currentDrawingElement).fillPoints, currentDrawingElement.X, currentDrawingElement.Y, currentDrawingElement.Width, currentDrawingElement.Height);
-                                savedata.imageElements.Add(currentDrawingElement);
+                                Core.AddElement(currentDrawingElement);
 
                                 if (currentDrawingGraphics != null) currentDrawingGraphics.Dispose();
                                 currentDrawingElement = null;
@@ -978,7 +978,7 @@ namespace ABPaint
                         currentDrawingElement.Width = Math.Abs(currentDrawingElement.Width);
                         currentDrawingElement.Height = Math.Abs(currentDrawingElement.Height);
 
-                        savedata.imageElements.Add(currentDrawingElement);
+                        Core.AddElement(currentDrawingElement);
                     }
 
                     if (currentDrawingElement is Line)
@@ -1011,7 +1011,7 @@ namespace ABPaint
 
                         ((Line)currentDrawingElement).color = clrNorm.BackColor;
 
-                        savedata.imageElements.Add(currentDrawingElement);
+                        Core.AddElement(currentDrawingElement);
 
                         canvaspre.Invalidate();
                     }
@@ -1023,7 +1023,7 @@ namespace ABPaint
                         currentDrawingElement.X = e.X;
                         currentDrawingElement.Y = e.Y;
 
-                        savedata.imageElements.Add(currentDrawingElement);
+                        Core.AddElement(currentDrawingElement);
                     }
 
                     if (currentDrawingElement is Pencil || currentDrawingElement is Elements.Brush)
@@ -1039,7 +1039,7 @@ namespace ABPaint
                         if (currentDrawingElement.Width < 0) currentDrawingElement.Width = 1;
                         if (currentDrawingElement.Height < 0) currentDrawingElement.Height = 1;
 
-                        savedata.imageElements.Add(currentDrawingElement);
+                        Core.AddElement(currentDrawingElement);
                     }
 
                     if (currentDrawingGraphics != null) currentDrawingGraphics.Dispose();
@@ -1764,7 +1764,11 @@ namespace ABPaint
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             Core.HandleKeyPress(keyData);
-            return base.ProcessCmdKey(ref msg, keyData);
+            canvaspre.Invalidate();
+
+            if ((Core.currentTool == null || !Core.currentTool.UseRegionDrag) && keyData != Keys.Enter)
+                return base.ProcessCmdKey(ref msg, keyData);
+            return true;
         }
 
         private void polygonTestToolStripMenuItem_Click(object sender, EventArgs e)
