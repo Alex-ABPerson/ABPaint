@@ -42,7 +42,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(125, 36);
             this.button1.TabIndex = 0;
-            this.button1.Text = "New";
+            this.button1.Text = "Newuho";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -50,7 +50,7 @@
             // 
             this.txtWidth.Location = new System.Drawing.Point(62, 12);
             this.txtWidth.Name = "txtWidth";
-            this.txtWidth.Size = new System.Drawing.Size(100, 20);
+            this.txtWidth.Size = new System.Drawing.Size(210, 20);
             this.txtWidth.TabIndex = 1;
             this.txtWidth.Text = "800";
             this.txtWidth.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumbersOnlyKeyPress);
@@ -77,7 +77,7 @@
             // 
             this.txtHeight.Location = new System.Drawing.Point(62, 36);
             this.txtHeight.Name = "txtHeight";
-            this.txtHeight.Size = new System.Drawing.Size(100, 20);
+            this.txtHeight.Size = new System.Drawing.Size(210, 20);
             this.txtHeight.TabIndex = 1;
             this.txtHeight.Text = "600";
             this.txtHeight.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumbersOnlyKeyPress);

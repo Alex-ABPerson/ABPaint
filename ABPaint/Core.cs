@@ -16,6 +16,7 @@ namespace ABPaint
     public static class Core
     {
         public static bool InOperation = false;
+        public static MagicTool currentTool;
 
         public async static void PaintPreviewAsync()
         {
@@ -27,6 +28,7 @@ namespace ABPaint
 
             Program.mainForm.endImage = await Program.mainForm.tskPP;
         }
+
         /// <summary>
         /// Draws the preview. (Probably the most crucial method in the whole application!)
         /// </summary>
@@ -126,19 +128,45 @@ namespace ABPaint
                         HandlePaste();
 
                     break;
+                case Keys.Enter:
+                    HandleApply();
+
+                    break;
                 case (Keys.Control | Keys.OemMinus):
-                case (Keys.Control | Keys.Subtract):
-                    //if (follControl.ModifierKeys == Keys.Control)
-                        HandleZoomOut();
+                case (Keys.Control | Keys.Subtract):             
+                    HandleZoomOut();
 
                     break;
                 case (Keys.Control | Keys.Oemplus):
                 case (Keys.Control | Keys.Add):
-                    //if (Control.ModifierKeys == Keys.Control)
-                        HandleZoomIn();
+                    
+                    HandleZoomIn();
 
                     break;
             }
+        }
+
+        public static void UseTool(MagicTool tool)
+        {
+            if (tool.UseRegionDrag)
+                Program.mainForm.IsInDragRegion = true;
+
+            currentTool = tool;
+
+            tool.Prepare();
+        }
+
+        public static void HandleApply()
+        {
+            if (currentTool != null)
+                if (currentTool.UseRegionDrag)
+                {
+                    Program.mainForm.IsInDragRegion = false;
+                    currentTool.Apply(Program.mainForm.dragRegionSelect);
+                } else {
+                    Program.mainForm.IsInDragRegion = false;
+                    currentTool.Apply(new Rectangle());
+                }
         }
 
         public static void HandleDelete()

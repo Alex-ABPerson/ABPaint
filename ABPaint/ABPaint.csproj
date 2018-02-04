@@ -73,6 +73,12 @@
   <ItemGroup>
     <Compile Include="Core.cs" />
     <Compile Include="Elements\ImageE.cs" />
+    <Compile Include="Form2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form2.Designer.cs">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Objects\Action.cs" />
     <Compile Include="Objects\Element.cs" />
     <Compile Include="Elements\Brush.cs" />
@@ -88,6 +94,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Objects\MagicTool.cs" />
     <Compile Include="Objects\Tool.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -107,7 +114,15 @@
     <Compile Include="Tools\Backend\ImageFilling.cs" />
     <Compile Include="Tools\Backend\ImageFormer.cs" />
     <Compile Include="Tools\Backend\ImageInverting.cs" />
+    <Compile Include="Tools\Backend\PolygonDrawing.cs" />
     <Compile Include="Tools\Backend\SaveSystem.cs" />
+    <Compile Include="Tools\CropTool.cs" />
+    <Compile Include="Tools\Windows\CropTool.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tools\Windows\CropTool.Designer.cs">
+      <DependentUpon>CropTool.cs</DependentUpon>
+    </Compile>
     <Compile Include="Windows\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -124,6 +139,9 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Form2.resx">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
@@ -131,6 +149,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RightMenu\ColorBox.resx">
       <DependentUpon>ColorBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\Windows\CropTool.resx">
+      <DependentUpon>CropTool.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\About.resx">
       <DependentUpon>About.cs</DependentUpon>
@@ -270,6 +291,7 @@
     <Content Include="Resources\new_graphics\CutIcon.png" />
     <Content Include="Resources\new_graphics\EllipseIcon.png" />
     <Content Include="Resources\new_graphics\Export.png" />
+    <None Include="Resources\new_graphics\FakeWindow.png" />
     <Content Include="Resources\new_graphics\FillBucket.png" />
     <Content Include="Resources\new_graphics\Import.png" />
     <None Include="Resources\new_graphics\LineTool.png" />

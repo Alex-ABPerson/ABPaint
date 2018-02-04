@@ -24,6 +24,10 @@ namespace ABPaint
         {
             if (ForNew)
             {
+                // Change the UI for "new"
+                Text = "New";
+                button1.Text = "New";
+
                 Size clipboardSize = new Size(0, 0);
                 if (Clipboard.ContainsImage())
                 {
@@ -33,15 +37,14 @@ namespace ABPaint
                     clipboardSize = getSize.Size;
                 }
 
-                txtWidth.Text = clipboardSize.Width.ToString() ?? 800.ToString();
-                txtHeight.Text = clipboardSize.Height.ToString() ?? 600.ToString();
-
-                button1.Text = "New";
+                txtWidth.Text = (clipboardSize.Width == 0) ? "800" : clipboardSize.Width.ToString();
+                txtHeight.Text = (clipboardSize.Width == 0) ? "600" : clipboardSize.Height.ToString();               
             } else {
-                txtWidth.Text = oldSize.Width.ToString() ?? 800.ToString();
-                txtHeight.Text = oldSize.Height.ToString() ?? 600.ToString();
-
+                Text = "Resize";
                 button1.Text = "Resize";
+
+                txtWidth.Text = oldSize.Width.ToString() ?? "800";
+                txtHeight.Text = oldSize.Height.ToString() ?? "600";               
             }
         }
 
