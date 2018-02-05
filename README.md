@@ -44,6 +44,14 @@ You don't have to use Bitmaps but if you have to (or want to for a certain thing
 
 As of now there is not a website however when there is there will be a link here for full in-depth detail on it.
 
+## History
+
+Undoing, redoing and keeping track of work is (*or will be*) easy with ABPaint! Undoing and redoing doesn't  use much memory at all - no need to worry!
+
+The last five undos are stored in your file so that you can undo big events.
+
+You can mark certain changes as important so that you can go back to them no matter how many times you undo and redo.
+
 ## Contributers
 
 [**Alex-TimeHACK**](https://www.github.com/Alex-TIMEHACK) - The lead developer of the project. Currently the only person who does any programming :P
