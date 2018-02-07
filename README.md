@@ -52,6 +52,7 @@ The last five undos are stored in your file so that you can undo big events.
 
 You can mark certain changes as important so that you can go back to them no matter how many times you undo and redo.
 
+Once again, for a tutorial on all of this - simply check the website - (Not Existant Right Now)
 ## Contributers
 
 [**Alex-TimeHACK**](https://www.github.com/Alex-TIMEHACK) - The lead developer of the project. Currently the only person who does any programming :P
