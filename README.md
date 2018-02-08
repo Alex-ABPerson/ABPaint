@@ -55,7 +55,7 @@ You can mark certain changes as important so that you can go back to them no mat
 Once again, for a tutorial on all of this - simply check the website - (Not Existant Right Now)
 ## Contributers
 
-[**Alex-TimeHACK**](https://www.github.com/Alex-TIMEHACK) - The lead developer of the project. Currently the only person who does any programming :P
+[**Alex-ABWorld**](https://www.github.com/Alex-TIMEHACK) - The lead developer of the project. Currently the only person who does any programming :P
 
 [**jtsshieh**](https://www.github.com/jtsshieh) - The lead artist of the project. Makes a lot of the artwork for the program but has also made the wiki and tested the application several times.
 
