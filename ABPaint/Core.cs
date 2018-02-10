@@ -20,7 +20,9 @@ namespace ABPaint
     {
         public static bool InOperation = false;
         public static PowerTool currentTool;
-        private static Object lockObj = new Object();
+        private static Object paintLock = new Object(); // A lock for a painting
+        private static Object editLock = new Object(); // A lock for editing imageElements
+        private static Object actionLock = new Object(); // A lock for doing big processing that involve changing variables like "selectedElement"
 
         #region Main Variables
         // General Variables
@@ -113,9 +115,8 @@ namespace ABPaint
         /// <returns>An image for the result.</returns>
         public static Bitmap PaintPreview()
         {
-            lock (lockObj)
+            lock (paintLock)
             {
-
                 Bitmap endResult = new Bitmap(savedata.imageSize.Width, savedata.imageSize.Height);
 
                 //try
@@ -160,25 +161,28 @@ namespace ABPaint
         {
             Element ret = null;
 
-            // Order the list based on zindex! But backwards so that the foreach picks up the top one!
-            savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).Reverse().ToList();
-
-            foreach (Element ele in savedata.imageElements)
+            lock (editLock)
             {
-                if (new Rectangle(ele.X - 10, ele.Y - 10, ele.Width + 20, ele.Height + 20).Contains(new Point(x, y)))
+                // Order the list based on zindex! But backwards so that the foreach picks up the top one!
+                savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).Reverse().ToList();
+
+                foreach (Element ele in savedata.imageElements)
                 {
-                    // The mouse is in this element!
+                    if (new Rectangle(ele.X - 10, ele.Y - 10, ele.Width + 20, ele.Height + 20).Contains(new Point(x, y)))
+                    {
+                        // The mouse is in this element!
 
-                    ele.zindex = SaveSystem.savedata.topZIndex++; // Brings to front
+                        ele.zindex = SaveSystem.savedata.topZIndex++; // Brings to front
 
-                    ret = ele;
+                        ret = ele;
 
-                    break;
+                        break;
+                    }
                 }
-            }
 
-            // Order the list based on zindex!
-            savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).ToList();
+                // Order the list based on zindex!
+                savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).ToList();
+            }
 
             return ret;
         }
@@ -310,7 +314,7 @@ namespace ABPaint
 
         public static void UseTool(PowerTool tool)
         {
-            lock (lockObj)
+            lock (actionLock)
             {
                 if (tool.UseRegionDrag)
                     IsInDragRegion = true;
@@ -323,7 +327,7 @@ namespace ABPaint
 
         public static void HandleApply()
         {
-            lock (lockObj)
+            lock (actionLock)
             {
                 if (currentTool != null)
                     if (currentTool.UseRegionDrag)
@@ -341,7 +345,7 @@ namespace ABPaint
 
         public static void HandleDelete()
         {
-            lock (lockObj)
+            lock (actionLock)
             {
                 if (selectedElement != null)
                     if (selectedTool == Tool.Selection)
@@ -358,7 +362,7 @@ namespace ABPaint
 
         public static void HandleCut()
         {
-            lock (lockObj)
+            lock (actionLock)
             {
                 HandleCopy();
 
@@ -372,7 +376,7 @@ namespace ABPaint
 
         public static void HandleCopy()
         {
-            lock (lockObj)
+            lock (actionLock)
             {
                 Clipboard.SetDataObject("ABPELE" + ABJson.GDISupport.JsonSerializer.Serialize("", selectedElement, ABJson.GDISupport.JsonFormatting.Compact, 0, true).TrimEnd(','), true);
             }
@@ -381,7 +385,7 @@ namespace ABPaint
 
         public static void HandlePaste()
         {
-            lock (lockObj)
+            lock (actionLock)
             {
                 //Clipboard.SetDataObject("ABPAINTELEMENT" + ABJson.GDISupport.JsonSerializer.Serialize("", Program.mainForm.selectedElement, ABJson.GDISupport.JsonFormatting.Compact, 0, true).TrimEnd(','), true);
                 IDataObject data = Clipboard.GetDataObject();
@@ -423,7 +427,7 @@ namespace ABPaint
 
         public static void AddElement(Element element)
         {
-            lock (lockObj)
+            lock (editLock)
             {
                 savedata.imageElements.Add(element);
             }
