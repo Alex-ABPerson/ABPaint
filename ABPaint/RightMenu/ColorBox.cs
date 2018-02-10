@@ -22,7 +22,7 @@ namespace ABPaint.RightMenu
         private void ColorBox_Paint(object sender, PaintEventArgs e)
         {
             if (Program.mainForm != null)
-                if (Program.mainForm.selectedPalette == ToSelect)
+                if (Core.selectedPalette == ToSelect)
                 {
                     // Draw the outline
 
@@ -41,7 +41,7 @@ namespace ABPaint.RightMenu
         {
             if (e.Button == MouseButtons.Left)
             {
-                Program.mainForm.selectedPalette = ToSelect;
+                Core.selectedPalette = ToSelect;
             }
             else
             {

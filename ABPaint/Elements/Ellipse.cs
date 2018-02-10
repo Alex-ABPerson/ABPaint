@@ -15,7 +15,7 @@ namespace ABPaint.Elements
         public Color FillColor;
         public Color BorderColor;
         public int BorderSize;
-        public bool IsFilled;
+        public bool IsFilled = false;
 
         public override Bitmap ProcessImage()
         {

@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace ABPaint.Elements
 {
-    class RectangleE : Element
+    public class RectangleE : Element
     {
         public Color fillColor;
         public Color borderColor;
         public int BorderSize;
-        public bool IsFilled;
+        public bool IsFilled = false;
 
         public override Bitmap ProcessImage()
         {

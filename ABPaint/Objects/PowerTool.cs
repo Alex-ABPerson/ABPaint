@@ -28,6 +28,6 @@ namespace ABPaint.Objects
         /// Once all the controls for the effect has been set this function will be run.
         /// </summary>
         /// <param name="dragRegion"></param>
-        public abstract void Apply(Rectangle dragRegion);
+        public abstract void Apply(Rectangle region);
     }
 }

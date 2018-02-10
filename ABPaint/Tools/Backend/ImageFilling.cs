@@ -61,16 +61,16 @@ namespace ABPaint.Tools.Backend
             Color clr = background.GetPixel(x, y);
             if (clr.Equals(old_color))
             {
-                var DrawingMin = Program.mainForm.DrawingMin;
-                var DrawingMax = Program.mainForm.DrawingMax;
+                var DrawingMin = Core.DrawingMin;
+                var DrawingMax = Core.DrawingMax;
 
                 if (x < DrawingMin.X) DrawingMin.X = x;
                 if (y < DrawingMin.Y) DrawingMin.Y = y;
                 if (x > DrawingMax.X) DrawingMax.X = x;
                 if (y > DrawingMax.Y) DrawingMax.Y = y;
 
-                Program.mainForm.DrawingMin = DrawingMin;
-                Program.mainForm.DrawingMax = DrawingMax;
+                Core.DrawingMin = DrawingMin;
+                Core.DrawingMax = DrawingMax;
 
                 pts.Push(new Point(x, y));
                 background.SetPixel(x, y, new_color);
