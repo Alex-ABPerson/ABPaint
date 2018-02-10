@@ -3,14 +3,7 @@ using ABPaint.Objects;
 using ABPaint.Tools.Backend;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using static ABPaint.Tools.Backend.SaveSystem;
@@ -469,7 +462,7 @@ namespace ABPaint
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            Core.PaintPreviewAsync();
+           PaintPreviewAsync();
         }
 
         private void canvaspre_Paint(object sender, PaintEventArgs e)
@@ -694,7 +687,7 @@ namespace ABPaint
                 if (selectedElement is Elements.Fill) ((Elements.Fill)selectedElement).fillColor = clrNorm.BackColor;
                 if (selectedElement is Elements.Text) ((Elements.Text)selectedElement).clr = clrNorm.BackColor;
 
-                Core.PaintPreviewAsync();
+               PaintPreviewAsync();
             }
         }
 
@@ -707,7 +700,7 @@ namespace ABPaint
                 if (selectedElement is RectangleE) ((RectangleE)selectedElement).FillColor = clrFill.BackColor;
                 if (selectedElement is Ellipse) ((Ellipse)selectedElement).FillColor = clrFill.BackColor;
 
-                Core.PaintPreviewAsync();
+                PaintPreviewAsync();
             }
         }
 
@@ -720,7 +713,7 @@ namespace ABPaint
                 if (selectedElement is RectangleE) ((RectangleE)selectedElement).BorderColor = clrBord.BackColor;
                 if (selectedElement is Ellipse) ((Ellipse)selectedElement).BorderColor = clrBord.BackColor;
 
-                Core.PaintPreviewAsync();
+                PaintPreviewAsync();
             }
         }
 
@@ -734,7 +727,7 @@ namespace ABPaint
                 if (selectedElement is RectangleE) ((RectangleE)selectedElement).BorderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
                 if (selectedElement is Ellipse) ((Ellipse)selectedElement).BorderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
 
-                Core.PaintPreviewAsync();
+                PaintPreviewAsync();
             }
         }
 
@@ -751,7 +744,7 @@ namespace ABPaint
                         ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Bold | currentFont.Style);
                 }
 
-                Core.PaintPreviewAsync();
+                PaintPreviewAsync();
             }
 
             if (BoldSelected)
@@ -773,7 +766,7 @@ namespace ABPaint
             if (selectedElement != null)
                 ((Text)selectedElement).mainText = txtTText.Text;
 
-            Core.PaintPreviewAsync();
+            PaintPreviewAsync();
         }
 
         private void btnItl_Click(object sender, EventArgs e)
@@ -789,7 +782,7 @@ namespace ABPaint
                         ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Italic | currentFont.Style);
                 }
 
-                Core.PaintPreviewAsync();
+                PaintPreviewAsync();
             }
 
             if (ItalicSelected)
@@ -819,7 +812,7 @@ namespace ABPaint
                         ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Underline | currentFont.Style);
                 }
 
-                Core.PaintPreviewAsync();
+                PaintPreviewAsync();
             }
 
             if (UnderlineSelected)
@@ -850,7 +843,7 @@ namespace ABPaint
                         ((Text)selectedElement).fnt = new Font(cmbFont.Text, ((Text)selectedElement).fnt.Size, ((Text)selectedElement).fnt.Style);
                     }
 
-            Core.PaintPreviewAsync();
+            PaintPreviewAsync();
         }
 
         private void cmbSize_SelectedIndexChanged(object sender, EventArgs e)
@@ -875,7 +868,7 @@ namespace ABPaint
                         ((Text)selectedElement).Height = (int)Math.Round(TextSize.Height);
                     }
 
-            Core.PaintPreviewAsync();
+            PaintPreviewAsync();
         }
 
         private void txtBThick_TextChanged(object sender, EventArgs e)
@@ -894,7 +887,7 @@ namespace ABPaint
                     selectedElement.Height += ((Line)selectedElement).Thickness - beforeThickness;
                 }
 
-                Core.PaintPreviewAsync();
+                PaintPreviewAsync();
             }
         }
         #endregion
@@ -1042,7 +1035,7 @@ namespace ABPaint
 
         private void cropToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Core.UseTool(new Tools.CropTool());
+            UseTool(new Tools.CropTool());
         }
     }
 }
