@@ -17,6 +17,7 @@ namespace ABPaint
     {
         public static bool InOperation = false;
         public static PowerTool currentTool;
+        private static Object lockObj = new Object();
 
         public async static void PaintPreviewAsync()
         {
@@ -35,39 +36,39 @@ namespace ABPaint
         /// <returns>An image for the result.</returns>
         public static Bitmap PaintPreview()
         {
-            InOperation = true;
-
-            Bitmap endResult = new Bitmap(savedata.imageSize.Width, savedata.imageSize.Height);
-
-            //try
-            //{
-            // Draw the elements in order
-
-                
-            Graphics g = Graphics.FromImage(endResult);
-
-            // Order them by zindex:
-            savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).ToList();
-
-            // Now draw them all!
-
-            foreach (Element ele in savedata.imageElements)
+            lock (lockObj)
             {
-                if (ele.Visible)
+
+                Bitmap endResult = new Bitmap(savedata.imageSize.Width, savedata.imageSize.Height);
+
+                //try
+                //{
+                // Draw the elements in order
+
+
+                Graphics g = Graphics.FromImage(endResult);
+
+                // Order them by zindex:
+                savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).ToList();
+
+                // Now draw them all!
+
+                foreach (Element ele in savedata.imageElements)
                 {
-                    Bitmap bmp = ele.ProcessImage();
-                    g.DrawImage(bmp, ele.X, ele.Y);
+                    if (ele.Visible)
+                    {
+                        Bitmap bmp = ele.ProcessImage();
+                        g.DrawImage(bmp, ele.X, ele.Y);
 
-                    if (!(ele is ImageE)) bmp.Dispose(); // Why don't we dispose it if it's an image? Because, for some reason Bitmaps actually reference where they came from so I dispose it here
-                    // then it will dispose it in the ImageE as well, however, this doesn't affect other elements since their image is just for the preview and usually created from the data.
+                        if (!(ele is ImageE)) bmp.Dispose(); // Why don't we dispose it if it's an image? Because, for some reason Bitmaps actually reference where they came from so I dispose it here
+                                                             // then it will dispose it in the ImageE as well, however, this doesn't affect other elements since their image is just for the preview and usually created from the data.
+                    }
                 }
+
+                Program.mainForm.endImage = endResult;
+
+                return endResult;
             }
-
-            Program.mainForm.endImage = endResult;
-
-            InOperation = false;
-
-            return endResult;
                
             //} catch { return endImage; }
         }
@@ -153,6 +154,66 @@ namespace ABPaint
                         if ((Program.mainForm.selectedElement.Y + Program.mainForm.selectedElement.Height) < savedata.imageSize.Height) Program.mainForm.selectedElement.Y += 1;
 
                     break;
+                case (Keys.Left | Keys.Alt):
+                    if (Program.mainForm.selectedElement != null)
+                        if (Program.mainForm.selectedElement.X > 9) Program.mainForm.selectedElement.X -= 10;
+
+                    break;
+                case (Keys.Right | Keys.Alt):
+                    if (Program.mainForm.selectedElement != null)
+                        if ((Program.mainForm.selectedElement.X + Program.mainForm.selectedElement.Width) < savedata.imageSize.Width - 9) Program.mainForm.selectedElement.X += 10;
+
+                    break;
+                case (Keys.Up | Keys.Alt):
+                    if (Program.mainForm.selectedElement != null)
+                        if (Program.mainForm.selectedElement.Y > 9) Program.mainForm.selectedElement.Y -= 10;
+
+                    break;
+                case (Keys.Down | Keys.Alt):
+                    if (Program.mainForm.selectedElement != null)
+                        if ((Program.mainForm.selectedElement.Y + Program.mainForm.selectedElement.Height) < savedata.imageSize.Height - 9) Program.mainForm.selectedElement.Y += 10;
+
+                    break;
+                case (Keys.Left | Keys.Control):
+                    if (Program.mainForm.appcenter.HorizontalScroll.Value > 1)
+                        Program.mainForm.appcenter.HorizontalScroll.Value -= 1;
+
+                    break;
+                case (Keys.Right | Keys.Control):
+                    if (Program.mainForm.appcenter.HorizontalScroll.Value < Program.mainForm.appcenter.VerticalScroll.Maximum - 1)
+                        Program.mainForm.appcenter.HorizontalScroll.Value += 1;
+
+                    break;
+                case (Keys.Up | Keys.Control):
+                    if (Program.mainForm.appcenter.VerticalScroll.Value > 1)
+                        Program.mainForm.appcenter.VerticalScroll.Value -= 1;
+
+                    break;
+                case (Keys.Down | Keys.Control):
+                    if (Program.mainForm.appcenter.VerticalScroll.Value < Program.mainForm.appcenter.VerticalScroll.Maximum - 1)
+                        Program.mainForm.appcenter.VerticalScroll.Value += 1;
+
+                    break;
+                case (Keys.Left | Keys.Control | Keys.Alt):
+                    if (Program.mainForm.appcenter.HorizontalScroll.Value > 10)
+                        Program.mainForm.appcenter.HorizontalScroll.Value -= 10;
+
+                    break;
+                case (Keys.Right | Keys.Control | Keys.Alt):
+                    if (Program.mainForm.appcenter.HorizontalScroll.Value < Program.mainForm.appcenter.VerticalScroll.Maximum - 10)
+                        Program.mainForm.appcenter.HorizontalScroll.Value += 10;
+
+                    break;
+                case (Keys.Up | Keys.Control | Keys.Alt):
+                    if (Program.mainForm.appcenter.VerticalScroll.Value > 10)
+                        Program.mainForm.appcenter.VerticalScroll.Value -= 10;
+
+                    break;
+                case (Keys.Down | Keys.Control | Keys.Alt):
+                    if (Program.mainForm.appcenter.VerticalScroll.Value < Program.mainForm.appcenter.VerticalScroll.Maximum - 10)
+                        Program.mainForm.appcenter.VerticalScroll.Value += 10;
+
+                    break;
                 #endregion
                 case (Keys.Control | Keys.OemMinus):
                 case (Keys.Control | Keys.Subtract):             
@@ -160,44 +221,51 @@ namespace ABPaint
 
                     break;
                 case (Keys.Control | Keys.Oemplus):
-                case (Keys.Control | Keys.Add):
-                    
+                case (Keys.Control | Keys.Add):          
                     HandleZoomIn();
 
                     break;
             }
 
             PaintPreviewAsync();
+            Program.mainForm.canvaspre.Invalidate();
         }
 
         public static void UseTool(PowerTool tool)
         {
-            if (tool.UseRegionDrag)
-                Program.mainForm.IsInDragRegion = true;
+            lock (lockObj)
+            {
+                if (tool.UseRegionDrag)
+                    Program.mainForm.IsInDragRegion = true;
 
-            currentTool = tool;
+                currentTool = tool;
 
-            tool.Prepare();
+                tool.Prepare();
+            }
         }
 
         public static void HandleApply()
         {
-            if (currentTool != null)
-                if (currentTool.UseRegionDrag)
-                {
-                    Program.mainForm.IsInDragRegion = false;
-                    currentTool.Apply(Program.mainForm.dragRegionSelect);
-                } else {
-                    Program.mainForm.IsInDragRegion = false;
-                    currentTool.Apply(new Rectangle());
-                }
+            lock (lockObj)
+            {
+                if (currentTool != null)
+                    if (currentTool.UseRegionDrag)
+                    {
+                        Program.mainForm.IsInDragRegion = false;
+                        currentTool.Apply(Program.mainForm.dragRegionSelect);
+                    }
+                    else
+                    {
+                        Program.mainForm.IsInDragRegion = false;
+                        currentTool.Apply(new Rectangle());
+                    }
+            }
         }
 
         public static void HandleDelete()
         {
-            if (!InOperation)
+            lock (lockObj)
             {
-                InOperation = true;
                 if (Program.mainForm.selectedElement != null)
                     if (Program.mainForm.selectedTool == Tool.Selection)
                     {
@@ -208,17 +276,13 @@ namespace ABPaint
                         Program.mainForm.canvaspre.Invalidate();
                         Program.mainForm.endImage = PaintPreview();
                     }
-
-                InOperation = false;
             }
         }
 
         public static void HandleCut()
         {
-            if (!InOperation)
+            lock (lockObj)
             {
-                InOperation = true;
-
                 HandleCopy();
 
                 savedata.imageElements.Remove(Program.mainForm.selectedElement);
@@ -226,28 +290,22 @@ namespace ABPaint
 
                 Program.mainForm.canvaspre.Invalidate();
                 Program.mainForm.endImage = Core.PaintPreview();
-
-                InOperation = false;
             }
         }
 
         public static void HandleCopy()
         {
-            if (!InOperation)
+            lock (lockObj)
             {
-                InOperation = true;
                 Clipboard.SetDataObject("ABPELE" + ABJson.GDISupport.JsonSerializer.Serialize("", Program.mainForm.selectedElement, ABJson.GDISupport.JsonFormatting.Compact, 0, true).TrimEnd(','), true);
-
-                InOperation = false;
             }
             //Clipboard.SetDataObject(Program.mainForm.selectedElement, true);
         }
 
         public static void HandlePaste()
         {
-            if (!InOperation)
+            lock (lockObj)
             {
-                InOperation = true;
                 //Clipboard.SetDataObject("ABPAINTELEMENT" + ABJson.GDISupport.JsonSerializer.Serialize("", Program.mainForm.selectedElement, ABJson.GDISupport.JsonFormatting.Compact, 0, true).TrimEnd(','), true);
                 IDataObject data = Clipboard.GetDataObject();
 
@@ -263,7 +321,6 @@ namespace ABPaint
 
                 Program.mainForm.canvaspre.Invalidate();
                 Program.mainForm.endImage = Core.PaintPreview();
-                InOperation = false;
             }
         }
 
@@ -289,8 +346,10 @@ namespace ABPaint
 
         public static void AddElement(Element element)
         {
-            savedata.imageElements.Add(element);
-
+            lock (lockObj)
+            {
+                savedata.imageElements.Add(element);
+            }
             // TODO: Add undo option!
         }
     }

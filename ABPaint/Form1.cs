@@ -513,11 +513,6 @@ namespace ABPaint
 
                     currentDrawingGraphics.DrawPath(new Pen(Color.FromArgb(1, 0, 1)), grph);
 
-                    if (mouseLoc.X > DrawingMax.X) DrawingMax.X = mouseLoc.X;
-                    if (mouseLoc.Y > DrawingMax.Y) DrawingMax.Y = mouseLoc.Y;
-                    if (mouseLoc.X < DrawingMin.X) DrawingMin.X = mouseLoc.X;
-                    if (mouseLoc.Y < DrawingMin.Y) DrawingMin.Y = mouseLoc.Y;
-
                     canvaspre.Invalidate();
                 }
 
@@ -531,33 +526,17 @@ namespace ABPaint
                     //currentDrawingGraphics.DrawPath(new Pen(Color.FromArgb(1, 0, 1), Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text)), grph);
                     //currentDrawingGraphics.DrawLine(new Pen(Color.FromArgb(1, 0, 1), Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text)), lastMousePoint, mouseLoc);
                     //currentDrawingGraphics.FillEllipse(sb101, mouseLoc.X, mouseLoc.Y, Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text), Convert.ToInt32(txtBThick.Text));
-
-                    if (mouseLoc.X > DrawingMax.X) DrawingMax.X = mouseLoc.X;
-                    if (mouseLoc.Y > DrawingMax.Y) DrawingMax.Y = mouseLoc.Y;
-                    if (mouseLoc.X < DrawingMin.X) DrawingMin.X = mouseLoc.X;
-                    if (mouseLoc.Y < DrawingMin.Y) DrawingMin.Y = mouseLoc.Y;
-
+                    
                     canvaspre.Invalidate();
                 }
 
                 if (currentDrawingElement is RectangleE || currentDrawingElement is Ellipse)
                 {
-                    DrawingMax.X = mouseLoc.X;
-                    DrawingMax.Y = mouseLoc.Y;
-
-                    if (mouseLoc.X < DrawingMin.X) DrawingMin.X = mouseLoc.X;
-                    if (mouseLoc.Y < DrawingMin.Y) DrawingMin.Y = mouseLoc.Y;
-
                     canvaspre.Invalidate();
                 }
 
                 if (currentDrawingElement is Line)
                 {
-                    if (mouseLoc.X > DrawingMax.X) DrawingMax.X = mouseLoc.X;
-                    if (mouseLoc.Y > DrawingMax.Y) DrawingMax.Y = mouseLoc.Y;
-                    if (mouseLoc.X < DrawingMin.X) DrawingMin.X = mouseLoc.X;
-                    if (mouseLoc.Y < DrawingMin.Y) DrawingMin.Y = mouseLoc.Y;
-
                     canvaspre.Invalidate();
                 }
 
@@ -567,6 +546,14 @@ namespace ABPaint
                     ((Elements.Text)currentDrawingElement).Y = mouseLoc.Y;
 
                     canvaspre.Invalidate();
+                }
+
+                if (currentDrawingElement is Pencil || currentDrawingElement is Elements.Brush || currentDrawingElement is Line || currentDrawingElement is RectangleE || currentDrawingElement is Ellipse)
+                {
+                    if (mouseLoc.X > DrawingMax.X) DrawingMax.X = mouseLoc.X;
+                    if (mouseLoc.Y > DrawingMax.Y) DrawingMax.Y = mouseLoc.Y;
+                    if (mouseLoc.X < DrawingMin.X) DrawingMin.X = mouseLoc.X;
+                    if (mouseLoc.Y < DrawingMin.Y) DrawingMin.Y = mouseLoc.Y;
                 }
 
                 lastMousePoint = mouseLoc;
@@ -943,17 +930,31 @@ namespace ABPaint
 
                     if (selectedTool == Tool.Pencil) grph.Reset();
 
+                    if (currentDrawingElement is Pencil || currentDrawingElement is Elements.Brush || currentDrawingElement is Line || currentDrawingElement is RectangleE || currentDrawingElement is Ellipse)
+                    {
+                        if (mouseLoc.X > DrawingMax.X) DrawingMax.X = mouseLoc.X;
+                        if (mouseLoc.Y > DrawingMax.Y) DrawingMax.Y = mouseLoc.Y;
+                        if (mouseLoc.X < DrawingMin.X) DrawingMin.X = mouseLoc.X;
+                        if (mouseLoc.Y < DrawingMin.Y) DrawingMin.Y = mouseLoc.Y;
+                    }
+
                     // Apply the data
 
                     if (currentDrawingElement is Pencil)
                     {
-                        ((Pencil)currentDrawingElement).pencilPoints = ImageCropping.CropImage(((Pencil)currentDrawingElement).pencilPoints, DrawingMin.X, DrawingMin.Y, DrawingMax.X, DrawingMax.Y);
+                        int x = (DrawingMin.X < 0) ? 0 : DrawingMin.X;
+                        int y = (DrawingMin.Y < 0) ? 0 : DrawingMin.Y;
+
+                        ((Pencil)currentDrawingElement).pencilPoints = ImageCropping.CropImage(((Pencil)currentDrawingElement).pencilPoints, x, y, DrawingMax.X, DrawingMax.Y);
                         ((Pencil)currentDrawingElement).pencilColor = clrNorm.BackColor;
                     }
 
                     if (currentDrawingElement is Elements.Brush)
                     {
-                        ((Elements.Brush)currentDrawingElement).brushPoints = ImageCropping.CropImage(((Elements.Brush)currentDrawingElement).brushPoints, DrawingMin.X, DrawingMin.Y, DrawingMax.X + Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text), DrawingMax.Y + Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text));
+                        int x = (DrawingMin.X < 0) ? 0 : DrawingMin.X;
+                        int y = (DrawingMin.Y < 0) ? 0 : DrawingMin.Y;
+
+                        ((Elements.Brush)currentDrawingElement).brushPoints = ImageCropping.CropImage(((Elements.Brush)currentDrawingElement).brushPoints, x, y, DrawingMax.X + Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text), DrawingMax.Y + Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text));
                         ((Elements.Brush)currentDrawingElement).brushColor = clrNorm.BackColor;
                     }
 
@@ -1031,8 +1032,8 @@ namespace ABPaint
                         // Reset everything back
 
                         currentDrawingElement.zindex = savedata.topZIndex++;
-                        currentDrawingElement.X = DrawingMin.X;
-                        currentDrawingElement.Y = DrawingMin.Y;
+                        currentDrawingElement.X = (DrawingMin.X < 0) ? 0 : DrawingMin.X;
+                        currentDrawingElement.Y = (DrawingMin.Y < 0) ? 0 : DrawingMin.Y;
                         currentDrawingElement.Width = (DrawingMax.X - DrawingMin.X) + Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
                         currentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y) + Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
 
@@ -1044,7 +1045,7 @@ namespace ABPaint
 
                     if (currentDrawingGraphics != null) currentDrawingGraphics.Dispose();
                     currentDrawingElement = null;
-                }
+                }                
 
                 if (selectedElement != null)
                 {
