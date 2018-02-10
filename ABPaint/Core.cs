@@ -195,6 +195,11 @@ namespace ABPaint
             return ret;
         }
 
+        public static void DeselectElements()
+        {
+            selectedElement = null;
+        }
+
         public static void HandleKeyPress(Keys key)
         {
             switch (key)
@@ -353,6 +358,7 @@ namespace ABPaint
                     }
                 actionLock = false;
             }
+            Program.mainForm.canvaspre.Invalidate();
         }
 
         public static void HandleDelete()
@@ -366,7 +372,7 @@ namespace ABPaint
                     {
                         savedata.imageElements.Remove(selectedElement);
 
-                       selectedElement = null;
+                        DeselectElements();
 
                         Program.mainForm.canvaspre.Invalidate();
                         endImage = PaintPreview();
@@ -1146,7 +1152,7 @@ namespace ABPaint
                 }
             }
 
-            Core.PaintPreviewAsync();
+           PaintPreviewAsync();
 
             GC.Collect();
 

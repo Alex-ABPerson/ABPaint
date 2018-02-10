@@ -19,9 +19,9 @@ namespace ABPaint
             InitializeComponent();
 
             //canvaspre.PreviewKeyDown += new PreviewKeyDownEventHandler((sender, e) => {
-            //    Core.HandleKeyPress(e.KeyCode); });
+            //    HandleKeyPress(e.KeyCode); });
             //this.KeyDown += new KeyEventHandler((sender, e) => {
-            //    Core.HandleKeyPress(e.KeyCode); });
+            //    HandleKeyPress(e.KeyCode); });
 
             ReloadImage();
         }
@@ -275,6 +275,8 @@ namespace ABPaint
 
             canvaspre.Left = (ProposedLeft < 0) ? 0 : ProposedLeft;
             canvaspre.Top = (ProposedTop < 0) ? 0 : ProposedTop;
+
+            DeselectElements();
 
             //if (canvaspre.Width + canvaspre.Left > appcenter.Width) appcenter.HorizontalScroll.Visible = true;
             //else appcenter.HorizontalScroll.Visible = false;
@@ -894,7 +896,7 @@ namespace ABPaint
 
         private void movingRefresh_Tick(object sender, EventArgs e)
         {
-            endImage = Core.PaintPreview();
+            endImage = PaintPreview();
         }
 
         private void CanvasAnywhereClick(object sender, EventArgs e)
@@ -914,12 +916,12 @@ namespace ABPaint
 
         private void zoomDown_Click(object sender, EventArgs e)
         {
-            Core.HandleZoomOut();
+            HandleZoomOut();
         }
 
         private void zoomUp_Click(object sender, EventArgs e)
         {
-            Core.HandleZoomIn();
+            HandleZoomIn();
         }
 
         #region MenuStrip
@@ -937,7 +939,7 @@ namespace ABPaint
 
                 savedata.imageElements = new List<Element>();
 
-                Core.PaintPreview();
+                PaintPreview();
             }
         }
 
@@ -946,9 +948,8 @@ namespace ABPaint
             if (openFileDialogOPEN.ShowDialog() == DialogResult.OK)
                 LoadFile(openFileDialogOPEN.FileName);
 
-            Core.selectElementByLocation(0, 0);
             ReloadImage();
-            Core.PaintPreview();
+            PaintPreview();
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -957,7 +958,7 @@ namespace ABPaint
                 SaveFile(saveFileDialogSAVE.FileName, true);
 
             ReloadImage();
-            Core.PaintPreview();
+            PaintPreview();
         }
 
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
@@ -966,7 +967,7 @@ namespace ABPaint
                 ImportFile(openFileDialogIMPORT.FileName);
 
             ReloadImage();
-            Core.PaintPreview();
+            PaintPreview();
         }
 
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)
@@ -975,7 +976,7 @@ namespace ABPaint
                 ExportFile(saveFileDialogEXPORT.FileName);
 
             ReloadImage();
-            Core.PaintPreview();
+            PaintPreview();
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -989,41 +990,41 @@ namespace ABPaint
                 SaveFile(currentFile);
 
             ReloadImage();
-            Core.PaintPreview();
+            PaintPreview();
         }
 
         private void cutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Core.HandleCut();
+            HandleCut();
         }
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Core.HandleCopy();
+            HandleCopy();
         }
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Core.HandlePaste();
+            HandlePaste();
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Core.HandleDelete();
+            HandleDelete();
         }
 
         private void redrawToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            endImage = Core.PaintPreview();
+            endImage = PaintPreview();
         }
         #endregion
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            Core.HandleKeyPress(keyData);
+            HandleKeyPress(keyData);
             canvaspre.Invalidate();
 
-            if ((Core.currentTool == null || !Core.currentTool.UseRegionDrag) && keyData != Keys.Enter)
+            if ((currentTool == null || !currentTool.UseRegionDrag) && keyData != Keys.Enter)
                 return base.ProcessCmdKey(ref msg, keyData);
             return true;
         }
