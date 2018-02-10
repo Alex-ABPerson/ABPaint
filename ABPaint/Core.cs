@@ -465,7 +465,7 @@ namespace ABPaint
             if (selectedElement == null) Program.mainForm.ShowProperties("Selection Tool - Nothing selected!", false, false, false, false, false, false, Program.mainForm.GetCurrentColor());
             if (selectedElement is Pencil) Program.mainForm.ShowProperties("Selection Tool - Pencil", false, false, true, false, false, false, ((Pencil)selectedElement).pencilColor);
             if (selectedElement is Elements.Brush) Program.mainForm.ShowProperties("Selection Tool - Brush", false, false, true, false, false, false, ((Elements.Brush)selectedElement).brushColor);
-            if (selectedElement is RectangleE) Program.mainForm.ShowProperties("Selection Tool - Rectangle", true, true, false, true, false, false, ((RectangleE)selectedElement).fillColor);
+            if (selectedElement is RectangleE) Program.mainForm.ShowProperties("Selection Tool - Rectangle", true, true, false, true, false, false, ((RectangleE)selectedElement).FillColor);
             if (selectedElement is Ellipse) Program.mainForm.ShowProperties("Selection Tool - Ellipse", true, true, false, true, false, false, ((Ellipse)selectedElement).FillColor);
             if (selectedElement is Line) Program.mainForm.ShowProperties("Selection Tool - Line", false, false, true, false, true, false, ((Line)selectedElement).color);
             if (selectedElement is Fill) Program.mainForm.ShowProperties("Selection Tool - Fill", false, false, true, false, false, false, ((Fill)selectedElement).fillColor);

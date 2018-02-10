@@ -519,9 +519,9 @@ namespace ABPaint
 
                     int borderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
 
-                    if (ele.IsFilled) e.Graphics.FillRectangle(new SolidBrush(ele.fillColor), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height)); // Fill
+                    if (ele.IsFilled) e.Graphics.FillRectangle(new SolidBrush(ele.FillColor), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height)); // Fill
 
-                    e.Graphics.DrawRectangle(new Pen(ele.borderColor, borderSize), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height));
+                    e.Graphics.DrawRectangle(new Pen(ele.BorderColor, borderSize), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height));
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, ele.BorderSize, height); // Left border
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, width, ele.BorderSize); // Top border
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), (ele.Width - ele.BorderSize) + DrawingMin.X, DrawingMin.Y, ele.BorderSize, Height); // Right border
@@ -704,7 +704,7 @@ namespace ABPaint
 
             if (selectedElement != null)
             {
-                if (selectedElement is RectangleE) ((RectangleE)selectedElement).fillColor = clrFill.BackColor;
+                if (selectedElement is RectangleE) ((RectangleE)selectedElement).FillColor = clrFill.BackColor;
                 if (selectedElement is Ellipse) ((Ellipse)selectedElement).FillColor = clrFill.BackColor;
 
                 Core.PaintPreviewAsync();
@@ -717,7 +717,7 @@ namespace ABPaint
 
             if (selectedElement != null)
             {
-                if (selectedElement is RectangleE) ((RectangleE)selectedElement).borderColor = clrBord.BackColor;
+                if (selectedElement is RectangleE) ((RectangleE)selectedElement).BorderColor = clrBord.BackColor;
                 if (selectedElement is Ellipse) ((Ellipse)selectedElement).BorderColor = clrBord.BackColor;
 
                 Core.PaintPreviewAsync();

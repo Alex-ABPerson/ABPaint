@@ -10,8 +10,8 @@ namespace ABPaint.Elements
 {
     public class RectangleE : Element
     {
-        public Color fillColor;
-        public Color borderColor;
+        public Color FillColor;
+        public Color BorderColor;
         public int BorderSize;
         public bool IsFilled = false;
 
@@ -31,9 +31,9 @@ namespace ABPaint.Elements
             //if (height < 0) currentDrawingElement.Height = 1;
 
 
-            if (IsFilled) g.FillRectangle(new SolidBrush(fillColor), 0, 0, Math.Abs(Width), Math.Abs(Height)); // Fill
+            if (IsFilled) g.FillRectangle(new SolidBrush(FillColor), 0, 0, Math.Abs(Width), Math.Abs(Height)); // Fill
 
-            g.DrawRectangle(new Pen(borderColor, BorderSize), BorderSize / 2, BorderSize / 2, Math.Abs(Width - (BorderSize)), Math.Abs(Height - (BorderSize)));
+            g.DrawRectangle(new Pen(BorderColor, BorderSize), BorderSize / 2, BorderSize / 2, Math.Abs(Width - (BorderSize)), Math.Abs(Height - (BorderSize)));
 
             //g.FillRectangle(new SolidBrush(borderColor), 0, 0, BorderSize, Height); // Left border
             //g.FillRectangle(new SolidBrush(borderColor), 0, 0, Width, BorderSize); // Top border
