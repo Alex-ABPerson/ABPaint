@@ -1,5 +1,5 @@
 version: Alpha1-{build}
-configuration: Release
+configuration: Release 
 
 image: Visual Studio 2017
 build:
