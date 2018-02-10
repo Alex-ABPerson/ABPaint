@@ -20,9 +20,11 @@ namespace ABPaint
     {
         public static bool InOperation = false;
         public static PowerTool currentTool;
-        private static Object paintLock = new Object(); // A lock for a painting
-        private static Object editLock = new Object(); // A lock for editing imageElements
-        private static Object actionLock = new Object(); // A lock for doing big processing that involve changing variables like "selectedElement"
+        internal static bool eventLock; // A lock for MouseDown, MouseUp and MouseMove.
+        internal static bool paintLock; // A lock for a painting
+        internal static bool editLock; // A lock for editing imageElements
+        internal static bool actionLock; // A lock for doing big processing that involves changing variables like "selectedElement"
+        internal static bool fillLock = false;
 
         #region Main Variables
         // General Variables
@@ -115,9 +117,10 @@ namespace ABPaint
         /// <returns>An image for the result.</returns>
         public static Bitmap PaintPreview()
         {
-            lock (paintLock)
-            {
-                Bitmap endResult = new Bitmap(savedata.imageSize.Width, savedata.imageSize.Height);
+            Bitmap endResult = new Bitmap(savedata.imageSize.Width, savedata.imageSize.Height);
+
+            if (!paintLock) {
+                paintLock = true;               
 
                 //try
                 //{
@@ -145,8 +148,10 @@ namespace ABPaint
 
                 endImage = endResult;
 
-                return endResult;
+                paintLock = false;
             }
+            return endResult;            
+            
                
             //} catch { return endImage; }
         }
@@ -161,8 +166,9 @@ namespace ABPaint
         {
             Element ret = null;
 
-            lock (editLock)
+            if (!editLock)
             {
+                editLock = true;
                 // Order the list based on zindex! But backwards so that the foreach picks up the top one!
                 savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).Reverse().ToList();
 
@@ -182,6 +188,8 @@ namespace ABPaint
 
                 // Order the list based on zindex!
                 savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).ToList();
+
+                editLock = false;
             }
 
             return ret;
@@ -314,21 +322,24 @@ namespace ABPaint
 
         public static void UseTool(PowerTool tool)
         {
-            lock (actionLock)
+            if (!actionLock)
             {
+                actionLock = true;
                 if (tool.UseRegionDrag)
                     IsInDragRegion = true;
 
                 currentTool = tool;
 
                 tool.Prepare();
+                actionLock = false;
             }
         }
 
         public static void HandleApply()
         {
-            lock (actionLock)
+            if (!actionLock)
             {
+                actionLock = true;
                 if (currentTool != null)
                     if (currentTool.UseRegionDrag)
                     {
@@ -340,13 +351,16 @@ namespace ABPaint
                         IsInDragRegion = false;
                         currentTool.Apply(new Rectangle());
                     }
+                actionLock = false;
             }
         }
 
         public static void HandleDelete()
         {
-            lock (actionLock)
+            if (!actionLock)
             {
+                actionLock = true;
+
                 if (selectedElement != null)
                     if (selectedTool == Tool.Selection)
                     {
@@ -357,13 +371,17 @@ namespace ABPaint
                         Program.mainForm.canvaspre.Invalidate();
                         endImage = PaintPreview();
                     }
+
+                actionLock = false;
             }
         }
 
         public static void HandleCut()
         {
-            lock (actionLock)
+            if (!actionLock)
             {
+                actionLock = true;
+
                 HandleCopy();
 
                 savedata.imageElements.Remove(selectedElement);
@@ -371,22 +389,27 @@ namespace ABPaint
 
                 Program.mainForm.canvaspre.Invalidate();
                 endImage = Core.PaintPreview();
+
+                actionLock = false;
             }
         }
 
         public static void HandleCopy()
         {
-            lock (actionLock)
+            if (!actionLock)
             {
+                actionLock = true;
                 Clipboard.SetDataObject("ABPELE" + ABJson.GDISupport.JsonSerializer.Serialize("", selectedElement, ABJson.GDISupport.JsonFormatting.Compact, 0, true).TrimEnd(','), true);
+                actionLock = false;
             }
             //Clipboard.SetDataObject(Program.mainForm.selectedElement, true);
         }
 
         public static void HandlePaste()
         {
-            lock (actionLock)
+            if (!actionLock)
             {
+                actionLock = true;
                 //Clipboard.SetDataObject("ABPAINTELEMENT" + ABJson.GDISupport.JsonSerializer.Serialize("", Program.mainForm.selectedElement, ABJson.GDISupport.JsonFormatting.Compact, 0, true).TrimEnd(','), true);
                 IDataObject data = Clipboard.GetDataObject();
 
@@ -402,6 +425,7 @@ namespace ABPaint
 
                 Program.mainForm.canvaspre.Invalidate();
                 endImage = Core.PaintPreview();
+                actionLock = false;
             }
         }
 
@@ -427,10 +451,7 @@ namespace ABPaint
 
         public static void AddElement(Element element)
         {
-            lock (editLock)
-            {
-                savedata.imageElements.Add(element);
-            }
+            savedata.imageElements.Add(element);
 
             // TODO: Add undo option!
         }
@@ -798,14 +819,14 @@ namespace ABPaint
                         ((Line)currentDrawingElement).Thickness = Convert.ToInt32(string.IsNullOrEmpty(Program.mainForm.txtBThick.Text) ? "0" : Program.mainForm.txtBThick.Text);
                     }
 
+                    
                     #region Fill + Text
                     if (selectedTool == Tool.Fill) // I would hide this function, it's quite long because it runs async which causes all sorts of problems!
                     {
-                        try
-                        {
-                            if (!Core.InOperation)
+                        if (!fillLock)
+                            try
                             {
-                                Core.InOperation = true;
+                                fillLock = true;
 
                                 startPoint = new Point(mouseLoc.X, mouseLoc.Y);
 
@@ -822,10 +843,10 @@ namespace ABPaint
                                 DrawingMax.X = mouseLoc.X;
                                 DrawingMax.Y = mouseLoc.Y;
 
-                                Program.mainForm.lblProcess.Show();
+                                //Program.mainForm.lblProcess.Show();
                                 fill = new Task<Bitmap>(() =>
                                 {
-                                    return ImageFilling.SafeFloodFill(ImageFormer.ImageToByteArray(Core.PaintPreview()), mouseLoc.X, mouseLoc.Y, Color.FromArgb(1, 0, 1));
+                                     return ImageFilling.SafeFloodFill(ImageFormer.ImageToByteArray(Core.PaintPreview()), mouseLoc.X, mouseLoc.Y, Color.FromArgb(1, 0, 1));
                                 });
 
                                 fill.Start();
@@ -840,19 +861,15 @@ namespace ABPaint
                                 currentDrawingElement.zindex = savedata.topZIndex++;
 
                                 ((Fill)currentDrawingElement).fillPoints = ImageCropping.CropImage(((Fill)currentDrawingElement).fillPoints, currentDrawingElement.X, currentDrawingElement.Y, currentDrawingElement.Width, currentDrawingElement.Height);
-                                Core.AddElement(currentDrawingElement);
+                                AddElement(currentDrawingElement);
 
                                 if (currentDrawingGraphics != null) currentDrawingGraphics.Dispose();
                                 currentDrawingElement = null;
 
-                                endImage = Core.PaintPreview();
+                                endImage = PaintPreview();
 
-                                Program.mainForm.lblProcess.Hide();
-
-                                Core.InOperation = false;
-                            }
-                        }
-                        catch { Program.mainForm.lblProcess.Hide(); }
+                                fillLock = false;
+                            } catch { }
                     }
 
                     if (selectedTool == Tool.Text)
@@ -889,7 +906,9 @@ namespace ABPaint
 
                     if (selectedTool != Tool.Fill) MouseDownOnCanvas = true;
                 }
+                
             }
+            eventLock = false;
         }
 
         public static void HandleMouseMove(MouseEventArgs e)
@@ -967,6 +986,7 @@ namespace ABPaint
 
                 lastMousePoint = mouseLoc;
             }
+            eventLock = false;
         }
 
         public static void HandleMouseUp(MouseEventArgs e)
@@ -1129,6 +1149,8 @@ namespace ABPaint
             Core.PaintPreviewAsync();
 
             GC.Collect();
+
+            eventLock = false;
         }
         #endregion      
     }
