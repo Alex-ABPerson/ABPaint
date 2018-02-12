@@ -649,6 +649,7 @@
             // 
             // canvaspre
             // 
+            this.canvaspre.BackColor = System.Drawing.Color.Transparent;
             this.canvaspre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.canvaspre.Location = new System.Drawing.Point(150, 54);
             this.canvaspre.Name = "canvaspre";

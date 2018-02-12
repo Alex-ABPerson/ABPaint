@@ -474,8 +474,11 @@ namespace ABPaint
             e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
             e.Graphics.ScaleTransform(MagnificationLevel, MagnificationLevel); // Transform anything drawn to the zoom!
 
-            try { e.Graphics.DrawImage(endImage, 0, 0); } catch { }
-
+            if (!actionLock)
+                if (!editLock)
+                    if (!fillLock)
+                        e.Graphics.DrawImage(endImage, 0, 0);
+            
             //try { e.Graphics.DrawImage(canvaspre.Image, 0, 0, canvaspre.Width, canvaspre.Height); } catch { }
             //if (canvaspre.Image != null) canvaspre.Image = null;
 
@@ -585,15 +588,15 @@ namespace ABPaint
                     {
                         if (selectedElement is Line)
                         {
-                            if (CornerSelected == 1) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - (10 / MagnificationLevel), ((Line)selectedElement).StartPoint.Y + selectedElement.Y - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - (10 / MagnificationLevel), ((Line)selectedElement).StartPoint.Y + selectedElement.Y - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel);
-                            if (CornerSelected == 2) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - (10 / MagnificationLevel), ((Line)selectedElement).EndPoint.Y + selectedElement.Y - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - (10 / MagnificationLevel), ((Line)selectedElement).EndPoint.Y + selectedElement.Y - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel);
+                            if (CornerSelected == 1) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - 10, ((Line)selectedElement).StartPoint.Y + selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - 10, ((Line)selectedElement).StartPoint.Y + selectedElement.Y - 10, 20, 20);
+                            if (CornerSelected == 2) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - 10, ((Line)selectedElement).EndPoint.Y + selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - 10, ((Line)selectedElement).EndPoint.Y + selectedElement.Y - 10, 20, 20);
                         } else {
                             if (!(selectedElement is Pencil) && !(selectedElement is Elements.Brush) && !(selectedElement is Fill))
                             {
-                                if (CornerSelected == 1) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - (10 / MagnificationLevel), selectedElement.Y  - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X  - (10 / MagnificationLevel), selectedElement.Y  - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel);
-                                if (CornerSelected == 2) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - (10 / MagnificationLevel), selectedElement.Y  - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - (10 / MagnificationLevel), selectedElement.Y  - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel);
-                                if (CornerSelected == 3) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X  - (10 / MagnificationLevel), ((selectedElement.Y ) + selectedElement.Height) - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X  - (10 / MagnificationLevel), ((selectedElement.Y ) + selectedElement.Height) - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel);
-                                if (CornerSelected == 4) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - (10 / MagnificationLevel), ((selectedElement.Y ) + selectedElement.Height) - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - (10 / MagnificationLevel), ((selectedElement.Y ) + selectedElement.Height) - (10 / MagnificationLevel), 20 / MagnificationLevel, 20 / MagnificationLevel);
+                                if (CornerSelected == 1) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - 10, selectedElement.Y  - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X  - 10, selectedElement.Y  - 10, 20, 20);
+                                if (CornerSelected == 2) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - 10, selectedElement.Y  - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - 10, selectedElement.Y  - 10, 20, 20);
+                                if (CornerSelected == 3) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X  - 10, ((selectedElement.Y) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X  - 10, ((selectedElement.Y ) + selectedElement.Height) - 10, 20, 20);
+                                if (CornerSelected == 4) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - 10, ((selectedElement.Y ) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - 10, ((selectedElement.Y ) + selectedElement.Height) - 10, 20, 20);
                             }
                         }                        
                     }

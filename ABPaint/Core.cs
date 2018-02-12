@@ -18,12 +18,26 @@ namespace ABPaint
     /// </summary>
     public static class Core
     {
-        public static bool InOperation = false;
         public static PowerTool currentTool;
         internal static bool eventLock; // A lock for MouseDown, MouseUp and MouseMove.
         internal static bool editLock; // A lock for editing imageElements
         internal static bool actionLock; // A lock for doing big processing that involves changing variables like "selectedElement"
         internal static bool fillLock = false;
+
+        private static Bitmap endimg; // Just because you have to...
+
+        public static Bitmap endImage
+        {
+            get
+            {
+                return endimg;
+            }
+            set
+            {
+                endimg = value;
+                Program.mainForm.canvaspre.Invalidate();
+            }
+        }
 
         #region Main Variables
         // General Variables
@@ -45,36 +59,21 @@ namespace ABPaint
 
         // The image + Extra SolidBrush
 
-        private static Bitmap endimg; // Just because you have to...
-
-        public static Bitmap endImage
-        {
-            get
-            {
-                return endimg;
-            }
-            set
-            {
-                endimg = value;
-                Program.mainForm.canvaspre.Invalidate();
-            }
-        }
-
-
         public static SolidBrush sb101 = new SolidBrush(Color.FromArgb(1, 0, 1));
 
-        // Magnification level.
+        // Magnification level
         public static int MagnificationLevel = 1;
 
         // All the things needed for pencil + brush
         public static System.Drawing.Drawing2D.GraphicsPath grph = new System.Drawing.Drawing2D.GraphicsPath();
+        public static int LastX;
+        public static int LastY;
+
+        // All the things needed for tools while drawing
         public static Point DrawingMin;
         public static Point DrawingMax;
         public static Point lastMousePoint;
-        public static Point startPoint;
-
-        public static int LastX;
-        public static int LastY;
+        public static Point startPoint;    
 
         // Fill?
         static Task<Bitmap> fill;
@@ -101,10 +100,7 @@ namespace ABPaint
 
         public async static void PaintPreviewAsync()
         {
-            while (InOperation)
-                await Task.Delay(10);
-
-            tskPP = new Task<Bitmap>(Core.PaintPreview);
+            tskPP = new Task<Bitmap>(PaintPreview);
             tskPP.Start();
 
             endImage = await tskPP;
@@ -149,8 +145,7 @@ namespace ABPaint
 
                 editLock = false;
             }
-            return endResult;            
-            
+            return endResult;           
                
             //} catch { return endImage; }
         }
@@ -177,7 +172,7 @@ namespace ABPaint
                     {
                         // The mouse is in this element!
 
-                        ele.zindex = SaveSystem.savedata.topZIndex++; // Brings to front
+                        ele.zindex = savedata.topZIndex++; // Brings to front
 
                         ret = ele;
 
