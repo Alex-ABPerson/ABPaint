@@ -556,8 +556,10 @@ namespace ABPaint
                     //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, (ele.Height - ele.BorderSize) + DrawingMin.Y, ele.Width, ele.BorderSize); // Bottom border
                 }
 
-                if (currentDrawingElement is Line)
-                    e.Graphics.DrawLine(new Pen(clrNorm.BackColor, Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text)), startPoint.X, startPoint.Y, mousePoint.X, mousePoint.Y);
+                if (currentDrawingElement is Line) {
+                    int thickness = Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
+                    e.Graphics.DrawLine(new Pen(clrNorm.BackColor, thickness), startPoint.X, startPoint.Y, mousePoint.X, mousePoint.Y);
+                }
 
                 if (currentDrawingElement is Elements.Text)
                     e.Graphics.DrawString(((Elements.Text)currentDrawingElement).mainText, ((Elements.Text)currentDrawingElement).fnt, new SolidBrush(((Elements.Text)currentDrawingElement).clr), mousePoint.X, mousePoint.Y);
@@ -883,13 +885,15 @@ namespace ABPaint
                 if (selectedElement is Elements.Brush) ((Elements.Brush)selectedElement).Width = Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
                 if (selectedElement is Line)
                 {
-                    int beforeThickness = ((Line)selectedElement).Thickness;
-                    ((Line)selectedElement).Thickness = Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
-                    selectedElement.Width += ((Line)selectedElement).Thickness - beforeThickness;
-                    selectedElement.Height += ((Line)selectedElement).Thickness - beforeThickness;
+                    Line lineEle = ((Line)selectedElement);
+
+                    lineEle.Thickness = Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
+                    
+                    LineResizing.Resize(ref lineEle);
                 }
 
-                PaintPreviewAsync();
+                PaintPreview();
+                canvaspre.Invalidate();
             }
         }
         #endregion

@@ -114,6 +114,7 @@
     <Compile Include="Tools\Backend\ImageFilling.cs" />
     <Compile Include="Tools\Backend\ImageFormer.cs" />
     <Compile Include="Tools\Backend\ImageInverting.cs" />
+    <Compile Include="Tools\Backend\LineResizing.cs" />
     <Compile Include="Tools\Backend\PolygonDrawing.cs" />
     <Compile Include="Tools\Backend\SaveSystem.cs" />
     <Compile Include="Tools\CropTool.cs" />

@@ -14,15 +14,10 @@ namespace ABPaint.Elements
         public Point EndPoint;
         public Point StartPoint;
         public int Thickness;
-        public Point BeforeResizeStart;
-        public Point BeforeResizeEnd;
-        public int ResizeFilledX, ResizeFilledY;
-        public int BeforeResizeX, BeforeResizeY;
-        public int BeforeResizeWidth, BeforeResizeHeight;
 
         public override Bitmap ProcessImage()
         {
-            Bitmap ret = new Bitmap(Math.Abs(Width), Math.Abs(Height));
+            Bitmap ret = new Bitmap(Math.Abs(Width + 1), Math.Abs(Height + 1));
             Graphics g = Graphics.FromImage(ret);
 
             g.DrawLine(new Pen(color, Thickness), StartPoint.X, StartPoint.Y, EndPoint.X, EndPoint.Y);

@@ -21,7 +21,6 @@ namespace ABPaint
         public static bool InOperation = false;
         public static PowerTool currentTool;
         internal static bool eventLock; // A lock for MouseDown, MouseUp and MouseMove.
-        internal static bool paintLock; // A lock for a painting
         internal static bool editLock; // A lock for editing imageElements
         internal static bool actionLock; // A lock for doing big processing that involves changing variables like "selectedElement"
         internal static bool fillLock = false;
@@ -119,8 +118,8 @@ namespace ABPaint
         {
             Bitmap endResult = new Bitmap(savedata.imageSize.Width, savedata.imageSize.Height);
 
-            if (!paintLock) {
-                paintLock = true;               
+            if (!editLock) {
+                editLock = true;               
 
                 //try
                 //{
@@ -141,14 +140,14 @@ namespace ABPaint
                         Bitmap bmp = ele.ProcessImage();
                         g.DrawImage(bmp, ele.X, ele.Y);
 
-                        if (!(ele is ImageE)) bmp.Dispose(); // Why don't we dispose it if it's an image? Because, for some reason Bitmaps actually reference where they came from so I dispose it here
+                        if (!(ele is ImageE)) bmp.Dispose(); // Why don't we dispose it if it's an image? Because, for some reason Bitmaps actually reference where they came from so if I dispose it here
                                                              // then it will dispose it in the ImageE as well, however, this doesn't affect other elements since their image is just for the preview and usually created from the data.
                     }
                 }
 
                 endImage = endResult;
 
-                paintLock = false;
+                editLock = false;
             }
             return endResult;            
             
@@ -457,7 +456,12 @@ namespace ABPaint
 
         public static void AddElement(Element element)
         {
-            savedata.imageElements.Add(element);
+            if (!editLock)
+            {
+                editLock = true;
+                savedata.imageElements.Add(element);
+                editLock = false;
+            }
 
             // TODO: Add undo option!
         }
@@ -584,44 +588,77 @@ namespace ABPaint
                             //int proposedX = (((Line)selectedElement).StartPoint.X < ((Line)selectedElement).EndPoint.X) ? ((Line)selectedElement).StartPoint.X + ((Line)selectedElement).BeforeResizeX : ((Line)selectedElement).EndPoint.X + ((Line)selectedElement).BeforeResizeX;
                             //int proposedY = (((Line)selectedElement).StartPoint.Y < ((Line)selectedElement).EndPoint.Y) ? ((Line)selectedElement).StartPoint.Y + ((Line)selectedElement).BeforeResizeY : ((Line)selectedElement).EndPoint.Y + ((Line)selectedElement).BeforeResizeY;
 
+                            Line lineEle = ((Line)selectedElement);
+
                             if (CornerSelected == 1)
-                            {
-                                ((Line)selectedElement).StartPoint = new Point(mouseLoc.X - ((Line)selectedElement).BeforeResizeX, mouseLoc.Y - ((Line)selectedElement).BeforeResizeY);
-
-                                Program.mainForm.movingRefresh.Start();
-                            }
+                                lineEle.StartPoint = new Point(mouseLoc.X - selectedElement.X, mouseLoc.Y - selectedElement.Y);                        
                             else if (CornerSelected == 2)
-                            {
-                                ((Line)selectedElement).EndPoint = new Point(mouseLoc.X - ((Line)selectedElement).BeforeResizeX, mouseLoc.Y - ((Line)selectedElement).BeforeResizeY);
+                                lineEle.EndPoint = new Point(mouseLoc.X - selectedElement.X, mouseLoc.Y - selectedElement.Y);
 
-                                Program.mainForm.movingRefresh.Start();
-                            }
+                            Program.mainForm.movingRefresh.Start();
 
-                            int proposedX = 0, proposedY = 0;
+                            LineResizing.Resize(ref lineEle);
 
-                            int proposedWidth = (((Line)selectedElement).StartPoint.X > ((Line)selectedElement).EndPoint.X) ? ((Line)selectedElement).StartPoint.X : ((Line)selectedElement).EndPoint.X;
-                            int proposedHeight = (((Line)selectedElement).StartPoint.Y > ((Line)selectedElement).EndPoint.Y) ? ((Line)selectedElement).StartPoint.Y : ((Line)selectedElement).EndPoint.Y;
+                            //if (lineEle.StartPoint.X < 0)
+                            //{
+                            //    lineEle.X += lineEle.StartPoint.X;
+                            //    lineEle.Width -= lineEle.StartPoint.X;
+                            //    lineEle.EndPoint.X -= lineEle.StartPoint.X;
+                            //    lineEle.StartPoint.X = 0;
+                            //}
+                            //else if (((Line)selectedElement).StartPoint.X > selectedElement.Width)
+                            //    selectedElement.Width += ((Line)selectedElement).StartPoint.X - selectedElement.Width;
 
-                            //if (proposedX > 0) selectedElement.X = proposedX - Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
-                            //if (proposedY > 0) selectedElement.Y = proposedY - Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
+                            //if (((Line)selectedElement).StartPoint.X > selectedElement.Width)
+                            //    selectedElement.Width += ((Line)selectedElement).StartPoint.X - selectedElement.Width;
+                            //else if (((Line)selectedElement).StartPoint.X < 0)
+                            //{
+                            //    selectedElement.X += ((Line)selectedElement).StartPoint.X;
+                            //    selectedElement.Width += Math.Abs(((Line)selectedElement).StartPoint.X);
+                            //    ((Line)selectedElement).EndPoint.X += Math.Abs(((Line)selectedElement).StartPoint.X);
+                            //    ((Line)selectedElement).StartPoint.X = 0;
+                            //}
+                            //else
+                            //{
+                            //    selectedElement.X = ((Line)selectedElement).StartPoint.X + selectedElement.X;
+                            //}
 
-                            if (((Line)selectedElement).StartPoint.X < 0) proposedX = selectedElement.X + (((Line)selectedElement).StartPoint.X - ((Line)selectedElement).ResizeFilledX);
-                            if (((Line)selectedElement).StartPoint.Y < 0) proposedY = selectedElement.Y + (((Line)selectedElement).StartPoint.Y - ((Line)selectedElement).ResizeFilledY);
+                            //if (((Line)selectedElement).StartPoint.Y < 0)
+                            //{
+                            //    selectedElement.Y += ((Line)selectedElement).StartPoint.Y;
+                            //    selectedElement.Height += Math.Abs(((Line)selectedElement).StartPoint.Y);
+                            //    ((Line)selectedElement).EndPoint.Y += Math.Abs(((Line)selectedElement).StartPoint.Y);
+                            //    ((Line)selectedElement).StartPoint.Y = 0;
+                            //}
+                            //else if (((Line)selectedElement).StartPoint.Y > selectedElement.Height)
+                            //    selectedElement.Height += ((Line)selectedElement).StartPoint.Y - selectedElement.Height;
 
-                            if (proposedWidth > 0) selectedElement.Width = proposedWidth + Convert.ToInt32(string.IsNullOrEmpty(Program.mainForm.txtBThick.Text) ? "0" : Program.mainForm.txtBThick.Text);
-                            if (proposedHeight > 0) selectedElement.Height = proposedHeight + Convert.ToInt32(string.IsNullOrEmpty(Program.mainForm.txtBThick.Text) ? "0" : Program.mainForm.txtBThick.Text);
+                            //if (((Line)selectedElement).EndPoint.X < 0)
+                            //{
+                            //    selectedElement.X += ((Line)selectedElement).EndPoint.X;
+                            //    selectedElement.Width += Math.Abs(((Line)selectedElement).EndPoint.X);
+                            //    ((Line)selectedElement).StartPoint.X += Math.Abs(((Line)selectedElement).EndPoint.X);
+                            //    ((Line)selectedElement).EndPoint.X = 0;
+                            //}
+                            //else if (((Line)selectedElement).EndPoint.X > selectedElement.Width)
+                            //    selectedElement.Width += ((Line)selectedElement).EndPoint.X - selectedElement.Width;
 
-                            if (proposedX != 0) selectedElement.X = proposedX - Convert.ToInt32(string.IsNullOrEmpty(Program.mainForm.txtBThick.Text) ? "0" : Program.mainForm.txtBThick.Text);
-                            if (proposedY != 0) selectedElement.Y = proposedY - Convert.ToInt32(string.IsNullOrEmpty(Program.mainForm.txtBThick.Text) ? "0" : Program.mainForm.txtBThick.Text);
-
-                            ((Line)selectedElement).ResizeFilledX = ((Line)selectedElement).StartPoint.X + Convert.ToInt32(string.IsNullOrEmpty(Program.mainForm.txtBThick.Text) ? "0" : Program.mainForm.txtBThick.Text);
-                            ((Line)selectedElement).ResizeFilledY = ((Line)selectedElement).StartPoint.Y + Convert.ToInt32(string.IsNullOrEmpty(Program.mainForm.txtBThick.Text) ? "0" : Program.mainForm.txtBThick.Text);
-
+                            //if (((Line)selectedElement).EndPoint.Y < 0)
+                            //{
+                            //    selectedElement.Y += ((Line)selectedElement).EndPoint.Y;
+                            //    selectedElement.Height += Math.Abs(((Line)selectedElement).EndPoint.Y);
+                            //    ((Line)selectedElement).StartPoint.Y += Math.Abs(((Line)selectedElement).EndPoint.Y);
+                            //    ((Line)selectedElement).EndPoint.Y = 0;
+                            //}
+                            //else if (((Line)selectedElement).EndPoint.Y > selectedElement.Height)
+                            //    selectedElement.Height += ((Line)selectedElement).EndPoint.Y - selectedElement.Height;
                             //if (((Line)selectedElement).StartPoint.X > 0) ((Line)selectedElement).StartPoint.X = 0;
                             //if (((Line)selectedElement).StartPoint.Y > 0) ((Line)selectedElement).StartPoint.Y = 0;
 
                             //if (((Line)selectedElement).EndPoint.X > 0) ((Line)selectedElement).EndPoint.X = 0;
                             //if (((Line)selectedElement).EndPoint.Y > 0) ((Line)selectedElement).EndPoint.Y = 0;
+
+
                         }
                         else
                         {
@@ -687,15 +724,6 @@ namespace ABPaint
 
             if (CornerSelected != 0)
                 CornerSelected = 0;
-
-            if (selectedElement is Line)
-            {
-                ((Line)selectedElement).BeforeResizeX = selectedElement.X;
-                ((Line)selectedElement).BeforeResizeY = selectedElement.Y;
-
-                ((Line)selectedElement).ResizeFilledX = ((Line)selectedElement).StartPoint.X;
-                ((Line)selectedElement).ResizeFilledY = ((Line)selectedElement).StartPoint.Y;
-            }
         }
         #endregion
 
@@ -1085,30 +1113,23 @@ namespace ABPaint
                         currentDrawingElement.zindex = savedata.topZIndex++;
 
                         int thickness = Convert.ToInt32(string.IsNullOrEmpty(Program.mainForm.txtBWidth.Text) ? "0" : Program.mainForm.txtBWidth.Text);
-                        currentDrawingElement.Width = (DrawingMax.X - DrawingMin.X) + (thickness * 3);
-                        currentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y) + (thickness * 3);
 
                         // The below code is to get the X even in minus numbers!
 
                         //if (width < 0) currentDrawingElement.Width = 1;
                         //if (height < 0) currentDrawingElement.Height = 1;
 
-                        currentDrawingElement.X = DrawingMin.X - (thickness * 2);
-                        currentDrawingElement.Y = DrawingMin.Y - (thickness * 2);
 
-                        ((Line)currentDrawingElement).BeforeResizeX = currentDrawingElement.X;
-                        ((Line)currentDrawingElement).BeforeResizeY = currentDrawingElement.Y;
+                        currentDrawingElement.X = DrawingMin.X;
+                        currentDrawingElement.Y = DrawingMin.Y;
 
-                        ((Line)currentDrawingElement).BeforeResizeWidth = currentDrawingElement.Width;
-                        ((Line)currentDrawingElement).BeforeResizeHeight = currentDrawingElement.Height;
-
-                        ((Line)currentDrawingElement).StartPoint = new Point((startPoint.X - DrawingMin.X) + (thickness * 2), (startPoint.Y - DrawingMin.Y) + (thickness * 2));
-                        ((Line)currentDrawingElement).EndPoint = new Point((mouseLoc.X - DrawingMin.X) + (thickness * 2), (mouseLoc.Y - DrawingMin.Y) + (thickness * 2));
-
-                        ((Line)currentDrawingElement).BeforeResizeStart = ((Line)currentDrawingElement).StartPoint;
-                        ((Line)currentDrawingElement).BeforeResizeEnd = ((Line)currentDrawingElement).EndPoint;
+                        ((Line)currentDrawingElement).StartPoint = new Point((startPoint.X - DrawingMin.X), (startPoint.Y - DrawingMin.Y));
+                        ((Line)currentDrawingElement).EndPoint = new Point((mouseLoc.X - DrawingMin.X), (mouseLoc.Y - DrawingMin.Y));
 
                         ((Line)currentDrawingElement).color = Program.mainForm.clrNorm.BackColor;
+
+                        Line lineEle = ((Line)currentDrawingElement);
+                        LineResizing.Resize(ref lineEle);
 
                         Core.AddElement(currentDrawingElement);
 
@@ -1138,7 +1159,7 @@ namespace ABPaint
                         if (currentDrawingElement.Width < 0) currentDrawingElement.Width = 1;
                         if (currentDrawingElement.Height < 0) currentDrawingElement.Height = 1;
 
-                        Core.AddElement(currentDrawingElement);
+                        AddElement(currentDrawingElement);
                     }
 
                     if (currentDrawingGraphics != null) currentDrawingGraphics.Dispose();
@@ -1152,7 +1173,7 @@ namespace ABPaint
                 }
             }
 
-           PaintPreviewAsync();
+            PaintPreviewAsync();
 
             GC.Collect();
 
