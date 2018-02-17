@@ -71,6 +71,9 @@
     <Reference Include="UIAutomationClient" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CanvasBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Core.cs" />
     <Compile Include="Elements\ImageE.cs" />
     <Compile Include="Form2.cs">

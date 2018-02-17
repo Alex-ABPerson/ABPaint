@@ -78,7 +78,7 @@
             this.polygonTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cropToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.appcenter = new System.Windows.Forms.Panel();
-            this.canvaspre = new System.Windows.Forms.PictureBox();
+            this.canvaspre = new ABPaint.CanvasBox();
             this.welcomeScreen = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -654,7 +654,6 @@
             this.canvaspre.Location = new System.Drawing.Point(150, 54);
             this.canvaspre.Name = "canvaspre";
             this.canvaspre.Size = new System.Drawing.Size(426, 303);
-            this.canvaspre.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.canvaspre.TabIndex = 1;
             this.canvaspre.TabStop = false;
             this.canvaspre.Click += new System.EventHandler(this.CanvasAnywhereClick);
@@ -1119,6 +1118,7 @@
             this.Controls.Add(this.toolbox);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel2);
+            this.DoubleBuffered = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "ABPaint";
@@ -1171,7 +1171,7 @@
         #endregion
         public System.Windows.Forms.ColorDialog colorDialog1;
         public System.Windows.Forms.ComboBox cmbSize;
-        public System.Windows.Forms.PictureBox canvaspre;
+        public ABPaint.CanvasBox canvaspre;
         public System.Windows.Forms.Label label11;
         public System.Windows.Forms.Panel appcenter;
         public System.Windows.Forms.Timer movingRefresh;

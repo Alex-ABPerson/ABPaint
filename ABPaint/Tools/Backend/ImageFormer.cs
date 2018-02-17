@@ -29,5 +29,17 @@ namespace ABPaint.Tools.Backend
             Image image = Image.FromStream(ms, true);
             return image;
         }
+
+        public static Bitmap RemoveTransparency(Bitmap bitmap, Color background)
+        {
+            var result = new Bitmap(bitmap.Size.Width, bitmap.Size.Height, PixelFormat.Format24bppRgb);
+            var g = Graphics.FromImage(result);
+
+            g.Clear(background);
+            g.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+            g.DrawImage(bitmap, 0, 0);
+
+            return result;
+        }
     }
 }

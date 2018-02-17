@@ -35,7 +35,7 @@ namespace ABPaint
             set
             {
                 endimg = value;
-                Program.mainForm.canvaspre.Invalidate();
+                Program.mainForm.canvaspre.Image = endimg;
             }
         }
 
@@ -124,19 +124,20 @@ namespace ABPaint
 
                 Graphics g = Graphics.FromImage(endResult);
 
+                g.FillRectangle(Brushes.White, 0, 0, savedata.imageSize.Width, savedata.imageSize.Height);
                 // Order them by zindex:
                 savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).ToList();
 
                 // Now draw them all!
 
-                foreach (Element ele in savedata.imageElements)
+                for (int i = 0; i < savedata.imageElements.Count; i++)
                 {
-                    if (ele.Visible)
+                    if (savedata.imageElements[i].Visible)
                     {
-                        Bitmap bmp = ele.ProcessImage();
-                        g.DrawImage(bmp, ele.X, ele.Y);
+                        Bitmap bmp = savedata.imageElements[i].ProcessImage();
+                        g.DrawImage(bmp, savedata.imageElements[i].X, savedata.imageElements[i].Y);
 
-                        if (!(ele is ImageE)) bmp.Dispose(); // Why don't we dispose it if it's an image? Because, for some reason Bitmaps actually reference where they came from so if I dispose it here
+                        if (!(savedata.imageElements[i] is ImageE)) bmp.Dispose(); // Why don't we dispose it if it's an image? Because, for some reason Bitmaps actually reference where they came from so if I dispose it here
                                                              // then it will dispose it in the ImageE as well, however, this doesn't affect other elements since their image is just for the preview and usually created from the data.
                     }
                 }
@@ -145,6 +146,7 @@ namespace ABPaint
 
                 editLock = false;
             }
+
             return endResult;           
                
             //} catch { return endImage; }

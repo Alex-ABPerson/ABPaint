@@ -469,15 +469,11 @@ namespace ABPaint
 
         private void canvaspre_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-            e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-            e.Graphics.ScaleTransform(MagnificationLevel, MagnificationLevel); // Transform anything drawn to the zoom!
 
-            if (!actionLock)
-                if (!editLock)
-                    if (!fillLock)
-                        e.Graphics.DrawImage(endImage, 0, 0);
+            //if (!actionLock)
+            //    if (!fillLock)
+            //        if (!editLock)
+            //            try { e.Graphics.DrawImage(endImage, 0, 0); } catch { MessageBox.Show("Canvaspre paint error! Check locks!"); } // The try + catch is only there in case of a case where I haven't checked my locks.
             
             //try { e.Graphics.DrawImage(canvaspre.Image, 0, 0, canvaspre.Width, canvaspre.Height); } catch { }
             //if (canvaspre.Image != null) canvaspre.Image = null;
