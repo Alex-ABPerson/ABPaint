@@ -52,6 +52,9 @@
   <PropertyGroup>
     <SignManifests>false</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>logo_small.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ABJson.GDISupport, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -291,6 +294,7 @@
     <None Include="bin\Debug\new_graphics\Copy.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="logo_small.ico" />
     <Content Include="Resources\new_graphics\Copy.png" />
     <Content Include="Resources\new_graphics\CutIcon.png" />
     <Content Include="Resources\new_graphics\EllipseIcon.png" />
