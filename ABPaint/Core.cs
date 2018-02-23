@@ -133,13 +133,7 @@ namespace ABPaint
                 for (int i = 0; i < savedata.imageElements.Count; i++)
                 {
                     if (savedata.imageElements[i].Visible)
-                    {
-                        Bitmap bmp = savedata.imageElements[i].ProcessImage();
-                        g.DrawImage(bmp, savedata.imageElements[i].X, savedata.imageElements[i].Y);
-
-                        if (!(savedata.imageElements[i] is ImageE)) bmp.Dispose(); // Why don't we dispose it if it's an image? Because, for some reason Bitmaps actually reference where they came from so if I dispose it here
-                                                             // then it will dispose it in the ImageE as well, however, this doesn't affect other elements since their image is just for the preview and usually created from the data.
-                    }
+                        savedata.imageElements[i].ProcessImage(g);
                 }
 
                 endImage = endResult;
@@ -659,53 +653,57 @@ namespace ABPaint
                         }
                         else
                         {
-                            if (!(selectedElement is Pencil) && !(selectedElement is Elements.Brush) && !(selectedElement is Fill))
+                            if (!(selectedElement is Pencil) && !(selectedElement is Elements.Brush) && !(selectedElement is Fill)) {
+                                int proposedX = selectedElement.X;
+                                int proposedY = selectedElement.Y;
+                                int proposedWidth = selectedElement.Width;
+                                int proposedHeight = selectedElement.Height;                               
+
                                 switch (CornerSelected)
                                 {
-                                    case 1: // Top-left corner
-                                        selectedElement.X = mouseLoc.X;
-                                        selectedElement.Y = mouseLoc.Y;
+                                    case 1: // Top-left corner       
+                                        proposedWidth = ((mouseLoc.X - BeforeResizePoint.X) * -1) + BeforeResizeSize.Width;
+                                        proposedHeight = ((mouseLoc.Y - BeforeResizePoint.Y) * -1) + BeforeResizeSize.Height;
 
-                                        int proposedWidth = ((mouseLoc.X - BeforeResizePoint.X) * -1) + BeforeResizeSize.Width;
-                                        int proposedHeight = ((mouseLoc.Y - BeforeResizePoint.Y) * -1) + BeforeResizeSize.Height;
-                                        if (proposedWidth > 0) selectedElement.Width = proposedWidth;
-                                        if (proposedHeight > 0) selectedElement.Height = proposedHeight;
+                                        if (proposedWidth < 0) proposedX = mouseLoc.X + proposedWidth; else proposedX = mouseLoc.X;
+                                        if (proposedHeight < 0) proposedY = mouseLoc.Y + proposedHeight; else proposedY = mouseLoc.Y;
 
-                                        Program.mainForm.movingRefresh.Start();
-                                        selectedElement.Resize(selectedElement.Width, selectedElement.Height);
                                         break;
                                     case 2: // Top-right corner
-                                        selectedElement.Y = mouseLoc.Y;
+                                        proposedWidth = (mouseLoc.X - BeforeResizePoint.X) + BeforeResizeSize.Width;
+                                        proposedHeight = ((mouseLoc.Y - BeforeResizePoint.Y) * -1) + BeforeResizeSize.Height;
 
-                                        int proposedWidth2 = ((mouseLoc.X - BeforeResizePoint.X)) + BeforeResizeSize.Width;
-                                        int proposedHeight2 = ((mouseLoc.Y - BeforeResizePoint.Y) * -1) + BeforeResizeSize.Height;
-                                        if (proposedWidth2 > 0) selectedElement.Width = proposedWidth2;
-                                        if (proposedHeight2 > 0) selectedElement.Height = proposedHeight2;
+                                        if (proposedWidth < 0) proposedX = mouseLoc.X;
+                                        proposedY = mouseLoc.Y;
 
-                                        Program.mainForm.movingRefresh.Start();
-                                        selectedElement.Resize(selectedElement.Width, selectedElement.Height);
                                         break;
                                     case 3: // Bottom-left corner
-                                        selectedElement.X = mouseLoc.X;
+                                        proposedWidth = ((mouseLoc.X - BeforeResizePoint.X) * -1) + BeforeResizeSize.Width;
+                                        proposedHeight = (mouseLoc.Y - BeforeResizePoint.Y) + BeforeResizeSize.Height;
 
-                                        int proposedWidth3 = ((mouseLoc.X - BeforeResizePoint.X) * -1) + BeforeResizeSize.Width;
-                                        int proposedHeight3 = ((mouseLoc.Y - BeforeResizePoint.Y)) + BeforeResizeSize.Height;
-                                        if (proposedWidth3 > 0) selectedElement.Width = proposedWidth3;
-                                        if (proposedHeight3 > 0) selectedElement.Height = proposedHeight3;
+                                        if (proposedWidth < 0) proposedX = mouseLoc.X + proposedWidth; else proposedX = mouseLoc.X;
+                                        if (proposedHeight < 0) proposedY = mouseLoc.Y;
 
-                                        Program.mainForm.movingRefresh.Start();
-                                        selectedElement.Resize(selectedElement.Width, selectedElement.Height);
                                         break;
                                     case 4: // Bottom-right corner
-                                        int proposedWidth4 = ((mouseLoc.X - BeforeResizePoint.X)) + BeforeResizeSize.Width;
-                                        int proposedHeight4 = ((mouseLoc.Y - BeforeResizePoint.Y)) + BeforeResizeSize.Height;
-                                        if (proposedWidth4 > 0) selectedElement.Width = proposedWidth4;
-                                        if (proposedHeight4 > 0) selectedElement.Height = proposedHeight4;
+                                        proposedWidth = (mouseLoc.X - BeforeResizePoint.X) + BeforeResizeSize.Width;
+                                        proposedHeight = (mouseLoc.Y - BeforeResizePoint.Y) + BeforeResizeSize.Height;
 
-                                        Program.mainForm.movingRefresh.Start();
-                                        selectedElement.Resize(selectedElement.Width, selectedElement.Height);
+                                        if (proposedWidth < 0) proposedX = mouseLoc.X;
+                                        if (proposedHeight < 0) proposedY = mouseLoc.Y;
+
                                         break;
                                 }
+
+                                selectedElement.X = proposedX;
+                                selectedElement.Y = proposedY;
+
+                                selectedElement.Width = Math.Abs(proposedWidth);
+                                selectedElement.Height = Math.Abs(proposedHeight);
+
+                                Program.mainForm.movingRefresh.Start();
+                                selectedElement.Resize(selectedElement.Width, selectedElement.Height);
+                            }
                         }
                     }
 

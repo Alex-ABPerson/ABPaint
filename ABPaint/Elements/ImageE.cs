@@ -18,9 +18,9 @@ namespace ABPaint.Elements
             mainImage = img;
         }
 
-        public override Bitmap ProcessImage()
+        public override void ProcessImage(Graphics g)
         {
-            return mainImage;
+            g.DrawImage(mainImage, DrawAtX, DrawAtY);
         }
 
         public override void Resize(int newWidth, int newHeight)

@@ -15,15 +15,10 @@ namespace ABPaint.Elements
         public Font fnt;
         public Color clr;
 
-        public override Bitmap ProcessImage()
+        public override void ProcessImage(Graphics g)
         {
-            Bitmap toReturn = new Bitmap(Width, Height);
-            Graphics g = Graphics.FromImage(toReturn);
-
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-            g.DrawString(mainText, fnt, new SolidBrush(clr), 0, 0);
-
-            return toReturn;
+            g.DrawString(mainText, fnt, new SolidBrush(clr), DrawAtX, DrawAtY);
         }
 
         public static Size MeasureText(string Text, Font Font)

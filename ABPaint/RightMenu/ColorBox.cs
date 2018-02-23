@@ -40,9 +40,7 @@ namespace ABPaint.RightMenu
         private void ColorBox_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
-            {
                 Core.selectedPalette = ToSelect;
-            }
             else
             {
                 if (Program.mainForm.colorDialog1.ShowDialog() == DialogResult.OK)
@@ -50,7 +48,7 @@ namespace ABPaint.RightMenu
                     BackColor = Program.mainForm.colorDialog1.Color;
                 }
             }
-            Program.mainForm.Invalidate();
+            Program.mainForm.Refresh();
         }
     }
 }

@@ -10,14 +10,14 @@ using ABPaint.Objects;
 
 namespace ABPaint.Elements
 {
-    class Pencil : Element
+    public class Pencil : Element
     {       
         public Bitmap pencilPoints;
         public Color pencilColor = Color.Blue;
 
-        public override Bitmap ProcessImage()
+        public override void ProcessImage(Graphics g)
         {
-            return BrushDrawing.ChangeImageColor(pencilPoints, pencilColor);
+            g.DrawImage(BrushDrawing.ChangeImageColor(pencilPoints, pencilColor), DrawAtX, DrawAtY);
         }
 
         public override void Resize(int newWidth, int newHeight)

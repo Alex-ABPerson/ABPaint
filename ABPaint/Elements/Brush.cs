@@ -15,9 +15,9 @@ namespace ABPaint.Elements
         public Bitmap brushPoints;
         public Color brushColor = Color.Black;
 
-        public override Bitmap ProcessImage()
+        public override void ProcessImage(Graphics g)
         {
-            return BrushDrawing.ChangeImageColor(brushPoints, brushColor);
+            g.DrawImage(BrushDrawing.ChangeImageColor(brushPoints, brushColor), DrawAtX, DrawAtY);
         }
 
         public override void Resize(int newWidth, int newHeight)
