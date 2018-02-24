@@ -65,7 +65,7 @@ namespace ABPaint
 
         private void NumbersOnlyKeyPress(Object sender, KeyPressEventArgs e)
         {
-            if (((TextBox)sender).Text.Length > 2)
+            if (((dynamic)sender).Text.Length > 2)
             {
                 if ((int)e.KeyChar != 8)
                 {

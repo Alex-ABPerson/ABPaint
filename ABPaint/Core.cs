@@ -755,7 +755,7 @@ namespace ABPaint
                     DrawingMax.X = 0;
                     DrawingMax.Y = 0;
 
-                    if (selectedTool == 0)
+                    if (selectedTool == Tool.Selection)
                     { // Selection tool!
                         HandleMouseDownSelection(mouseLoc);
                     }
