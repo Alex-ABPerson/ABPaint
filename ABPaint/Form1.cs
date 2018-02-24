@@ -564,7 +564,7 @@ namespace ABPaint
                     e.Graphics.DrawString(((Elements.Text)currentDrawingElement).mainText, ((Elements.Text)currentDrawingElement).fnt, new SolidBrush(((Elements.Text)currentDrawingElement).clr), mousePoint.X, mousePoint.Y);
             }
 
-            // ...or to draw the overlay of the selection tool!
+            // ...or to draw the overlay of the selection tool...
 
             if (selectedElement != null)
             {
@@ -584,22 +584,22 @@ namespace ABPaint
                     {
                         if (selectedElement is Line)
                         {
-                            if (CornerSelected == 1) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - 10, ((Line)selectedElement).StartPoint.Y + selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - 10, ((Line)selectedElement).StartPoint.Y + selectedElement.Y - 10, 20, 20);
-                            if (CornerSelected == 2) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - 10, ((Line)selectedElement).EndPoint.Y + selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - 10, ((Line)selectedElement).EndPoint.Y + selectedElement.Y - 10, 20, 20);
+                            if (CornerSelected == Corner.TopLeft) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - 10, ((Line)selectedElement).StartPoint.Y + selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - 10, ((Line)selectedElement).StartPoint.Y + selectedElement.Y - 10, 20, 20);
+                            if (CornerSelected == Corner.TopRight) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - 10, ((Line)selectedElement).EndPoint.Y + selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - 10, ((Line)selectedElement).EndPoint.Y + selectedElement.Y - 10, 20, 20);
                         } else {
                             if (!(selectedElement is Pencil) && !(selectedElement is Elements.Brush) && !(selectedElement is Fill))
                             {
-                                if (CornerSelected == 1) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - 10, selectedElement.Y  - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X  - 10, selectedElement.Y  - 10, 20, 20);
-                                if (CornerSelected == 2) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - 10, selectedElement.Y  - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - 10, selectedElement.Y  - 10, 20, 20);
-                                if (CornerSelected == 3) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X  - 10, ((selectedElement.Y) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X  - 10, ((selectedElement.Y ) + selectedElement.Height) - 10, 20, 20);
-                                if (CornerSelected == 4) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - 10, ((selectedElement.Y ) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - 10, ((selectedElement.Y ) + selectedElement.Height) - 10, 20, 20);
+                                if (CornerSelected == Corner.TopLeft) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - 10, selectedElement.Y  - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X  - 10, selectedElement.Y  - 10, 20, 20);
+                                if (CornerSelected == Corner.TopRight) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - 10, selectedElement.Y  - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - 10, selectedElement.Y  - 10, 20, 20);
+                                if (CornerSelected == Corner.BottomLeft) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X  - 10, ((selectedElement.Y) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X  - 10, ((selectedElement.Y ) + selectedElement.Height) - 10, 20, 20);
+                                if (CornerSelected == Corner.BottomRight) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - 10, ((selectedElement.Y ) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - 10, ((selectedElement.Y ) + selectedElement.Height) - 10, 20, 20);
                             }
                         }                        
                     }
                 }
             }
 
-            // Drag region overlay
+            // ...or even for the drag region overlay!
 
             if (IsInDragRegion)
             {
@@ -855,11 +855,14 @@ namespace ABPaint
                 if (selectedElement is Text)
                     try
                     {
-                        ((Text)selectedElement).fnt = new Font(((Text)selectedElement).fnt.FontFamily, float.Parse(cmbSize.Text), ((Text)selectedElement).fnt.Style);
+                        ((Text)selectedElement).fnt = new Font(((Text)selectedElement).fnt.FontFamily, (float.Parse(cmbSize.Text) > 999) ? float.Parse(cmbSize.Text) : 12, ((Text)selectedElement).fnt.Style);
 
                         SizeF TextSize = Elements.Text.MeasureText(((Text)selectedElement).mainText, ((Text)selectedElement).fnt);
                         ((Text)selectedElement).Width = (int)Math.Round(TextSize.Width);
                         ((Text)selectedElement).Height = (int)Math.Round(TextSize.Height);
+
+                        if ((float.Parse(cmbSize.Text) > 999))
+                            cmbSize.Text = "12";
                     }
                     catch
                     {

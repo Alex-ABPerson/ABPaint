@@ -86,6 +86,7 @@
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
     <Compile Include="Objects\Action.cs" />
+    <Compile Include="Objects\Corner.cs" />
     <Compile Include="Objects\Element.cs" />
     <Compile Include="Elements\Brush.cs" />
     <Compile Include="Elements\Ellipse.cs" />

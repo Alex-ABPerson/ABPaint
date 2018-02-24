@@ -35,7 +35,11 @@ namespace ABPaint
             set
             {
                 endimg = value;
-                Program.mainForm.canvaspre.Image = endimg;
+                if (Program.mainForm.canvaspre.Image != null)
+                {
+                    if (Monitor.TryEnter(Program.mainForm.canvaspre.Image))
+                        Program.mainForm.canvaspre.Image = endimg;
+                } else Program.mainForm.canvaspre.Image = endimg;
             }
         }
 
@@ -86,7 +90,7 @@ namespace ABPaint
         public static bool IsOnSelection = false;
 
         // Resizing 
-        public static int CornerSelected = 0;
+        public static Corner CornerSelected = 0;
         public static Point BeforeResizePoint;
         public static Size BeforeResizeSize;
         public static bool Resized = false;
@@ -433,6 +437,7 @@ namespace ABPaint
                 Program.mainForm.label11.Text = "X" + MagnificationLevel;
                 Program.mainForm.ReloadImage();
             }
+            PaintPreview();
         }
 
         public static void HandleZoomOut()
@@ -443,6 +448,7 @@ namespace ABPaint
                 Program.mainForm.label11.Text = "X" + MagnificationLevel;
                 Program.mainForm.ReloadImage();
             }
+            PaintPreview();
         }
 
         public static void AddElement(Element element)
@@ -477,7 +483,7 @@ namespace ABPaint
 
             if (selectedElement != null)
             {
-                if (new Rectangle(selectedElement.X - (10 / MagnificationLevel), selectedElement.Y - (10 / MagnificationLevel), selectedElement.Width + (20 / MagnificationLevel), selectedElement.Height + (20 / MagnificationLevel)).Contains(mouseLoc))
+                if (new Rectangle(selectedElement.X - (10 * MagnificationLevel), selectedElement.Y - (10 * MagnificationLevel), selectedElement.Width + (20 * MagnificationLevel), selectedElement.Height + (20 * MagnificationLevel)).Contains(mouseLoc))
                 {
                     // The mouse is in this element!
 
@@ -490,10 +496,10 @@ namespace ABPaint
                         CornerSelected = 0;
 
                         // First point
-                        if (new Rectangle(((Line)selectedElement).StartPoint.X + selectedElement.X - (10 / MagnificationLevel), ((Line)selectedElement).StartPoint.Y + selectedElement.Y - (10 / MagnificationLevel), (20 / MagnificationLevel), (20 / MagnificationLevel)).Contains(mouseLoc)) CornerSelected = 1;
+                        if (new Rectangle(((Line)selectedElement).StartPoint.X + selectedElement.X - (10 * MagnificationLevel), ((Line)selectedElement).StartPoint.Y + selectedElement.Y - (10 * MagnificationLevel), (20 * MagnificationLevel), (20 / MagnificationLevel)).Contains(mouseLoc)) CornerSelected = Corner.TopLeft;
 
                         // Second point
-                        if (new Rectangle(((Line)selectedElement).EndPoint.X + selectedElement.X - (10 / MagnificationLevel), ((Line)selectedElement).EndPoint.Y + selectedElement.Y - (10 / MagnificationLevel), (20 / MagnificationLevel), (20 / MagnificationLevel)).Contains(mouseLoc)) CornerSelected = 2;
+                        if (new Rectangle(((Line)selectedElement).EndPoint.X + selectedElement.X - (10 * MagnificationLevel), ((Line)selectedElement).EndPoint.Y + selectedElement.Y - (10 * MagnificationLevel), (20 * MagnificationLevel), (20 * MagnificationLevel)).Contains(mouseLoc)) CornerSelected = Corner.TopRight;
                     }
                     else
                     {
@@ -504,16 +510,16 @@ namespace ABPaint
                             CornerSelected = 0;
 
                             // Top left corner
-                            if (new Rectangle(selectedElement.X - (10 / MagnificationLevel), selectedElement.Y - (10 / MagnificationLevel), (20 / MagnificationLevel), (20 / MagnificationLevel)).Contains(mouseLoc)) CornerSelected = 1;
+                            if (new Rectangle(selectedElement.X - (10 * MagnificationLevel), selectedElement.Y - (10 * MagnificationLevel), (20 * MagnificationLevel), (20 * MagnificationLevel)).Contains(mouseLoc)) CornerSelected = Corner.TopLeft;
 
                             // Top Right Corner
-                            if (new Rectangle(selectedElement.Right - (10 / MagnificationLevel), selectedElement.Y - (10 / MagnificationLevel), (20 / MagnificationLevel), (20 / MagnificationLevel)).Contains(mouseLoc)) CornerSelected = 2;
+                            if (new Rectangle(selectedElement.Right - (10 * MagnificationLevel), selectedElement.Y - (10 * MagnificationLevel), (20 * MagnificationLevel), (20 * MagnificationLevel)).Contains(mouseLoc)) CornerSelected = Corner.TopRight;
 
                             // Bottom Left corner
-                            if (new Rectangle(selectedElement.X - (10 / MagnificationLevel), selectedElement.Bottom - (10 / MagnificationLevel), (20 / MagnificationLevel), (20 / MagnificationLevel)).Contains(mouseLoc)) CornerSelected = 3;
+                            if (new Rectangle(selectedElement.X - (10 * MagnificationLevel), selectedElement.Bottom - (10 * MagnificationLevel), (20 * MagnificationLevel), (20 * MagnificationLevel)).Contains(mouseLoc)) CornerSelected = Corner.BottomLeft;
 
                             // Bottom Right corner
-                            if (new Rectangle(selectedElement.Right - (10 / MagnificationLevel), selectedElement.Bottom - (10 / MagnificationLevel), (20 / MagnificationLevel), (20 / MagnificationLevel)).Contains(mouseLoc)) CornerSelected = 4;
+                            if (new Rectangle(selectedElement.Right - (10 * MagnificationLevel), selectedElement.Bottom - (10 * MagnificationLevel), (20 * MagnificationLevel), (20 * MagnificationLevel)).Contains(mouseLoc)) CornerSelected = Corner.BottomRight;
                         }
                     }
 
@@ -533,15 +539,15 @@ namespace ABPaint
                     {
                         if (selectedElement is Line)
                         {
-                            if (CornerSelected == 1) BeforeResizePoint = new Point(((Line)selectedElement).StartPoint.X, ((Line)selectedElement).StartPoint.Y);
-                            else if (CornerSelected == 2) BeforeResizePoint = new Point(((Line)selectedElement).EndPoint.X, ((Line)selectedElement).EndPoint.Y);
+                            if (CornerSelected == Corner.TopLeft) BeforeResizePoint = new Point(((Line)selectedElement).StartPoint.X, ((Line)selectedElement).StartPoint.Y);
+                            else if (CornerSelected == Corner.TopRight) BeforeResizePoint = new Point(((Line)selectedElement).EndPoint.X, ((Line)selectedElement).EndPoint.Y);
                         }
                         else
                         {
-                            if (CornerSelected == 1) BeforeResizePoint = new Point(selectedElement.X, selectedElement.Y);
-                            else if (CornerSelected == 2) BeforeResizePoint = new Point(selectedElement.X + selectedElement.Width, selectedElement.Y);
-                            else if (CornerSelected == 3) BeforeResizePoint = new Point(selectedElement.X, selectedElement.Y + selectedElement.Height);
-                            else if (CornerSelected == 4) BeforeResizePoint = new Point(selectedElement.X + selectedElement.Width, selectedElement.Y + selectedElement.Height);
+                            if (CornerSelected == Corner.TopLeft) BeforeResizePoint = new Point(selectedElement.X, selectedElement.Y);
+                            else if (CornerSelected == Corner.TopRight) BeforeResizePoint = new Point(selectedElement.X + selectedElement.Width, selectedElement.Y);
+                            else if (CornerSelected == Corner.BottomLeft) BeforeResizePoint = new Point(selectedElement.X, selectedElement.Y + selectedElement.Height);
+                            else if (CornerSelected == Corner.BottomRight) BeforeResizePoint = new Point(selectedElement.X + selectedElement.Width, selectedElement.Y + selectedElement.Height);
                         }
                         BeforeResizeSize = new Size(selectedElement.Width, selectedElement.Height);
                     }
@@ -581,9 +587,9 @@ namespace ABPaint
 
                             Line lineEle = ((Line)selectedElement);
 
-                            if (CornerSelected == 1)
+                            if (CornerSelected == Corner.TopLeft)
                                 lineEle.StartPoint = new Point(mouseLoc.X - selectedElement.X, mouseLoc.Y - selectedElement.Y);                        
-                            else if (CornerSelected == 2)
+                            else if (CornerSelected == Corner.TopRight)
                                 lineEle.EndPoint = new Point(mouseLoc.X - selectedElement.X, mouseLoc.Y - selectedElement.Y);
 
                             Program.mainForm.movingRefresh.Start();
@@ -661,7 +667,7 @@ namespace ABPaint
 
                                 switch (CornerSelected)
                                 {
-                                    case 1: // Top-left corner       
+                                    case Corner.TopLeft:   
                                         proposedWidth = ((mouseLoc.X - BeforeResizePoint.X) * -1) + BeforeResizeSize.Width;
                                         proposedHeight = ((mouseLoc.Y - BeforeResizePoint.Y) * -1) + BeforeResizeSize.Height;
 
@@ -669,7 +675,7 @@ namespace ABPaint
                                         if (proposedHeight < 0) proposedY = mouseLoc.Y + proposedHeight; else proposedY = mouseLoc.Y;
 
                                         break;
-                                    case 2: // Top-right corner
+                                    case Corner.TopRight: // Top-right corner
                                         proposedWidth = (mouseLoc.X - BeforeResizePoint.X) + BeforeResizeSize.Width;
                                         proposedHeight = ((mouseLoc.Y - BeforeResizePoint.Y) * -1) + BeforeResizeSize.Height;
 
@@ -677,7 +683,7 @@ namespace ABPaint
                                         proposedY = mouseLoc.Y;
 
                                         break;
-                                    case 3: // Bottom-left corner
+                                    case Corner.BottomLeft: // Bottom-left corner
                                         proposedWidth = ((mouseLoc.X - BeforeResizePoint.X) * -1) + BeforeResizeSize.Width;
                                         proposedHeight = (mouseLoc.Y - BeforeResizePoint.Y) + BeforeResizeSize.Height;
 
@@ -685,7 +691,7 @@ namespace ABPaint
                                         if (proposedHeight < 0) proposedY = mouseLoc.Y;
 
                                         break;
-                                    case 4: // Bottom-right corner
+                                    case Corner.BottomRight: // Bottom-right corner
                                         proposedWidth = (mouseLoc.X - BeforeResizePoint.X) + BeforeResizeSize.Width;
                                         proposedHeight = (mouseLoc.Y - BeforeResizePoint.Y) + BeforeResizeSize.Height;
 
@@ -717,8 +723,8 @@ namespace ABPaint
             IsMoving = false;
             Program.mainForm.movingRefresh.Stop();
 
-            if (CornerSelected != 0)
-                CornerSelected = 0;
+            if (CornerSelected != Corner.None)
+                CornerSelected = Corner.None;
         }
         #endregion
 
