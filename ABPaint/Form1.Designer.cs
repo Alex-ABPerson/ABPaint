@@ -910,6 +910,7 @@
             this.cmbSize.TabIndex = 0;
             this.cmbSize.Text = "12";
             this.cmbSize.SelectedIndexChanged += new System.EventHandler(this.cmbSize_SelectedIndexChanged);
+            this.cmbSize.TextChanged += new System.EventHandler(this.cmbSize_TextChanged);
             this.cmbSize.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumbersOnlyKeyPress);
             // 
             // btnBold

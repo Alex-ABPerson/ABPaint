@@ -851,30 +851,7 @@ namespace ABPaint
 
         private void cmbSize_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (selectedElement != null)
-                if (selectedElement is Text)
-                    try
-                    {
-                        ((Text)selectedElement).fnt = new Font(((Text)selectedElement).fnt.FontFamily, (float.Parse(cmbSize.Text) > 999) ? float.Parse(cmbSize.Text) : 12, ((Text)selectedElement).fnt.Style);
-
-                        SizeF TextSize = Elements.Text.MeasureText(((Text)selectedElement).mainText, ((Text)selectedElement).fnt);
-                        ((Text)selectedElement).Width = (int)Math.Round(TextSize.Width);
-                        ((Text)selectedElement).Height = (int)Math.Round(TextSize.Height);
-
-                        if ((float.Parse(cmbSize.Text) > 999))
-                            cmbSize.Text = "12";
-                    }
-                    catch
-                    {
-                        cmbSize.Text = "12";
-                        ((Text)selectedElement).fnt = new Font(((Text)selectedElement).fnt.FontFamily, float.Parse(cmbSize.Text), ((Text)selectedElement).fnt.Style);
-
-                        SizeF TextSize = Elements.Text.MeasureText(((Text)selectedElement).mainText, ((Text)selectedElement).fnt);
-                        ((Text)selectedElement).Width = (int)Math.Round(TextSize.Width);
-                        ((Text)selectedElement).Height = (int)Math.Round(TextSize.Height);
-                    }
-
-            PaintPreviewAsync();
+            HandleChangeTextSize();
         }
 
         private void txtBThick_TextChanged(object sender, EventArgs e)
@@ -1043,6 +1020,39 @@ namespace ABPaint
         private void cropToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UseTool(new Tools.CropTool());
+        }
+
+        private void cmbSize_TextChanged(object sender, EventArgs e)
+        {
+            HandleChangeTextSize();
+        }
+
+        public void HandleChangeTextSize()
+        {
+            if (selectedElement != null)
+                if (selectedElement is Text)
+                    try
+                    {
+                        ((Text)selectedElement).fnt = new Font(((Text)selectedElement).fnt.FontFamily, (float.Parse(cmbSize.Text) > 999) ? float.Parse(cmbSize.Text) : 12, ((Text)selectedElement).fnt.Style);
+
+                        SizeF TextSize = Elements.Text.MeasureText(((Text)selectedElement).mainText, ((Text)selectedElement).fnt);
+                        ((Text)selectedElement).Width = (int)Math.Round(TextSize.Width);
+                        ((Text)selectedElement).Height = (int)Math.Round(TextSize.Height);
+
+                        if ((float.Parse(cmbSize.Text) > 999))
+                            cmbSize.Text = "12";
+                    }
+                    catch
+                    {
+                        cmbSize.Text = "12";
+                        ((Text)selectedElement).fnt = new Font(((Text)selectedElement).fnt.FontFamily, float.Parse(cmbSize.Text), ((Text)selectedElement).fnt.Style);
+
+                        SizeF TextSize = Elements.Text.MeasureText(((Text)selectedElement).mainText, ((Text)selectedElement).fnt);
+                        ((Text)selectedElement).Width = (int)Math.Round(TextSize.Width);
+                        ((Text)selectedElement).Height = (int)Math.Round(TextSize.Height);
+                    }
+
+            PaintPreviewAsync();
         }
     }
 }
