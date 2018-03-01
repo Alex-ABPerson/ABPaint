@@ -189,11 +189,18 @@ namespace ABPaint
             return ret;
         }
 
+        /// <summary>
+        /// Deselects all elements.
+        /// </summary>
         public static void DeselectElements()
         {
             selectedElement = null;
         }
 
+        /// <summary>
+        /// Handles a key press.
+        /// </summary>
+        /// <param name="key">The key pressed.</param>
         public static void HandleKeyPress(Keys key)
         {
             switch (key)
@@ -319,6 +326,10 @@ namespace ABPaint
             Program.mainForm.canvaspre.Invalidate();
         }
 
+        /// <summary>
+        /// Starts using a PowerTool.
+        /// </summary>
+        /// <param name="tool">The PowerTool to use.</param>
         public static void UseTool(PowerTool tool)
         {
             if (!actionLock)
@@ -331,6 +342,26 @@ namespace ABPaint
 
                 tool.Prepare();
                 actionLock = false;
+            }
+        }
+
+        /// <summary>
+        /// Cancels the current power tool.
+        /// </summary>
+        public static void CancelTool()
+        {
+            if (!actionLock)
+            {
+                actionLock = true;
+                if (currentTool.UseRegionDrag)
+                    IsInDragRegion = false;
+
+                currentTool.Cancel();
+                currentTool = null;
+                
+                actionLock = false;
+
+                Program.mainForm.canvaspre.Invalidate();
             }
         }
 
@@ -380,9 +411,9 @@ namespace ABPaint
         {
             if (!actionLock)
             {
-                actionLock = true;
-
                 HandleCopy();
+
+                actionLock = true;
 
                 savedata.imageElements.Remove(selectedElement);
                 selectedElement = null;
@@ -595,67 +626,6 @@ namespace ABPaint
                             Program.mainForm.movingRefresh.Start();
 
                             LineResizing.Resize(ref lineEle);
-
-                            //if (lineEle.StartPoint.X < 0)
-                            //{
-                            //    lineEle.X += lineEle.StartPoint.X;
-                            //    lineEle.Width -= lineEle.StartPoint.X;
-                            //    lineEle.EndPoint.X -= lineEle.StartPoint.X;
-                            //    lineEle.StartPoint.X = 0;
-                            //}
-                            //else if (((Line)selectedElement).StartPoint.X > selectedElement.Width)
-                            //    selectedElement.Width += ((Line)selectedElement).StartPoint.X - selectedElement.Width;
-
-                            //if (((Line)selectedElement).StartPoint.X > selectedElement.Width)
-                            //    selectedElement.Width += ((Line)selectedElement).StartPoint.X - selectedElement.Width;
-                            //else if (((Line)selectedElement).StartPoint.X < 0)
-                            //{
-                            //    selectedElement.X += ((Line)selectedElement).StartPoint.X;
-                            //    selectedElement.Width += Math.Abs(((Line)selectedElement).StartPoint.X);
-                            //    ((Line)selectedElement).EndPoint.X += Math.Abs(((Line)selectedElement).StartPoint.X);
-                            //    ((Line)selectedElement).StartPoint.X = 0;
-                            //}
-                            //else
-                            //{
-                            //    selectedElement.X = ((Line)selectedElement).StartPoint.X + selectedElement.X;
-                            //}
-
-                            //if (((Line)selectedElement).StartPoint.Y < 0)
-                            //{
-                            //    selectedElement.Y += ((Line)selectedElement).StartPoint.Y;
-                            //    selectedElement.Height += Math.Abs(((Line)selectedElement).StartPoint.Y);
-                            //    ((Line)selectedElement).EndPoint.Y += Math.Abs(((Line)selectedElement).StartPoint.Y);
-                            //    ((Line)selectedElement).StartPoint.Y = 0;
-                            //}
-                            //else if (((Line)selectedElement).StartPoint.Y > selectedElement.Height)
-                            //    selectedElement.Height += ((Line)selectedElement).StartPoint.Y - selectedElement.Height;
-
-                            //if (((Line)selectedElement).EndPoint.X < 0)
-                            //{
-                            //    selectedElement.X += ((Line)selectedElement).EndPoint.X;
-                            //    selectedElement.Width += Math.Abs(((Line)selectedElement).EndPoint.X);
-                            //    ((Line)selectedElement).StartPoint.X += Math.Abs(((Line)selectedElement).EndPoint.X);
-                            //    ((Line)selectedElement).EndPoint.X = 0;
-                            //}
-                            //else if (((Line)selectedElement).EndPoint.X > selectedElement.Width)
-                            //    selectedElement.Width += ((Line)selectedElement).EndPoint.X - selectedElement.Width;
-
-                            //if (((Line)selectedElement).EndPoint.Y < 0)
-                            //{
-                            //    selectedElement.Y += ((Line)selectedElement).EndPoint.Y;
-                            //    selectedElement.Height += Math.Abs(((Line)selectedElement).EndPoint.Y);
-                            //    ((Line)selectedElement).StartPoint.Y += Math.Abs(((Line)selectedElement).EndPoint.Y);
-                            //    ((Line)selectedElement).EndPoint.Y = 0;
-                            //}
-                            //else if (((Line)selectedElement).EndPoint.Y > selectedElement.Height)
-                            //    selectedElement.Height += ((Line)selectedElement).EndPoint.Y - selectedElement.Height;
-                            //if (((Line)selectedElement).StartPoint.X > 0) ((Line)selectedElement).StartPoint.X = 0;
-                            //if (((Line)selectedElement).StartPoint.Y > 0) ((Line)selectedElement).StartPoint.Y = 0;
-
-                            //if (((Line)selectedElement).EndPoint.X > 0) ((Line)selectedElement).EndPoint.X = 0;
-                            //if (((Line)selectedElement).EndPoint.Y > 0) ((Line)selectedElement).EndPoint.Y = 0;
-
-
                         }
                         else
                         {
@@ -680,7 +650,7 @@ namespace ABPaint
                                         proposedHeight = ((mouseLoc.Y - BeforeResizePoint.Y) * -1) + BeforeResizeSize.Height;
 
                                         if (proposedWidth < 0) proposedX = mouseLoc.X;
-                                        proposedY = mouseLoc.Y;
+                                        if (proposedHeight < 0) proposedY = mouseLoc.Y + proposedHeight; else proposedY = mouseLoc.Y;
 
                                         break;
                                     case Corner.BottomLeft: // Bottom-left corner
@@ -833,7 +803,7 @@ namespace ABPaint
                         ((dynamic)currentDrawingElement).IsFilled = true;
                         ((dynamic)currentDrawingElement).BorderColor = Program.mainForm.clrBord.BackColor;
                         ((dynamic)currentDrawingElement).FillColor = Program.mainForm.clrFill.BackColor;
-                        ((dynamic)currentDrawingElement).BorderSize = Convert.ToInt32(string.IsNullOrEmpty(Program.mainForm.txtBWidth.Text) ? "0" : Program.mainForm.txtBWidth.Text);
+                        ((dynamic)currentDrawingElement).BorderSize = (Program.mainForm.txtBWidth.Text.Length > 0) ? int.Parse(Program.mainForm.txtBWidth.Text) : 0;
                     }
 
                     if (selectedTool == Tool.Line)
@@ -851,7 +821,7 @@ namespace ABPaint
                         startPoint = mouseLoc;
 
                         ((Line)currentDrawingElement).color = Program.mainForm.clrNorm.BackColor;
-                        ((Line)currentDrawingElement).Thickness = Convert.ToInt32(string.IsNullOrEmpty(Program.mainForm.txtBThick.Text) ? "0" : Program.mainForm.txtBThick.Text);
+                        ((Line)currentDrawingElement).Thickness = (Program.mainForm.txtBThick.Text.Length > 0) ? int.Parse(Program.mainForm.txtBThick.Text) : 0;
                     }
 
                     
@@ -924,13 +894,13 @@ namespace ABPaint
                             FontStyle italic = (ItalicSelected) ? FontStyle.Italic : FontStyle.Regular;
                             FontStyle underline = (UnderlineSelected) ? FontStyle.Underline : FontStyle.Regular;
 
-                            ((Text)currentDrawingElement).fnt = new Font(Program.mainForm.cmbFont.Text, Convert.ToInt32(string.IsNullOrEmpty(Program.mainForm.cmbSize.Text) ? "0" : Program.mainForm.cmbSize.Text), bold | italic | underline);
+                            ((Text)currentDrawingElement).fnt = new Font(Program.mainForm.cmbFont.Text, (Program.mainForm.cmbSize.Text.Length > 0) ? int.Parse(Program.mainForm.cmbSize.Text) : 0, bold | italic | underline);
                         }
                         catch
                         {
                             Program.mainForm.cmbFont.Text = "Microsoft Sans Serif";
                             Program.mainForm.cmbSize.Text = "12";
-                            ((Text)currentDrawingElement).fnt = new Font(Program.mainForm.cmbFont.Text, Convert.ToInt32(string.IsNullOrEmpty(Program.mainForm.cmbSize.Text) ? "0" : Program.mainForm.cmbSize.Text), FontStyle.Regular);
+                            ((Text)currentDrawingElement).fnt = new Font(Program.mainForm.cmbFont.Text, (Program.mainForm.cmbSize.Text.Length > 0) ? int.Parse(Program.mainForm.cmbSize.Text) : 0, FontStyle.Regular);
                         }
 
                         Size widthHeight = Elements.Text.MeasureText(Program.mainForm.txtTText.Text, ((Text)currentDrawingElement).fnt);
@@ -984,7 +954,7 @@ namespace ABPaint
                     //grph.AddLine(lastMousePoint.X, lastMousePoint.Y, mouseLoc.X, mouseLoc.Y);
                     //BrushDrawing.DrawLineOfEllipse(Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text), currentDrawingGraphics, sb101, lastMousePoint.X, lastMousePoint.Y, mouseLoc.X, mouseLoc.Y);
 
-                    BrushDrawing.DrawLineOfEllipse(Convert.ToInt32(string.IsNullOrEmpty(Program.mainForm.txtBThick.Text) ? "0" : Program.mainForm.txtBThick.Text), currentDrawingGraphics, sb101, lastMousePoint.X, lastMousePoint.Y, mouseLoc.X, mouseLoc.Y);
+                    BrushDrawing.DrawLineOfEllipse((Program.mainForm.txtBThick.Text.Length > 0) ? int.Parse(Program.mainForm.txtBThick.Text) : 0, currentDrawingGraphics, sb101, lastMousePoint.X, lastMousePoint.Y, mouseLoc.X, mouseLoc.Y);
                     //currentDrawingGraphics.DrawPath(new Pen(Color.FromArgb(1, 0, 1)), grph);
                     //currentDrawingGraphics.DrawPath(new Pen(Color.FromArgb(1, 0, 1), Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text)), grph);
                     //currentDrawingGraphics.DrawLine(new Pen(Color.FromArgb(1, 0, 1), Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text)), lastMousePoint, mouseLoc);
@@ -1081,7 +1051,7 @@ namespace ABPaint
                         int x = (DrawingMin.X < 0) ? 0 : DrawingMin.X;
                         int y = (DrawingMin.Y < 0) ? 0 : DrawingMin.Y;
 
-                        ((Elements.Brush)currentDrawingElement).brushPoints = ImageCropping.CropImage(((Elements.Brush)currentDrawingElement).brushPoints, x, y, DrawingMax.X + Convert.ToInt32(string.IsNullOrEmpty(Program.mainForm.txtBThick.Text) ? "0" : Program.mainForm.txtBThick.Text), DrawingMax.Y + Convert.ToInt32(string.IsNullOrEmpty(Program.mainForm.txtBThick.Text) ? "0" : Program.mainForm.txtBThick.Text));
+                        ((Elements.Brush)currentDrawingElement).brushPoints = ImageCropping.CropImage(((Elements.Brush)currentDrawingElement).brushPoints, x, y, DrawingMax.X + ((Program.mainForm.txtBThick.Text.Length > 0) ? int.Parse(Program.mainForm.txtBThick.Text) : 0), DrawingMax.Y + ((Program.mainForm.txtBThick.Text.Length > 0) ? int.Parse(Program.mainForm.txtBThick.Text) : 0));
                         ((Elements.Brush)currentDrawingElement).brushColor = Program.mainForm.clrNorm.BackColor;
                     }
 
@@ -1089,7 +1059,7 @@ namespace ABPaint
                     {
                         currentDrawingElement.zindex = savedata.topZIndex++;
 
-                        int borderSize = Convert.ToInt32(string.IsNullOrEmpty(Program.mainForm.txtBWidth.Text) ? "0" : Program.mainForm.txtBWidth.Text);
+                        int borderSize = (Program.mainForm.txtBWidth.Text.Length > 0) ? int.Parse(Program.mainForm.txtBWidth.Text) : 0;
 
                         currentDrawingElement.Width = mouseLoc.X - startPoint.X + borderSize;
                         currentDrawingElement.Height = mouseLoc.Y - startPoint.Y + borderSize;
@@ -1113,7 +1083,7 @@ namespace ABPaint
                     {
                         currentDrawingElement.zindex = savedata.topZIndex++;
 
-                        int thickness = Convert.ToInt32(string.IsNullOrEmpty(Program.mainForm.txtBWidth.Text) ? "0" : Program.mainForm.txtBWidth.Text);
+                        int thickness = (Program.mainForm.txtBWidth.Text.Length > 0) ? int.Parse(Program.mainForm.txtBWidth.Text) : 0;
 
                         // The below code is to get the X even in minus numbers!
 
@@ -1154,8 +1124,8 @@ namespace ABPaint
                         currentDrawingElement.zindex = savedata.topZIndex++;
                         currentDrawingElement.X = (DrawingMin.X < 0) ? 0 : DrawingMin.X;
                         currentDrawingElement.Y = (DrawingMin.Y < 0) ? 0 : DrawingMin.Y;
-                        currentDrawingElement.Width = (DrawingMax.X - DrawingMin.X) + Convert.ToInt32(string.IsNullOrEmpty(Program.mainForm.txtBThick.Text) ? "0" : Program.mainForm.txtBThick.Text);
-                        currentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y) + Convert.ToInt32(string.IsNullOrEmpty(Program.mainForm.txtBThick.Text) ? "0" : Program.mainForm.txtBThick.Text);
+                        currentDrawingElement.Width = (DrawingMax.X - DrawingMin.X) + ((Program.mainForm.txtBThick.Text.Length > 0) ? int.Parse(Program.mainForm.txtBThick.Text) : 0);
+                        currentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y) + ((Program.mainForm.txtBThick.Text.Length > 0) ? int.Parse(Program.mainForm.txtBThick.Text) : 0);
 
                         if (currentDrawingElement.Width < 0) currentDrawingElement.Width = 1;
                         if (currentDrawingElement.Height < 0) currentDrawingElement.Height = 1;

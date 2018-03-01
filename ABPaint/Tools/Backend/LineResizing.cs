@@ -31,8 +31,6 @@ namespace ABPaint.Tools.Backend
                 lineEle.Width = lineEle.StartPoint.X - lineEle.EndPoint.X + lineEle.Thickness * 2;
                 lineEle.EndPoint.X = lineEle.Thickness;
                 lineEle.StartPoint.X = lineEle.Width - lineEle.Thickness;
-
-
             }
 
             if (lineEle.StartPoint.Y < lineEle.EndPoint.Y)

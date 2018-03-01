@@ -93,6 +93,16 @@ namespace ABPaint.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Crop {
+            get {
+                object obj = ResourceManager.GetObject("Crop", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap CutIcon {
             get {
                 object obj = ResourceManager.GetObject("CutIcon", resourceCulture);

@@ -469,7 +469,6 @@ namespace ABPaint
 
         private void canvaspre_Paint(object sender, PaintEventArgs e)
         {
-
             //if (!actionLock)
             //    if (!fillLock)
             //        if (!editLock)

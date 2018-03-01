@@ -26,5 +26,10 @@ namespace ABPaint.Tools
             wnd.Close();
             // Do Stuff
         }
+
+        public override void Cancel()
+        {
+            wnd.Close();
+        }
     }
 }

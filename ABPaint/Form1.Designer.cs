@@ -78,6 +78,7 @@
             this.polygonTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cropToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.appcenter = new System.Windows.Forms.Panel();
+            this.canvaspre = new ABPaint.CanvasBox();
             this.welcomeScreen = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -106,15 +107,6 @@
             this.btnUline = new System.Windows.Forms.Button();
             this.propertiesLbl = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.movingRefresh = new System.Windows.Forms.Timer(this.components);
-            this.lblProcess = new System.Windows.Forms.Label();
-            this.openFileDialogOPEN = new System.Windows.Forms.OpenFileDialog();
-            this.saveFileDialogSAVE = new System.Windows.Forms.SaveFileDialog();
-            this.openFileDialogIMPORT = new System.Windows.Forms.OpenFileDialog();
-            this.saveFileDialogEXPORT = new System.Windows.Forms.SaveFileDialog();
-            this.canvaspre = new ABPaint.CanvasBox();
             this.cl8 = new ABPaint.RightMenu.ColorBox();
             this.cl4 = new ABPaint.RightMenu.ColorBox();
             this.cl7 = new ABPaint.RightMenu.ColorBox();
@@ -123,6 +115,13 @@
             this.cl5 = new ABPaint.RightMenu.ColorBox();
             this.cl2 = new ABPaint.RightMenu.ColorBox();
             this.cl1 = new ABPaint.RightMenu.ColorBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.movingRefresh = new System.Windows.Forms.Timer(this.components);
+            this.openFileDialogOPEN = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialogSAVE = new System.Windows.Forms.SaveFileDialog();
+            this.openFileDialogIMPORT = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialogEXPORT = new System.Windows.Forms.SaveFileDialog();
             this.toolbox.SuspendLayout();
             this.toolCursorN.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timgCursorN)).BeginInit();
@@ -146,6 +145,7 @@
             this.panel4.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.appcenter.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).BeginInit();
             this.welcomeScreen.SuspendLayout();
             this.panel2.SuspendLayout();
             this.properties.SuspendLayout();
@@ -155,7 +155,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.clrNorm)).BeginInit();
             this.pnlFont.SuspendLayout();
             this.panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).BeginInit();
             this.SuspendLayout();
             // 
             // toolbox
@@ -460,7 +459,7 @@
             this.menuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(131, 41);
+            this.menuStrip1.Size = new System.Drawing.Size(223, 41);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -623,14 +622,15 @@
             // polygonTestToolStripMenuItem
             // 
             this.polygonTestToolStripMenuItem.Name = "polygonTestToolStripMenuItem";
-            this.polygonTestToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.polygonTestToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.polygonTestToolStripMenuItem.Text = "Polygon Test";
             this.polygonTestToolStripMenuItem.Click += new System.EventHandler(this.polygonTestToolStripMenuItem_Click);
             // 
             // cropToolStripMenuItem
             // 
+            this.cropToolStripMenuItem.Image = global::ABPaint.Properties.Resources.Crop;
             this.cropToolStripMenuItem.Name = "cropToolStripMenuItem";
-            this.cropToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.cropToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.cropToolStripMenuItem.Text = "Crop";
             this.cropToolStripMenuItem.Click += new System.EventHandler(this.cropToolStripMenuItem_Click);
             // 
@@ -646,6 +646,21 @@
             this.appcenter.Size = new System.Drawing.Size(724, 471);
             this.appcenter.TabIndex = 3;
             this.appcenter.Click += new System.EventHandler(this.CanvasAnywhereClick);
+            // 
+            // canvaspre
+            // 
+            this.canvaspre.BackColor = System.Drawing.Color.Transparent;
+            this.canvaspre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.canvaspre.Location = new System.Drawing.Point(150, 54);
+            this.canvaspre.Name = "canvaspre";
+            this.canvaspre.Size = new System.Drawing.Size(426, 303);
+            this.canvaspre.TabIndex = 1;
+            this.canvaspre.TabStop = false;
+            this.canvaspre.Click += new System.EventHandler(this.CanvasAnywhereClick);
+            this.canvaspre.Paint += new System.Windows.Forms.PaintEventHandler(this.canvaspre_Paint);
+            this.canvaspre.MouseDown += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseDown);
+            this.canvaspre.MouseMove += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseMove);
+            this.canvaspre.MouseUp += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseUp);
             // 
             // welcomeScreen
             // 
@@ -971,72 +986,6 @@
             this.panel3.Size = new System.Drawing.Size(139, 117);
             this.panel3.TabIndex = 0;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(9, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(65, 25);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Color:";
-            // 
-            // movingRefresh
-            // 
-            this.movingRefresh.Interval = 10;
-            this.movingRefresh.Tick += new System.EventHandler(this.movingRefresh_Tick);
-            // 
-            // lblProcess
-            // 
-            this.lblProcess.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lblProcess.Font = new System.Drawing.Font("Monotype Corsiva", 50F, System.Drawing.FontStyle.Italic);
-            this.lblProcess.Location = new System.Drawing.Point(60, 430);
-            this.lblProcess.Name = "lblProcess";
-            this.lblProcess.Size = new System.Drawing.Size(724, 82);
-            this.lblProcess.TabIndex = 3;
-            this.lblProcess.Text = "Processing...";
-            this.lblProcess.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblProcess.Visible = false;
-            // 
-            // openFileDialogOPEN
-            // 
-            this.openFileDialogOPEN.FileName = "*";
-            this.openFileDialogOPEN.Filter = "ABPaint File (*.abpt)|*.abpt|All files|*.*";
-            this.openFileDialogOPEN.Title = "Open...";
-            // 
-            // saveFileDialogSAVE
-            // 
-            this.saveFileDialogSAVE.FileName = "*";
-            this.saveFileDialogSAVE.Filter = "ABPaint File (*.abpt)|*.abpt|All files|*.*";
-            this.saveFileDialogSAVE.Title = "Save...";
-            // 
-            // openFileDialogIMPORT
-            // 
-            this.openFileDialogIMPORT.FileName = "*";
-            this.openFileDialogIMPORT.Filter = resources.GetString("openFileDialogIMPORT.Filter");
-            this.openFileDialogIMPORT.Title = "Import...";
-            // 
-            // saveFileDialogEXPORT
-            // 
-            this.saveFileDialogEXPORT.FileName = "*";
-            this.saveFileDialogEXPORT.Filter = resources.GetString("saveFileDialogEXPORT.Filter");
-            this.saveFileDialogEXPORT.Title = "Export...";
-            // 
-            // canvaspre
-            // 
-            this.canvaspre.BackColor = System.Drawing.Color.Transparent;
-            this.canvaspre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.canvaspre.Location = new System.Drawing.Point(150, 54);
-            this.canvaspre.Name = "canvaspre";
-            this.canvaspre.Size = new System.Drawing.Size(426, 303);
-            this.canvaspre.TabIndex = 1;
-            this.canvaspre.TabStop = false;
-            this.canvaspre.Click += new System.EventHandler(this.CanvasAnywhereClick);
-            this.canvaspre.Paint += new System.Windows.Forms.PaintEventHandler(this.canvaspre_Paint);
-            this.canvaspre.MouseDown += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseDown);
-            this.canvaspre.MouseMove += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseMove);
-            this.canvaspre.MouseUp += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseUp);
-            // 
             // cl8
             // 
             this.cl8.BackColor = System.Drawing.Color.Blue;
@@ -1109,13 +1058,51 @@
             this.cl1.TabIndex = 2;
             this.cl1.ToSelect = 1;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(9, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(65, 25);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Color:";
+            // 
+            // movingRefresh
+            // 
+            this.movingRefresh.Interval = 10;
+            this.movingRefresh.Tick += new System.EventHandler(this.movingRefresh_Tick);
+            // 
+            // openFileDialogOPEN
+            // 
+            this.openFileDialogOPEN.FileName = "*";
+            this.openFileDialogOPEN.Filter = "ABPaint File (*.abpt)|*.abpt|All files|*.*";
+            this.openFileDialogOPEN.Title = "Open...";
+            // 
+            // saveFileDialogSAVE
+            // 
+            this.saveFileDialogSAVE.FileName = "*";
+            this.saveFileDialogSAVE.Filter = "ABPaint File (*.abpt)|*.abpt|All files|*.*";
+            this.saveFileDialogSAVE.Title = "Save...";
+            // 
+            // openFileDialogIMPORT
+            // 
+            this.openFileDialogIMPORT.FileName = "*";
+            this.openFileDialogIMPORT.Filter = resources.GetString("openFileDialogIMPORT.Filter");
+            this.openFileDialogIMPORT.Title = "Import...";
+            // 
+            // saveFileDialogEXPORT
+            // 
+            this.saveFileDialogEXPORT.FileName = "*";
+            this.saveFileDialogEXPORT.Filter = resources.GetString("saveFileDialogEXPORT.Filter");
+            this.saveFileDialogEXPORT.Title = "Export...";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(784, 629);
-            this.Controls.Add(this.lblProcess);
             this.Controls.Add(this.appcenter);
             this.Controls.Add(this.toolbox);
             this.Controls.Add(this.panel1);
@@ -1154,6 +1141,7 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.appcenter.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).EndInit();
             this.welcomeScreen.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.properties.ResumeLayout(false);
@@ -1165,7 +1153,6 @@
             this.pnlFont.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1218,7 +1205,6 @@
         public System.Windows.Forms.Panel welcomeScreen;
         public System.Windows.Forms.Label label9;
         public System.Windows.Forms.Label label3;
-        public System.Windows.Forms.Label lblProcess;
         public System.Windows.Forms.Label label2;
         public System.Windows.Forms.TextBox txtTText;
         public System.Windows.Forms.FlowLayoutPanel pnlFont;

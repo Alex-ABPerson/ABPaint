@@ -14,6 +14,7 @@ namespace ABPaint.Elements
         public Color BorderColor;
         public int BorderSize;
         public bool IsFilled = false;
+        public bool TmpIsRect = true; // A temp variable just so the TEMPORARY JSON SERIALIZER will work.
 
         public override void ProcessImage(Graphics g)
         {

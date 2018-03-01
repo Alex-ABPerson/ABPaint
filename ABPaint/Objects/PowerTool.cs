@@ -25,6 +25,11 @@ namespace ABPaint.Objects
         public abstract void Prepare();
 
         /// <summary>
+        /// The code that cancelled the tool when the user requests it.
+        /// </summary>
+        public abstract void Cancel();
+
+        /// <summary>
         /// Once all the controls for the effect has been set this function will be run.
         /// </summary>
         /// <param name="dragRegion"></param>

@@ -297,6 +297,7 @@
   <ItemGroup>
     <Content Include="logo_small.ico" />
     <Content Include="Resources\new_graphics\Copy.png" />
+    <None Include="Resources\new_graphics\Crop.png" />
     <Content Include="Resources\new_graphics\CutIcon.png" />
     <Content Include="Resources\new_graphics\EllipseIcon.png" />
     <Content Include="Resources\new_graphics\Export.png" />

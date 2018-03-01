@@ -51,14 +51,12 @@ namespace ABPaint.Tools.Backend
         {
             //string compressed;
 
-            using (var outStream = File.OpenWrite(path))
-            {
-                using (var tinyStream = new GZipStream(outStream, CompressionMode.Compress))
-                using (var mStream = new MemoryStream(Encoding.UTF8.GetBytes(SaveData())))
-                    mStream.CopyTo(tinyStream);
+            var outStream = File.OpenWrite(path);
+            using (var tinyStream = new GZipStream(outStream, CompressionMode.Compress))
+            using (var mStream = new MemoryStream(Encoding.UTF8.GetBytes(SaveData())))
+                mStream.CopyTo(tinyStream);
 
                 //compressed = Encoding.ASCII.GetString(outStream.ToArray());
-            }
 
             //File.WriteAllText(path, compressed);
             currentFile = path;
@@ -73,10 +71,9 @@ namespace ABPaint.Tools.Backend
         {
             string decompressedData = "";
 
-            using (var inStream = File.OpenRead(path))
+            var inStream = File.OpenRead(path);
             using (var bigStream = new GZipStream(inStream, CompressionMode.Decompress))
-            using (var bigStreamOut = new MemoryStream())
-            {
+            using (var bigStreamOut = new MemoryStream()) {
                 bigStream.CopyTo(bigStreamOut);
 
                 decompressedData = Encoding.ASCII.GetString(bigStreamOut.ToArray());
