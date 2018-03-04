@@ -23,9 +23,12 @@ namespace ABPaint.Elements
             g.DrawRectangle(new Pen(BorderColor, BorderSize), (BorderSize / 2) + DrawAtX, (BorderSize / 2) + DrawAtY, Math.Abs(Width - (BorderSize)), Math.Abs(Height - (BorderSize))); // Border
         }
 
-        public override void Resize(int newWidth, int newHeight)
+        public override void Resize()
         {
-            // Do Nothing
+        }
+
+        public override void FinishResize()
+        {
         }
     }
 }

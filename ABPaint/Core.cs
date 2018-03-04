@@ -19,11 +19,16 @@ namespace ABPaint
     public static class Core
     {
         public static PowerTool currentTool;
+
+        public static bool paintLock; // A lock for painting
         internal static bool eventLock; // A lock for MouseDown, MouseUp and MouseMove.
         internal static bool editLock; // A lock for editing imageElements
         internal static bool actionLock; // A lock for doing big processing that involves changing variables like "selectedElement"
         internal static bool fillLock = false;
 
+        // ==================
+        // The Final Renderered Image
+        // ==================
         private static Bitmap endimg; // Just because you have to...
 
         public static Bitmap endImage
@@ -44,8 +49,9 @@ namespace ABPaint
         }
 
         #region Main Variables
+        // ==================
         // General Variables
-
+        // ==================
         public static Tool selectedTool = Tool.Selection;
 
         public static int selectedPalette = 1;
@@ -56,47 +62,65 @@ namespace ABPaint
 
         public static Point mousePoint = new Point(0, 0);
 
+        // ==================
         // Drag Region
+        // ==================
         public static Rectangle dragRegionSelect;
         public static bool IsInDragRegion;
         public static bool CurrentlyDragging;
 
-        // The image + Extra SolidBrush
+        // ==================
+        // SolidBrush
+        // ==================
 
         public static SolidBrush sb101 = new SolidBrush(Color.FromArgb(1, 0, 1));
 
+        // ==================
         // Magnification level
+        // ==================
         public static int MagnificationLevel = 1;
 
-        // All the things needed for pencil + brush
+        // ==================
+        // Pencil & Brush Variables
+        // ==================
         public static System.Drawing.Drawing2D.GraphicsPath grph = new System.Drawing.Drawing2D.GraphicsPath();
         public static int LastX;
         public static int LastY;
 
-        // All the things needed for tools while drawing
+        // ==================
+        // Drawing (Not Painting) Variables
+        // ==================
         public static Point DrawingMin;
         public static Point DrawingMax;
         public static Point lastMousePoint;
-        public static Point startPoint;    
+        public static Point startPoint;
 
-        // Fill?
+        // ==================
+        // Task For Fill (For Async)
+        // ==================
         static Task<Bitmap> fill;
 
-        // The Selection tool stuff
+        // ==================
+        // Selection Tool Variables
+        // ==================
         public static Element selectedElement;
         public static Size IsMovingGap;
         public static Point IsMovingOld;
         public static bool IsMoving = false;
         public static bool IsOnSelection = false;
 
-        // Resizing 
+        // ==================
+        // Resizing Variables
+        // ==================
         public static Corner CornerSelected = 0;
         public static Point BeforeResizePoint;
         public static Size BeforeResizeSize;
         public static bool Resized = false;
         public static bool LimitMouse;
 
-        // Text
+        // ==================
+        // Text Variables
+        // ==================
         public static bool BoldSelected = false;
         public static bool ItalicSelected = false;
         public static bool UnderlineSelected = false;
@@ -498,7 +522,7 @@ namespace ABPaint
         #region Mouse Selection Handlers
         public static void HandleMouseDownSelection(Point mouseLoc)
         {
-            selectedElement = Core.selectElementByLocation(mouseLoc.X, mouseLoc.Y);
+            selectedElement = selectElementByLocation(mouseLoc.X, mouseLoc.Y);
 
             if (selectedElement == null) Program.mainForm.ShowProperties("Selection Tool - Nothing selected!", false, false, false, false, false, false, Program.mainForm.GetCurrentColor());
             if (selectedElement is Pencil) Program.mainForm.ShowProperties("Selection Tool - Pencil", false, false, true, false, false, false, ((Pencil)selectedElement).pencilColor);
@@ -524,13 +548,13 @@ namespace ABPaint
                     {
                         // Check if the mouse is on the two points otherwise move the element.
 
-                        CornerSelected = 0;
+                        CornerSelected = Corner.None;
 
                         // First point
-                        if (new Rectangle(((Line)selectedElement).StartPoint.X + selectedElement.X - (10 * MagnificationLevel), ((Line)selectedElement).StartPoint.Y + selectedElement.Y - (10 * MagnificationLevel), (20 * MagnificationLevel), (20 / MagnificationLevel)).Contains(mouseLoc)) CornerSelected = Corner.TopLeft;
+                        if (new Rectangle(((Line)selectedElement).StartPoint.X + selectedElement.X - 10, ((Line)selectedElement).StartPoint.Y + selectedElement.Y - 10, 20, 20).Contains(mouseLoc)) CornerSelected = Corner.TopLeft;
 
                         // Second point
-                        if (new Rectangle(((Line)selectedElement).EndPoint.X + selectedElement.X - (10 * MagnificationLevel), ((Line)selectedElement).EndPoint.Y + selectedElement.Y - (10 * MagnificationLevel), (20 * MagnificationLevel), (20 * MagnificationLevel)).Contains(mouseLoc)) CornerSelected = Corner.TopRight;
+                        if (new Rectangle(((Line)selectedElement).EndPoint.X + selectedElement.X - 10, ((Line)selectedElement).EndPoint.Y + selectedElement.Y - 10, 20, 20).Contains(mouseLoc)) CornerSelected = Corner.TopRight;
                     }
                     else
                     {
@@ -538,23 +562,23 @@ namespace ABPaint
                         {
                             // Check if the mouse is on the scaling points otherwise move the element.
 
-                            CornerSelected = 0;
+                            CornerSelected = Corner.None;
 
                             // Top left corner
-                            if (new Rectangle(selectedElement.X - (10 * MagnificationLevel), selectedElement.Y - (10 * MagnificationLevel), (20 * MagnificationLevel), (20 * MagnificationLevel)).Contains(mouseLoc)) CornerSelected = Corner.TopLeft;
+                            if (new Rectangle(selectedElement.X - 10, selectedElement.Y - 10, 20, 20).Contains(mouseLoc)) CornerSelected = Corner.TopLeft;
 
                             // Top Right Corner
-                            if (new Rectangle(selectedElement.Right - (10 * MagnificationLevel), selectedElement.Y - (10 * MagnificationLevel), (20 * MagnificationLevel), (20 * MagnificationLevel)).Contains(mouseLoc)) CornerSelected = Corner.TopRight;
+                            if (new Rectangle(selectedElement.Right - 10, selectedElement.Y - 10, 20, 20).Contains(mouseLoc)) CornerSelected = Corner.TopRight;
 
                             // Bottom Left corner
-                            if (new Rectangle(selectedElement.X - (10 * MagnificationLevel), selectedElement.Bottom - (10 * MagnificationLevel), (20 * MagnificationLevel), (20 * MagnificationLevel)).Contains(mouseLoc)) CornerSelected = Corner.BottomLeft;
+                            if (new Rectangle(selectedElement.X - 10, selectedElement.Bottom - 10, 20, 20).Contains(mouseLoc)) CornerSelected = Corner.BottomLeft;
 
                             // Bottom Right corner
-                            if (new Rectangle(selectedElement.Right - (10 * MagnificationLevel), selectedElement.Bottom - (10 * MagnificationLevel), (20 * MagnificationLevel), (20 * MagnificationLevel)).Contains(mouseLoc)) CornerSelected = Corner.BottomRight;
+                            if (new Rectangle(selectedElement.Right - 10, selectedElement.Bottom - 10, 20, 20).Contains(mouseLoc)) CornerSelected = Corner.BottomRight;
                         }
                     }
 
-                    if (CornerSelected == 0)
+                    if (CornerSelected == Corner.None)
                     {
                         // Move the element
 
@@ -678,7 +702,7 @@ namespace ABPaint
                                 selectedElement.Height = Math.Abs(proposedHeight);
 
                                 Program.mainForm.movingRefresh.Start();
-                                selectedElement.Resize(selectedElement.Width, selectedElement.Height);
+                                selectedElement.Resize();
                             }
                         }
                     }
@@ -694,7 +718,10 @@ namespace ABPaint
             Program.mainForm.movingRefresh.Stop();
 
             if (CornerSelected != Corner.None)
+            {
+                selectedElement.FinishResize();
                 CornerSelected = Corner.None;
+            }
         }
         #endregion
 
@@ -930,10 +957,8 @@ namespace ABPaint
             }
             else
             {
-                if (selectedTool == 0)
-                {
+                if (selectedTool == Tool.Selection)
                     HandleMouseMoveSelection(mouseLoc);
-                }
             }
 
             if (MouseDownOnCanvas)
@@ -1017,124 +1042,132 @@ namespace ABPaint
             {
                 if (MouseDownOnCanvas)
                 {
+                    int x = (DrawingMin.X < 0) ? 0 : DrawingMin.X; // X for Pencil/Brush
+                    int y = (DrawingMin.Y < 0) ? 0 : DrawingMin.Y; // Y for Pencil/Brush
+
                     Program.mainForm.movingRefresh.Stop();
                     MouseDownOnCanvas = false;
 
-                    if (selectedTool == 0)
-                    {
+                    if (selectedTool == Tool.Selection)
                         HandleMouseUpSelection(mouseLoc);
-                    }
 
-                    if (selectedTool == Tool.Pencil) grph.Reset();
-
-                    if (currentDrawingElement is Pencil || currentDrawingElement is Elements.Brush || currentDrawingElement is Line || currentDrawingElement is RectangleE || currentDrawingElement is Ellipse)
+                    if (currentDrawingElement != null)
                     {
-                        if (mouseLoc.X > DrawingMax.X) DrawingMax.X = mouseLoc.X;
-                        if (mouseLoc.Y > DrawingMax.Y) DrawingMax.Y = mouseLoc.Y;
-                        if (mouseLoc.X < DrawingMin.X) DrawingMin.X = mouseLoc.X;
-                        if (mouseLoc.Y < DrawingMin.Y) DrawingMin.Y = mouseLoc.Y;
-                    }
+                        if (selectedTool == Tool.Pencil) grph.Reset();
 
-                    // Apply the data
+                        var asPencil = currentDrawingElement as Pencil;
+                        var asBrush = currentDrawingElement as Elements.Brush;
+                        var asLine = currentDrawingElement as Line;
+                        var asRectangle = currentDrawingElement as RectangleE;
+                        var asEllipse = currentDrawingElement as Ellipse;
+                        var asText = currentDrawingElement as Text;
 
-                    if (currentDrawingElement is Pencil)
-                    {
-                        int x = (DrawingMin.X < 0) ? 0 : DrawingMin.X;
-                        int y = (DrawingMin.Y < 0) ? 0 : DrawingMin.Y;
+                        if (asPencil != null || asBrush != null || asLine != null || asRectangle != null || asEllipse != null)
+                        {
+                            if (mouseLoc.X > DrawingMax.X) DrawingMax.X = mouseLoc.X;
+                            if (mouseLoc.Y > DrawingMax.Y) DrawingMax.Y = mouseLoc.Y;
+                            if (mouseLoc.X < DrawingMin.X) DrawingMin.X = mouseLoc.X;
+                            if (mouseLoc.Y < DrawingMin.Y) DrawingMin.Y = mouseLoc.Y;                           
+                        }
 
-                        ((Pencil)currentDrawingElement).pencilPoints = ImageCropping.CropImage(((Pencil)currentDrawingElement).pencilPoints, x, y, DrawingMax.X, DrawingMax.Y);
-                        ((Pencil)currentDrawingElement).pencilColor = Program.mainForm.clrNorm.BackColor;
-                    }
+                        // Apply the data
 
-                    if (currentDrawingElement is Elements.Brush)
-                    {
-                        int x = (DrawingMin.X < 0) ? 0 : DrawingMin.X;
-                        int y = (DrawingMin.Y < 0) ? 0 : DrawingMin.Y;
+                        // Pencil
+                        if (asPencil != null)
+                        {
+                            ((Pencil)currentDrawingElement).pencilPoints = ImageCropping.CropImage(((Pencil)currentDrawingElement).pencilPoints, x, y, DrawingMax.X, DrawingMax.Y);
+                            ((Pencil)currentDrawingElement).pencilColor = Program.mainForm.clrNorm.BackColor;
 
-                        ((Elements.Brush)currentDrawingElement).brushPoints = ImageCropping.CropImage(((Elements.Brush)currentDrawingElement).brushPoints, x, y, DrawingMax.X + ((Program.mainForm.txtBThick.Text.Length > 0) ? int.Parse(Program.mainForm.txtBThick.Text) : 0), DrawingMax.Y + ((Program.mainForm.txtBThick.Text.Length > 0) ? int.Parse(Program.mainForm.txtBThick.Text) : 0));
-                        ((Elements.Brush)currentDrawingElement).brushColor = Program.mainForm.clrNorm.BackColor;
-                    }
+                            currentDrawingElement.X = x;
+                            currentDrawingElement.Y = y;
 
-                    if (currentDrawingElement is RectangleE || currentDrawingElement is Ellipse)
-                    {
-                        currentDrawingElement.zindex = savedata.topZIndex++;
+                            currentDrawingElement.Width = (DrawingMax.X - DrawingMin.X);
+                            currentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y);
+                        }
 
-                        int borderSize = (Program.mainForm.txtBWidth.Text.Length > 0) ? int.Parse(Program.mainForm.txtBWidth.Text) : 0;
+                        // Brush
+                        if (asBrush != null)
+                        {
+                            currentDrawingElement.X = x;
+                            currentDrawingElement.Y = y;
 
-                        currentDrawingElement.Width = mouseLoc.X - startPoint.X + borderSize;
-                        currentDrawingElement.Height = mouseLoc.Y - startPoint.Y + borderSize;
+                            currentDrawingElement.Width = (DrawingMax.X - DrawingMin.X) + ((Program.mainForm.txtBThick.Text.Length > 0) ? int.Parse(Program.mainForm.txtBThick.Text) : 0);
+                            currentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y) + ((Program.mainForm.txtBThick.Text.Length > 0) ? int.Parse(Program.mainForm.txtBThick.Text) : 0);
 
-                        if (currentDrawingElement.Width < 0) currentDrawingElement.Width = currentDrawingElement.Width - borderSize;
-                        if (currentDrawingElement.Height < 0) currentDrawingElement.Height = currentDrawingElement.Height - borderSize;
+                            ((Elements.Brush)currentDrawingElement).brushPoints = ImageCropping.CropImage(((Elements.Brush)currentDrawingElement).brushPoints, x, y, DrawingMax.X + ((Program.mainForm.txtBThick.Text.Length > 0) ? int.Parse(Program.mainForm.txtBThick.Text) : 0), DrawingMax.Y + ((Program.mainForm.txtBThick.Text.Length > 0) ? int.Parse(Program.mainForm.txtBThick.Text) : 0));
+                            ((Elements.Brush)currentDrawingElement).brushColor = Program.mainForm.clrNorm.BackColor;
+                        }
 
-                        if (currentDrawingElement.Width < 0) currentDrawingElement.X = startPoint.X - Math.Abs(currentDrawingElement.Width); else currentDrawingElement.X = startPoint.X;
-                        if (currentDrawingElement.Height < 0) currentDrawingElement.Y = startPoint.Y - Math.Abs(currentDrawingElement.Height); else currentDrawingElement.Y = startPoint.Y;
+                        // Rectangle + Ellipse
+                        if (asRectangle != null || asEllipse != null)
+                        {
+                            currentDrawingElement.zindex = savedata.topZIndex++;
 
-                        if (currentDrawingElement.Width < 0) currentDrawingElement.Width = currentDrawingElement.Width - borderSize;
-                        if (currentDrawingElement.Height < 0) currentDrawingElement.Height = currentDrawingElement.Height - borderSize;
+                            int borderSize = (Program.mainForm.txtBWidth.Text.Length > 0) ? int.Parse(Program.mainForm.txtBWidth.Text) : 0;
 
-                        currentDrawingElement.Width = Math.Abs(currentDrawingElement.Width);
-                        currentDrawingElement.Height = Math.Abs(currentDrawingElement.Height);
+                            currentDrawingElement.Width = mouseLoc.X - startPoint.X + borderSize;
+                            currentDrawingElement.Height = mouseLoc.Y - startPoint.Y + borderSize;
 
-                        Core.AddElement(currentDrawingElement);
-                    }
+                            if (currentDrawingElement.Width < 0) currentDrawingElement.Width = currentDrawingElement.Width - borderSize;
+                            if (currentDrawingElement.Height < 0) currentDrawingElement.Height = currentDrawingElement.Height - borderSize;
 
-                    if (currentDrawingElement is Line)
-                    {
-                        currentDrawingElement.zindex = savedata.topZIndex++;
+                            if (currentDrawingElement.Width < 0) currentDrawingElement.X = startPoint.X - Math.Abs(currentDrawingElement.Width); else currentDrawingElement.X = startPoint.X;
+                            if (currentDrawingElement.Height < 0) currentDrawingElement.Y = startPoint.Y - Math.Abs(currentDrawingElement.Height); else currentDrawingElement.Y = startPoint.Y;
 
-                        int thickness = (Program.mainForm.txtBWidth.Text.Length > 0) ? int.Parse(Program.mainForm.txtBWidth.Text) : 0;
+                            if (currentDrawingElement.Width < 0) currentDrawingElement.Width = currentDrawingElement.Width - borderSize;
+                            if (currentDrawingElement.Height < 0) currentDrawingElement.Height = currentDrawingElement.Height - borderSize;
 
-                        // The below code is to get the X even in minus numbers!
+                            currentDrawingElement.Width = Math.Abs(currentDrawingElement.Width);
+                            currentDrawingElement.Height = Math.Abs(currentDrawingElement.Height);
+                        }
 
-                        //if (width < 0) currentDrawingElement.Width = 1;
-                        //if (height < 0) currentDrawingElement.Height = 1;
+                        // Line
+                        if (asLine != null)
+                        {
+                            currentDrawingElement.zindex = savedata.topZIndex++;
+
+                            int thickness = (Program.mainForm.txtBWidth.Text.Length > 0) ? int.Parse(Program.mainForm.txtBWidth.Text) : 0;
+
+                            // The below code is to get the X even in minus numbers!
+
+                            //if (width < 0) currentDrawingElement.Width = 1;
+                            //if (height < 0) currentDrawingElement.Height = 1;
 
 
-                        currentDrawingElement.X = DrawingMin.X;
-                        currentDrawingElement.Y = DrawingMin.Y;
+                            currentDrawingElement.X = DrawingMin.X;
+                            currentDrawingElement.Y = DrawingMin.Y;
 
-                        ((Line)currentDrawingElement).StartPoint = new Point((startPoint.X - DrawingMin.X), (startPoint.Y - DrawingMin.Y));
-                        ((Line)currentDrawingElement).EndPoint = new Point((mouseLoc.X - DrawingMin.X), (mouseLoc.Y - DrawingMin.Y));
+                            ((Line)currentDrawingElement).StartPoint = new Point((startPoint.X - DrawingMin.X), (startPoint.Y - DrawingMin.Y));
+                            ((Line)currentDrawingElement).EndPoint = new Point((mouseLoc.X - DrawingMin.X), (mouseLoc.Y - DrawingMin.Y));
 
-                        ((Line)currentDrawingElement).color = Program.mainForm.clrNorm.BackColor;
+                            ((Line)currentDrawingElement).color = Program.mainForm.clrNorm.BackColor;
 
-                        Line lineEle = ((Line)currentDrawingElement);
-                        LineResizing.Resize(ref lineEle);
+                            Line lineEle = ((Line)currentDrawingElement);
+                            LineResizing.Resize(ref lineEle);
 
-                        Core.AddElement(currentDrawingElement);
+                            Program.mainForm.canvaspre.Invalidate();
+                        }
 
-                        Program.mainForm.canvaspre.Invalidate();
-                    }
+                        // Text
+                        if (asText != null)
+                        {
+                            currentDrawingElement.X = e.X;
+                            currentDrawingElement.Y = e.Y;
+                        }
 
-                    if (currentDrawingElement is Elements.Text)
-                    {
-                        currentDrawingElement.zindex = savedata.topZIndex++;
-
-                        currentDrawingElement.X = e.X;
-                        currentDrawingElement.Y = e.Y;
-
-                        Core.AddElement(currentDrawingElement);
-                    }
-
-                    if (currentDrawingElement is Pencil || currentDrawingElement is Elements.Brush)
-                    {
-                        // Reset everything back
-
-                        currentDrawingElement.zindex = savedata.topZIndex++;
-                        currentDrawingElement.X = (DrawingMin.X < 0) ? 0 : DrawingMin.X;
-                        currentDrawingElement.Y = (DrawingMin.Y < 0) ? 0 : DrawingMin.Y;
-                        currentDrawingElement.Width = (DrawingMax.X - DrawingMin.X) + ((Program.mainForm.txtBThick.Text.Length > 0) ? int.Parse(Program.mainForm.txtBThick.Text) : 0);
-                        currentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y) + ((Program.mainForm.txtBThick.Text.Length > 0) ? int.Parse(Program.mainForm.txtBThick.Text) : 0);
+                        // Change some things and add the element!
 
                         if (currentDrawingElement.Width < 0) currentDrawingElement.Width = 1;
                         if (currentDrawingElement.Height < 0) currentDrawingElement.Height = 1;
 
+                        currentDrawingElement.zindex = savedata.topZIndex++;
                         AddElement(currentDrawingElement);
-                    }
 
-                    if (currentDrawingGraphics != null) currentDrawingGraphics.Dispose();
-                    currentDrawingElement = null;
+                        // Dispose some stuff.
+
+                        if (currentDrawingGraphics != null) currentDrawingGraphics.Dispose();
+                        currentDrawingElement = null;            
+                    }
                 }
 
                 if (selectedElement != null)

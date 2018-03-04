@@ -34,3 +34,19 @@ I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.RightMenu.ColorBox.reso
 I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.Windows.About.resources
 I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.Form2.resources
 I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.Tools.Windows.CropTool.resources
+I:\Desktop\HistamcomVB\ABPaint\ABPaint\obj\Debug\ABPaint.csprojResolveAssemblyReference.cache
+I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\bin\Debug\ABPaint.exe.config
+I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\bin\Debug\ABPaint.exe
+I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\bin\Debug\ABPaint.pdb
+I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.csprojResolveAssemblyReference.cache
+I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.Form1.resources
+I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.Form2.resources
+I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.Properties.Resources.resources
+I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.RightMenu.ColorBox.resources
+I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.Tools.Windows.CropTool.resources
+I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.Windows.About.resources
+I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.Sizer.resources
+I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.csproj.GenerateResource.Cache
+I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.csproj.CoreCompileInputs.cache
+I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.exe
+I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.pdb

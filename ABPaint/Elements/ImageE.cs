@@ -23,9 +23,13 @@ namespace ABPaint.Elements
             g.DrawImage(mainImage, DrawAtX, DrawAtY);
         }
 
-        public override void Resize(int newWidth, int newHeight)
+        public override void Resize()
         {
-            mainImage = ResizeImage.resizeImage(mainImage, new Size(newWidth, newHeight));
+            mainImage = ResizeImage.resizeImage(mainImage, new Size(Width, Height));
+        }
+
+        public override void FinishResize()
+        {
         }
     }
 }

@@ -20,9 +20,13 @@ namespace ABPaint.Elements
             g.DrawImage(BrushDrawing.ChangeImageColor(brushPoints, brushColor), DrawAtX, DrawAtY);
         }
 
-        public override void Resize(int newWidth, int newHeight)
+        public override void Resize()
         {
-            brushPoints = ResizeImage.resizeImageNoAntiAlias(brushPoints, new Size(newWidth, newHeight));
+            brushPoints = ResizeImage.resizeImageNoAntiAlias(brushPoints, new Size(Width, Height));
+        }
+
+        public override void FinishResize()
+        {
         }
     }
 }

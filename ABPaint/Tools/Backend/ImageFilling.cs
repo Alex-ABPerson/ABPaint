@@ -27,19 +27,25 @@ namespace ABPaint.Tools.Backend
             if (old_color != new_color)
             {
                 Stack<Point> pts = new Stack<Point>(1000);
+                Point pt;
                 pts.Push(new Point(x, y));
                 newBackground.SetPixel(x, y, new_color);
                 bm.SetPixel(x, y, new_color);
-
+                
                 while (pts.Count > 0)
                 {
-                    Point pt = pts.Pop();
+                    pt = pts.Pop();
                     if (pt.X > 0) SafeCheckPoint(ref bm, newBackground, ref pts, pt.X - 1, pt.Y, old_color, new_color);
                     if (pt.Y > 0) SafeCheckPoint(ref bm, newBackground, ref pts, pt.X, pt.Y - 1, old_color, new_color);
                     if (pt.X < bm.Width - 1) SafeCheckPoint(ref bm, newBackground, ref pts, pt.X + 1, pt.Y, old_color, new_color);
                     if (pt.Y < bm.Height - 1) SafeCheckPoint(ref bm, newBackground, ref pts, pt.X, pt.Y + 1, old_color, new_color);
                 }
             }
+
+            Core.DrawingMin.X -= 10;
+            Core.DrawingMin.Y -= 10;
+            Core.DrawingMax.X += 20;
+            Core.DrawingMax.Y += 20;
 
             GC.Collect();
 

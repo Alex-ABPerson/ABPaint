@@ -555,12 +555,12 @@ namespace ABPaint
                 }
 
                 if (currentDrawingElement is Line) {
-                    int thickness = Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
+                    int thickness = (txtBThick.Text.Length > 0) ? int.Parse(txtBThick.Text) : 0;
                     e.Graphics.DrawLine(new Pen(clrNorm.BackColor, thickness), startPoint.X, startPoint.Y, mousePoint.X, mousePoint.Y);
                 }
 
-                if (currentDrawingElement is Elements.Text)
-                    e.Graphics.DrawString(((Elements.Text)currentDrawingElement).mainText, ((Elements.Text)currentDrawingElement).fnt, new SolidBrush(((Elements.Text)currentDrawingElement).clr), mousePoint.X, mousePoint.Y);
+                if (currentDrawingElement is Text)
+                    e.Graphics.DrawString(((Text)currentDrawingElement).mainText, ((Text)currentDrawingElement).fnt, new SolidBrush(((Text)currentDrawingElement).clr), mousePoint.X, mousePoint.Y);
             }
 
             // ...or to draw the overlay of the selection tool...
@@ -689,7 +689,7 @@ namespace ABPaint
                 if (selectedElement is Elements.Fill) ((Elements.Fill)selectedElement).fillColor = clrNorm.BackColor;
                 if (selectedElement is Elements.Text) ((Elements.Text)selectedElement).clr = clrNorm.BackColor;
 
-               PaintPreviewAsync();
+               PaintPreview();
             }
         }
 
@@ -702,7 +702,7 @@ namespace ABPaint
                 if (selectedElement is RectangleE) ((RectangleE)selectedElement).FillColor = clrFill.BackColor;
                 if (selectedElement is Ellipse) ((Ellipse)selectedElement).FillColor = clrFill.BackColor;
 
-                PaintPreviewAsync();
+                PaintPreview();
             }
         }
 
@@ -715,7 +715,7 @@ namespace ABPaint
                 if (selectedElement is RectangleE) ((RectangleE)selectedElement).BorderColor = clrBord.BackColor;
                 if (selectedElement is Ellipse) ((Ellipse)selectedElement).BorderColor = clrBord.BackColor;
 
-                PaintPreviewAsync();
+                PaintPreview();
             }
         }
 
@@ -729,7 +729,7 @@ namespace ABPaint
                 if (selectedElement is RectangleE) ((RectangleE)selectedElement).BorderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
                 if (selectedElement is Ellipse) ((Ellipse)selectedElement).BorderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
 
-                PaintPreviewAsync();
+                PaintPreview();
             }
         }
 
@@ -746,7 +746,7 @@ namespace ABPaint
                         ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Bold | currentFont.Style);
                 }
 
-                PaintPreviewAsync();
+                PaintPreview();
             }
 
             if (BoldSelected)
@@ -768,7 +768,7 @@ namespace ABPaint
             if (selectedElement != null)
                 ((Text)selectedElement).mainText = txtTText.Text;
 
-            PaintPreviewAsync();
+            PaintPreview();
         }
 
         private void btnItl_Click(object sender, EventArgs e)
@@ -784,7 +784,7 @@ namespace ABPaint
                         ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Italic | currentFont.Style);
                 }
 
-                PaintPreviewAsync();
+                PaintPreview();
             }
 
             if (ItalicSelected)
@@ -814,7 +814,7 @@ namespace ABPaint
                         ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Underline | currentFont.Style);
                 }
 
-                PaintPreviewAsync();
+                PaintPreview();
             }
 
             if (UnderlineSelected)
@@ -845,7 +845,7 @@ namespace ABPaint
                         ((Text)selectedElement).fnt = new Font(cmbFont.Text, ((Text)selectedElement).fnt.Size, ((Text)selectedElement).fnt.Style);
                     }
 
-            PaintPreviewAsync();
+            PaintPreview();
         }
 
         private void cmbSize_SelectedIndexChanged(object sender, EventArgs e)
@@ -1021,11 +1021,6 @@ namespace ABPaint
             UseTool(new Tools.CropTool());
         }
 
-        private void cmbSize_TextChanged(object sender, EventArgs e)
-        {
-            HandleChangeTextSize();
-        }
-
         public void HandleChangeTextSize()
         {
             if (selectedElement != null)
@@ -1033,25 +1028,25 @@ namespace ABPaint
                     try
                     {
                         ((Text)selectedElement).fnt = new Font(((Text)selectedElement).fnt.FontFamily, (float.Parse(cmbSize.Text) > 999) ? float.Parse(cmbSize.Text) : 12, ((Text)selectedElement).fnt.Style);
-
-                        SizeF TextSize = Elements.Text.MeasureText(((Text)selectedElement).mainText, ((Text)selectedElement).fnt);
-                        ((Text)selectedElement).Width = (int)Math.Round(TextSize.Width);
-                        ((Text)selectedElement).Height = (int)Math.Round(TextSize.Height);
-
-                        if ((float.Parse(cmbSize.Text) > 999))
-                            cmbSize.Text = "12";
+                        SizeF RealSize = Elements.Text.MeasureText(((Text)selectedElement).mainText, ((Text)selectedElement).fnt);
+                        selectedElement.Width = Convert.ToInt32(RealSize.Width);
+                        selectedElement.Height = Convert.ToInt32(RealSize.Height);
                     }
                     catch
                     {
                         cmbSize.Text = "12";
                         ((Text)selectedElement).fnt = new Font(((Text)selectedElement).fnt.FontFamily, float.Parse(cmbSize.Text), ((Text)selectedElement).fnt.Style);
-
-                        SizeF TextSize = Elements.Text.MeasureText(((Text)selectedElement).mainText, ((Text)selectedElement).fnt);
-                        ((Text)selectedElement).Width = (int)Math.Round(TextSize.Width);
-                        ((Text)selectedElement).Height = (int)Math.Round(TextSize.Height);
+                        SizeF RealSize = Elements.Text.MeasureText(((Text)selectedElement).mainText, ((Text)selectedElement).fnt);
+                        selectedElement.Width = Convert.ToInt32(RealSize.Width);
+                        selectedElement.Height = Convert.ToInt32(RealSize.Height);
                     }
 
-            PaintPreviewAsync();
+            PaintPreview();
+        }
+
+        private void cmbSize_TextUpdate(object sender, EventArgs e)
+        {
+            HandleChangeTextSize();
         }
     }
 }

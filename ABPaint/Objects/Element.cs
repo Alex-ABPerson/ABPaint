@@ -77,8 +77,11 @@ namespace ABPaint.Objects
         /// <summary>
         /// Changes certain values within the element to adjust to a new size.
         /// </summary>
-        /// <param name="newWidth">The new width.</param>
-        /// <param name="newHeight">The new height.</param>
-        public abstract void Resize(int newWidth, int newHeight);
+        public abstract void Resize();
+
+        /// <summary>
+        /// Changes certain values within the element after it has resized.
+        /// </summary>
+        public abstract void FinishResize();
     }
 }

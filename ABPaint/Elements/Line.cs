@@ -20,16 +20,12 @@ namespace ABPaint.Elements
             g.DrawLine(new Pen(color, Thickness), StartPoint.X + DrawAtX, StartPoint.Y + DrawAtY, EndPoint.X + DrawAtX, EndPoint.Y + DrawAtY);
         }
 
-        public override void Resize(int newWidth, int newHeight)
+        public override void Resize()
         {
-            ////StartPoint.X = BeforeResizeStart.X + (newWidth - BeforeResizeWidth);
-            ////StartPoint.Y = BeforeResizeStart.Y + (newHeight - BeforeResizeHeight);
+        }
 
-            //EndPoint.X = BeforeResizeEnd.X + (newWidth - BeforeResizeWidth);
-            //EndPoint.Y = BeforeResizeEnd.Y + (newHeight - BeforeResizeHeight);
-
-            //StartPoint.Y = BeforeResizeStart.Y;
-            ////StartPoint.Y = BeforeResizeHeight + (newHeight - BeforeResizeHeight) - Thickness;
+        public override void FinishResize()
+        {
         }
     }
 }

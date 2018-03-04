@@ -24,9 +24,12 @@ namespace ABPaint.Elements
             g.DrawEllipse(new Pen(BorderColor, BorderSize), (BorderSize / 2) + DrawAtX, (BorderSize / 2) + DrawAtY, Math.Abs(Width - (BorderSize)), Math.Abs(Height - (BorderSize)));
         }
 
-        public override void Resize(int newWidth, int newHeight)
+        public override void Resize()
         {
-            // Do Nothing
+        }
+
+        public override void FinishResize()
+        {
         }
     }
 }

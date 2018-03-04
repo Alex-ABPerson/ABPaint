@@ -459,7 +459,7 @@
             this.menuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(223, 41);
+            this.menuStrip1.Size = new System.Drawing.Size(131, 41);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -622,7 +622,7 @@
             // polygonTestToolStripMenuItem
             // 
             this.polygonTestToolStripMenuItem.Name = "polygonTestToolStripMenuItem";
-            this.polygonTestToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.polygonTestToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.polygonTestToolStripMenuItem.Text = "Polygon Test";
             this.polygonTestToolStripMenuItem.Click += new System.EventHandler(this.polygonTestToolStripMenuItem_Click);
             // 
@@ -630,7 +630,7 @@
             // 
             this.cropToolStripMenuItem.Image = global::ABPaint.Properties.Resources.Crop;
             this.cropToolStripMenuItem.Name = "cropToolStripMenuItem";
-            this.cropToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cropToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.cropToolStripMenuItem.Text = "Crop";
             this.cropToolStripMenuItem.Click += new System.EventHandler(this.cropToolStripMenuItem_Click);
             // 
@@ -925,7 +925,7 @@
             this.cmbSize.TabIndex = 0;
             this.cmbSize.Text = "12";
             this.cmbSize.SelectedIndexChanged += new System.EventHandler(this.cmbSize_SelectedIndexChanged);
-            this.cmbSize.TextChanged += new System.EventHandler(this.cmbSize_TextChanged);
+            this.cmbSize.TextUpdate += new System.EventHandler(this.cmbSize_TextUpdate);
             this.cmbSize.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumbersOnlyKeyPress);
             // 
             // btnBold
