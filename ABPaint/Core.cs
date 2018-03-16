@@ -20,7 +20,7 @@ namespace ABPaint
     {
         public static PowerTool currentTool;
 
-        public static bool paintLock; // A lock for painting
+        internal static bool paintLock; // A lock for painting
         internal static bool eventLock; // A lock for MouseDown, MouseUp and MouseMove.
         internal static bool editLock; // A lock for editing imageElements
         internal static bool actionLock; // A lock for doing big processing that involves changing variables like "selectedElement"
@@ -488,8 +488,10 @@ namespace ABPaint
         {
             if (MagnificationLevel < 16)
             {
+                Program.mainForm.OldMagnificationLevel = MagnificationLevel;
                 MagnificationLevel = MagnificationLevel * 2;
-                Program.mainForm.label11.Text = "X" + MagnificationLevel;
+                
+                Program.mainForm.label11.Text = "X" + MagnificationLevel;            
                 Program.mainForm.ReloadImage();
             }
             PaintPreview();
@@ -499,7 +501,9 @@ namespace ABPaint
         {
             if (MagnificationLevel > 1)
             {
+                Program.mainForm.OldMagnificationLevel = MagnificationLevel;
                 MagnificationLevel = MagnificationLevel / 2;
+
                 Program.mainForm.label11.Text = "X" + MagnificationLevel;
                 Program.mainForm.ReloadImage();
             }

@@ -13,6 +13,7 @@ namespace ABPaint
 {
     public partial class Form1 : Form
     {
+        internal int OldMagnificationLevel;
 
         public Form1()
         {
@@ -267,25 +268,35 @@ namespace ABPaint
         /// </summary>
         public void ReloadImage()
         {
-            canvaspre.Width = (savedata.imageSize.Width * MagnificationLevel) + 2;
-            canvaspre.Height = (savedata.imageSize.Height * MagnificationLevel) + 2;
+            Point oldScrollOffset = appcenter.AutoScrollOffset;
+        
+            canvaspre.Width = (savedata.imageSize.Width * MagnificationLevel);
+            canvaspre.Height = (savedata.imageSize.Height * MagnificationLevel);
 
-            int ProposedLeft = appcenter.Width / 2 - canvaspre.Width / 2;
-            int ProposedTop = appcenter.Height / 2 - canvaspre.Height / 2;
+            canvaspre.Left = 25;
+            canvaspre.Top = 25;
 
-            canvaspre.Left = (ProposedLeft < 0) ? 0 : ProposedLeft;
-            canvaspre.Top = (ProposedTop < 0) ? 0 : ProposedTop;
+            if (canvaspre.Width < appcenter.Width)
+                canvaspre.Left = (appcenter.Width / 2 - canvaspre.Width / 2);
 
-            DeselectElements();
+            if (canvaspre.Height < appcenter.Height)
+                canvaspre.Top = (appcenter.Height / 2 - canvaspre.Height / 2);
+
+            canvaspre.Invalidate();
+
+            if (MagnificationLevel > OldMagnificationLevel)
+                appcenter.AutoScrollOffset = new Point((oldScrollOffset.X * (MagnificationLevel - OldMagnificationLevel)) + (25 * MagnificationLevel), (oldScrollOffset.Y * (MagnificationLevel - OldMagnificationLevel)) + (25 * MagnificationLevel));
+            else
+                appcenter.AutoScrollOffset = new Point((oldScrollOffset.X / (MagnificationLevel - OldMagnificationLevel)) + (25 * MagnificationLevel), (oldScrollOffset.Y / (MagnificationLevel - OldMagnificationLevel)) + (25 * MagnificationLevel));
+
+            appcenter.AutoScrollMinSize = new Size(canvaspre.Width + 50, canvaspre.Height + 50);
 
             //if (canvaspre.Width + canvaspre.Left > appcenter.Width) appcenter.HorizontalScroll.Visible = true;
             //else appcenter.HorizontalScroll.Visible = false;
 
-            //if (canvaspre.Height + canvaspre.Top > appcenter.Height) appcenter.VerticalScroll.Visible = true;
-            //else appcenter.VerticalScroll.Visible = false;
+                //if (canvaspre.Height + canvaspre.Top > appcenter.Height) appcenter.VerticalScroll.Visible = true;
+                //else appcenter.VerticalScroll.Visible = false;
         }
-
-        
 
         private void canvaspre_MouseMove(object sender, MouseEventArgs e)
         {
