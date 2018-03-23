@@ -101,6 +101,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Objects\PerformableAction.cs" />
     <Compile Include="Objects\PowerTool.cs" />
     <Compile Include="Objects\Tool.cs" />
     <Compile Include="Program.cs" />

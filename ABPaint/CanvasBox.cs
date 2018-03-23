@@ -11,17 +11,12 @@ namespace ABPaint
     {
         protected override void OnPaint(PaintEventArgs pe)
         {
-            if (!Core.fillLock)
-            {
-                Core.paintLock = true;
-                pe.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                pe.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-                pe.Graphics.ScaleTransform(Core.MagnificationLevel, Core.MagnificationLevel); // Transform anything drawn to the zoom!
+            pe.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            pe.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+            pe.Graphics.ScaleTransform(Core.MagnificationLevel, Core.MagnificationLevel); // Transform anything drawn to the zoom!
             
-                base.OnPaint(pe);
-                Core.paintLock = false;
-            }
+            base.OnPaint(pe);
         }
     }
 }

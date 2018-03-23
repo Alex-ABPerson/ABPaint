@@ -302,31 +302,19 @@ namespace ABPaint
         {
             //Point mouseLoc = new Point((int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)), (int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)));
 
-            if (!eventLock)
-            {
-                eventLock = true;
-                HandleMouseMove(e);
-            }
+            HandleMouseMove(e);
         }
 
         private void canvaspre_MouseDown(object sender, MouseEventArgs e)
         {
             //Point mouseLoc = new Point((int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)), (int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)));
 
-            if (!eventLock)
-            {
-                eventLock = true;
-                HandleMouseDown(e);              
-            }
+            HandleMouseDown(e);
         }
 
         private void canvaspre_MouseUp(object sender, MouseEventArgs e)
         {
-            if (!eventLock)
-            {
-                eventLock = true;
-                HandleMouseUp(e);
-            }
+            HandleMouseUp(e);
         }
 
         /// <summary>
@@ -475,7 +463,7 @@ namespace ABPaint
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-           PaintPreviewAsync();
+            HandlePaint();
         }
 
         private void canvaspre_Paint(object sender, PaintEventArgs e)

@@ -19,13 +19,10 @@ namespace ABPaint
     public static class Core
     {
         public static PowerTool currentTool;
+        internal static bool queueLock = false; // A lock for the queue - stops the queue from being looped through twice at the same time
 
-        internal static bool paintLock; // A lock for painting
-        internal static bool eventLock; // A lock for MouseDown, MouseUp and MouseMove.
-        internal static bool editLock; // A lock for editing imageElements
-        internal static bool actionLock; // A lock for doing big processing that involves changing variables like "selectedElement"
-        internal static bool fillLock = false;
-
+        // All of the main variables go below, I recommend you hide them.
+        #region Main Variables
         // ==================
         // The Final Renderered Image
         // ==================
@@ -40,15 +37,15 @@ namespace ABPaint
             set
             {
                 endimg = value;
-                if (Program.mainForm.canvaspre.Image != null)
-                {
-                    if (Monitor.TryEnter(Program.mainForm.canvaspre.Image))
-                        Program.mainForm.canvaspre.Image = endimg;
-                } else Program.mainForm.canvaspre.Image = endimg;
+                ActionQueue.Enqueue(new PerformAction(PerformableAction.UpdatePreview));
+                ProcessQueue();
             }
         }
 
-        #region Main Variables
+        // ==================
+        // Message Queue (Things For The Program To Do)
+        // ==================
+        private static Queue<PerformAction> ActionQueue = new Queue<PerformAction>();
         // ==================
         // General Variables
         // ==================
@@ -126,12 +123,83 @@ namespace ABPaint
         public static bool UnderlineSelected = false;
         #endregion
 
-        public async static void PaintPreviewAsync()
-        {
-            tskPP = new Task<Bitmap>(PaintPreview);
-            tskPP.Start();
+        public async static void ProcessQueue()
+        {   
+            Task tsk = null;
+            PerformAction paction;
+            if (!queueLock)
+            {
+                queueLock = true;
+                ActionQueue.Enqueue(new PerformAction(PerformableAction.Paint));
+                while (ActionQueue.Count > 0)
+                {
+                    paction = ActionQueue.Dequeue();
+                    switch (paction.action)
+                    {
+                        case PerformableAction.Paint:
+                            tsk = new Task<Bitmap>(PaintPreview);
+                            break;
+                        case PerformableAction.UpdatePreview:
+                            tsk = new Task(() =>
+                            {
+                                if (Program.mainForm.canvaspre.Image != null)
+                                {
+                                    if (Monitor.TryEnter(Program.mainForm.canvaspre.Image))
+                                        Program.mainForm.canvaspre.Image = endimg;
+                                }
+                                else Program.mainForm.canvaspre.Image = endimg;
+                            });
+                            break;
+                        case PerformableAction.SelectionToolSelect:
+                            tsk = new Task(() => { selectElementByLocation((int)paction.param1, (int)paction.param2); });
+                            break;
+                        case PerformableAction.Delete:
+                            tsk = new Task(PerformDelete);
+                            break;
+                        case PerformableAction.AddElement:
+                            tsk = new Task(() => { PerformAddElement(paction.param1 as Element); });
+                            break;
+                        case PerformableAction.CancelTool:
+                            tsk = new Task(PerformCancelTool);
+                            break;
+                        case PerformableAction.ApplyTool:
+                            tsk = new Task(PerformApply);
+                            break;
+                        case PerformableAction.UseTool:
+                            tsk = new Task(() => { PerformUseTool(paction.param1 as PowerTool); });
+                            break;                    
+                        case PerformableAction.Cut:
+                            tsk = new Task(PerformCut);
+                            break;
+                        case PerformableAction.Copy:
+                            tsk = new Task(PerformCopy);
+                            break;
+                        case PerformableAction.Paste:
+                            tsk = new Task(PerformPaste);
+                            break;
+                        case PerformableAction.Fill:
+                            tsk = new Task(() => { PerformFill((Point)paction.param1); });
+                            break;
+                        case PerformableAction.Text:
+                            tsk = new Task(() => { PerformText((Point)paction.param1); });
+                            break;
+                    }
+                    if (tsk != null)
+                    {
+                        tsk.Start();
+                        await tsk;
+                        Program.mainForm.canvaspre.Invalidate();
+                    }
+                }
+                tsk.Dispose();
+                queueLock = false;              
+            }    
+        }
 
-            endImage = await tskPP;
+        public static void HandlePaint()
+        {
+            ActionQueue.Enqueue(new PerformAction(PerformableAction.Paint));
+            ProcessQueue();
         }
 
         /// <summary>
@@ -142,32 +210,26 @@ namespace ABPaint
         {
             Bitmap endResult = new Bitmap(savedata.imageSize.Width, savedata.imageSize.Height);
 
-            if (!editLock) {
-                editLock = true;               
-
-                //try
-                //{
-                // Draw the elements in order
+            //try
+            //{
+            // Draw the elements in order
 
 
-                Graphics g = Graphics.FromImage(endResult);
+            Graphics g = Graphics.FromImage(endResult);
 
-                g.FillRectangle(Brushes.White, 0, 0, savedata.imageSize.Width, savedata.imageSize.Height);
-                // Order them by zindex:
-                savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).ToList();
+            g.FillRectangle(Brushes.White, 0, 0, savedata.imageSize.Width, savedata.imageSize.Height);
+            // Order them by zindex:
+            savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).ToList();
 
-                // Now draw them all!
+            // Now draw them all!
 
-                for (int i = 0; i < savedata.imageElements.Count; i++)
-                {
-                    if (savedata.imageElements[i].Visible)
-                        savedata.imageElements[i].ProcessImage(g);
-                }
-
-                endImage = endResult;
-
-                editLock = false;
+            for (int i = 0; i < savedata.imageElements.Count; i++)
+            {
+                if (savedata.imageElements[i].Visible)
+                    savedata.imageElements[i].ProcessImage(g);
             }
+
+            endImage = endResult;
 
             return endResult;           
                
@@ -184,31 +246,25 @@ namespace ABPaint
         {
             Element ret = null;
 
-            if (!editLock)
+            // Order the list based on zindex! But backwards so that the foreach picks up the top one!
+            savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).Reverse().ToList();
+
+            foreach (Element ele in savedata.imageElements)
             {
-                editLock = true;
-                // Order the list based on zindex! But backwards so that the foreach picks up the top one!
-                savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).Reverse().ToList();
-
-                foreach (Element ele in savedata.imageElements)
+                if (new Rectangle(ele.X - 10, ele.Y - 10, ele.Width + 20, ele.Height + 20).Contains(new Point(x, y)))
                 {
-                    if (new Rectangle(ele.X - 10, ele.Y - 10, ele.Width + 20, ele.Height + 20).Contains(new Point(x, y)))
-                    {
-                        // The mouse is in this element!
+                    // The mouse is in this element!
 
-                        ele.zindex = savedata.topZIndex++; // Brings to front
+                    ele.zindex = savedata.topZIndex++; // Brings to front
 
-                        ret = ele;
+                    ret = ele;
 
-                        break;
-                    }
+                    break;
                 }
-
-                // Order the list based on zindex!
-                savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).ToList();
-
-                editLock = false;
             }
+
+            // Order the list based on zindex!
+            savedata.imageElements = savedata.imageElements.OrderBy(o => o.zindex).ToList();
 
             return ret;
         }
@@ -346,7 +402,7 @@ namespace ABPaint
                     break;
             }
 
-            PaintPreviewAsync();
+            HandlePaint();
             Program.mainForm.canvaspre.Invalidate();
         }
 
@@ -356,17 +412,18 @@ namespace ABPaint
         /// <param name="tool">The PowerTool to use.</param>
         public static void UseTool(PowerTool tool)
         {
-            if (!actionLock)
-            {
-                actionLock = true;
-                if (tool.UseRegionDrag)
-                    IsInDragRegion = true;
+            ActionQueue.Enqueue(new PerformAction(PerformableAction.CancelTool, tool));
+            ProcessQueue();
+        }
 
-                currentTool = tool;
+        public static void PerformUseTool(PowerTool tool)
+        {
+            if (tool.UseRegionDrag)
+                IsInDragRegion = true;
 
-                tool.Prepare();
-                actionLock = false;
-            }
+            currentTool = tool;
+
+            tool.Prepare();
         }
 
         /// <summary>
@@ -374,114 +431,110 @@ namespace ABPaint
         /// </summary>
         public static void CancelTool()
         {
-            if (!actionLock)
-            {
-                actionLock = true;
-                if (currentTool.UseRegionDrag)
-                    IsInDragRegion = false;
+            ActionQueue.Enqueue(new PerformAction(PerformableAction.CancelTool));
+            ProcessQueue();
+        }
 
-                currentTool.Cancel();
-                currentTool = null;
-                
-                actionLock = false;
+        public static void PerformCancelTool()
+        {
+            if (currentTool.UseRegionDrag)
+                IsInDragRegion = false;
 
-                Program.mainForm.canvaspre.Invalidate();
-            }
+            currentTool.Cancel();
+            currentTool = null;
+
+            Program.mainForm.canvaspre.Invalidate();
         }
 
         public static void HandleApply()
         {
-            if (!actionLock)
-            {
-                actionLock = true;
-                if (currentTool != null)
-                    if (currentTool.UseRegionDrag)
-                    {
-                        IsInDragRegion = false;
-                        currentTool.Apply(dragRegionSelect);
-                    }
-                    else
-                    {
-                        IsInDragRegion = false;
-                        currentTool.Apply(new Rectangle());
-                    }
-                actionLock = false;
-            }
+            ActionQueue.Enqueue(new PerformAction(PerformableAction.ApplyTool));
+            ProcessQueue();
+        }
+
+        public static void PerformApply()
+        {
+            if (currentTool != null)
+                if (currentTool.UseRegionDrag)
+                {
+                    IsInDragRegion = false;
+                    currentTool.Apply(dragRegionSelect);
+                }
+                else
+                {
+                    IsInDragRegion = false;
+                    currentTool.Apply(new Rectangle());
+                }
             Program.mainForm.canvaspre.Invalidate();
         }
 
         public static void HandleDelete()
         {
-            if (!actionLock)
-            {
-                actionLock = true;
+            ActionQueue.Enqueue(new PerformAction(PerformableAction.Delete));
+            ProcessQueue();
+        }
 
-                if (selectedElement != null)
-                    if (selectedTool == Tool.Selection)
-                    {
-                        savedata.imageElements.Remove(selectedElement);
+        public static void PerformDelete()
+        {
+            if (selectedElement != null)
+                if (selectedTool == Tool.Selection)
+                {
+                    savedata.imageElements.Remove(selectedElement);
 
-                        DeselectElements();
+                    DeselectElements();
 
-                        Program.mainForm.canvaspre.Invalidate();
-                        endImage = PaintPreview();
-                    }
-
-                actionLock = false;
-            }
+                    Program.mainForm.canvaspre.Invalidate();
+                }
         }
 
         public static void HandleCut()
         {
-            if (!actionLock)
-            {
-                HandleCopy();
+            ActionQueue.Enqueue(new PerformAction(PerformableAction.Cut));
+            ProcessQueue();
+        }
 
-                actionLock = true;
+        public static void PerformCut()
+        {
+            PerformCopy();
 
-                savedata.imageElements.Remove(selectedElement);
-                selectedElement = null;
+            savedata.imageElements.Remove(selectedElement);
+            selectedElement = null;
 
-                Program.mainForm.canvaspre.Invalidate();
-                endImage = Core.PaintPreview();
-
-                actionLock = false;
-            }
+            Program.mainForm.canvaspre.Invalidate();
         }
 
         public static void HandleCopy()
         {
-            if (!actionLock)
-            {
-                actionLock = true;
-                Clipboard.SetDataObject("ABPELE" + ABJson.GDISupport.JsonSerializer.Serialize("", selectedElement, ABJson.GDISupport.JsonFormatting.Compact, 0, true).TrimEnd(','), true);
-                actionLock = false;
-            }
-            //Clipboard.SetDataObject(Program.mainForm.selectedElement, true);
+            ActionQueue.Enqueue(new PerformAction(PerformableAction.Copy));
+            ProcessQueue();
+        }
+
+        public static void PerformCopy()
+        {
+            Clipboard.SetDataObject("ABPELE" + ABJson.GDISupport.JsonSerializer.Serialize("", selectedElement, ABJson.GDISupport.JsonFormatting.Compact, 0, true).TrimEnd(','), true);
         }
 
         public static void HandlePaste()
         {
-            if (!actionLock)
+            ActionQueue.Enqueue(new PerformAction(PerformableAction.Paste));
+            ProcessQueue();
+        }
+
+        public static void PerformPaste()
+        {
+            IDataObject data = Clipboard.GetDataObject();
+
+            if (data.GetDataPresent(DataFormats.Text) && data.GetData(DataFormats.Text).ToString().StartsWith("ABPELE"))
             {
-                actionLock = true;
-                //Clipboard.SetDataObject("ABPAINTELEMENT" + ABJson.GDISupport.JsonSerializer.Serialize("", Program.mainForm.selectedElement, ABJson.GDISupport.JsonFormatting.Compact, 0, true).TrimEnd(','), true);
-                IDataObject data = Clipboard.GetDataObject();
+                Element ele = ABJson.GDISupport.JsonClassConverter.ConvertJsonToObject<Element>(data.GetData(DataFormats.Text).ToString().Remove(0, 6), true);
 
-                if (data.GetDataPresent(DataFormats.Text) && data.GetData(DataFormats.Text).ToString().StartsWith("ABPELE"))
-                {            
-                    Element ele = ABJson.GDISupport.JsonClassConverter.ConvertJsonToObject<Element>(data.GetData(DataFormats.Text).ToString().Remove(0, 6), true);
+                ele.zindex = savedata.topZIndex++;
+                AddElement(ele);
 
-                    ele.zindex = savedata.topZIndex++;
-                    AddElement(ele);
-
-                    selectedElement = ele;
-                }
-
-                Program.mainForm.canvaspre.Invalidate();
-                endImage = Core.PaintPreview();
-                actionLock = false;
+                selectedElement = ele;
             }
+
+            Program.mainForm.canvaspre.Invalidate();
         }
 
         public static void HandleZoomIn()
@@ -494,7 +547,6 @@ namespace ABPaint
                 Program.mainForm.label11.Text = "X" + MagnificationLevel;            
                 Program.mainForm.ReloadImage();
             }
-            PaintPreview();
         }
 
         public static void HandleZoomOut()
@@ -512,17 +564,96 @@ namespace ABPaint
 
         public static void AddElement(Element element)
         {
-            if (!editLock)
-            {
-                editLock = true;
-                savedata.imageElements.Add(element);
-                editLock = false;
-            }
+            ActionQueue.Enqueue(new PerformAction(PerformableAction.AddElement, element));
+            ProcessQueue();
+        }
+
+        public static void PerformAddElement(Element element)
+        {
+            savedata.imageElements.Add(element);
 
             // TODO: Add undo option!
         }
 
-        // It is recommended that you hide the lower two - however, if you don't... at least hide the "Fill + Text" region in the MouseDown...
+        public static void HandleFill(Point mouseLoc)
+        {
+            ActionQueue.Enqueue(new PerformAction(PerformableAction.Fill, mouseLoc));
+            ProcessQueue();
+        }
+
+        public static void PerformFill(Point mouseLoc)
+        {
+            startPoint = new Point(mouseLoc.X, mouseLoc.Y);
+
+            currentDrawingElement = new Fill()
+            {
+                X = mouseLoc.X,
+                Y = mouseLoc.Y,
+                Width = savedata.imageSize.Width,
+                Height = savedata.imageSize.Height
+            };
+
+            DrawingMin.X = mouseLoc.X;
+            DrawingMin.Y = mouseLoc.Y;
+            DrawingMax.X = mouseLoc.X;
+            DrawingMax.Y = mouseLoc.Y;
+
+            ((Fill)currentDrawingElement).fillPoints = ImageFilling.SafeFloodFill(ImageFormer.ImageToByteArray(Core.PaintPreview()), mouseLoc.X, mouseLoc.Y, Color.FromArgb(1, 0, 1));
+            ((Fill)currentDrawingElement).fillColor = Program.mainForm.clrNorm.BackColor;
+
+            currentDrawingElement.X = DrawingMin.X - 1; currentDrawingElement.Y = DrawingMin.Y - 1;
+
+            currentDrawingElement.Width = (DrawingMax.X - DrawingMin.X) + 1;
+            currentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y) + 1;
+            currentDrawingElement.zindex = savedata.topZIndex++;
+
+            ((Fill)currentDrawingElement).fillPoints = ImageCropping.CropImage(((Fill)currentDrawingElement).fillPoints, currentDrawingElement.X, currentDrawingElement.Y, currentDrawingElement.Width, currentDrawingElement.Height);
+            AddElement(currentDrawingElement);
+
+            if (currentDrawingGraphics != null) currentDrawingGraphics.Dispose();
+            currentDrawingElement = null;
+
+            endImage = PaintPreview();
+        }
+
+        public static void HandleText(Point mouseLoc)
+        {
+            ActionQueue.Enqueue(new PerformAction(PerformableAction.Text, mouseLoc));
+            ProcessQueue();
+        }
+
+        public static void PerformText(Point mouseLoc)
+        {
+            currentDrawingElement = new Elements.Text()
+            {
+                X = mouseLoc.X,
+                Y = mouseLoc.Y,
+            };
+
+            ((Text)currentDrawingElement).mainText = Program.mainForm.txtTText.Text;
+            ((Text)currentDrawingElement).clr = Program.mainForm.clrNorm.BackColor;
+
+            try
+            {
+                FontStyle bold = (BoldSelected) ? FontStyle.Bold : FontStyle.Regular;
+                FontStyle italic = (ItalicSelected) ? FontStyle.Italic : FontStyle.Regular;
+                FontStyle underline = (UnderlineSelected) ? FontStyle.Underline : FontStyle.Regular;
+
+                ((Text)currentDrawingElement).fnt = new Font(Program.mainForm.cmbFont.Text, (Program.mainForm.cmbSize.Text.Length > 0) ? int.Parse(Program.mainForm.cmbSize.Text) : 0, bold | italic | underline);
+            }
+            catch
+            {
+                Program.mainForm.cmbFont.Text = "Microsoft Sans Serif";
+                Program.mainForm.cmbSize.Text = "12";
+                ((Text)currentDrawingElement).fnt = new Font(Program.mainForm.cmbFont.Text, (Program.mainForm.cmbSize.Text.Length > 0) ? int.Parse(Program.mainForm.cmbSize.Text) : 0, FontStyle.Regular);
+            }
+
+            Size widthHeight = Elements.Text.MeasureText(Program.mainForm.txtTText.Text, ((Text)currentDrawingElement).fnt);
+            currentDrawingElement.Width = Convert.ToInt32(Math.Ceiling(widthHeight.Width + ((Text)currentDrawingElement).fnt.Size));
+            currentDrawingElement.Height = widthHeight.Height;
+        }
+
+        // It is recommended that you hide the lower two regions
         #region Mouse Selection Handlers
         public static void HandleMouseDownSelection(Point mouseLoc)
         {
@@ -730,7 +861,7 @@ namespace ABPaint
         #endregion
 
         #region Mouse Handlers
-        public async static void HandleMouseDown(MouseEventArgs e)
+        public static void HandleMouseDown(MouseEventArgs e)
         {
             Point mouseLoc = new Point(e.X / MagnificationLevel, e.Y / MagnificationLevel);
             mousePoint = mouseLoc;
@@ -855,88 +986,14 @@ namespace ABPaint
                         ((Line)currentDrawingElement).Thickness = (Program.mainForm.txtBThick.Text.Length > 0) ? int.Parse(Program.mainForm.txtBThick.Text) : 0;
                     }
 
-                    
+
                     #region Fill + Text
-                    if (selectedTool == Tool.Fill) // I would hide this function, it's quite long because it runs async which causes all sorts of problems!
-                    {
-                        if (!fillLock)
-                            try
-                            {
-                                fillLock = true;
-
-                                startPoint = new Point(mouseLoc.X, mouseLoc.Y);
-
-                                currentDrawingElement = new Fill()
-                                {
-                                    X = mouseLoc.X,
-                                    Y = mouseLoc.Y,
-                                    Width = savedata.imageSize.Width,
-                                    Height = savedata.imageSize.Height
-                                };
-
-                                DrawingMin.X = mouseLoc.X;
-                                DrawingMin.Y = mouseLoc.Y;
-                                DrawingMax.X = mouseLoc.X;
-                                DrawingMax.Y = mouseLoc.Y;
-
-                                //Program.mainForm.lblProcess.Show();
-                                fill = new Task<Bitmap>(() =>
-                                {
-                                     return ImageFilling.SafeFloodFill(ImageFormer.ImageToByteArray(Core.PaintPreview()), mouseLoc.X, mouseLoc.Y, Color.FromArgb(1, 0, 1));
-                                });
-
-                                fill.Start();
-
-                                ((Fill)currentDrawingElement).fillPoints = await fill;
-                                ((Fill)currentDrawingElement).fillColor = Program.mainForm.clrNorm.BackColor;
-
-                                currentDrawingElement.X = DrawingMin.X - 1; currentDrawingElement.Y = DrawingMin.Y - 1;
-
-                                currentDrawingElement.Width = (DrawingMax.X - DrawingMin.X) + 1;
-                                currentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y) + 1;
-                                currentDrawingElement.zindex = savedata.topZIndex++;
-
-                                ((Fill)currentDrawingElement).fillPoints = ImageCropping.CropImage(((Fill)currentDrawingElement).fillPoints, currentDrawingElement.X, currentDrawingElement.Y, currentDrawingElement.Width, currentDrawingElement.Height);
-                                AddElement(currentDrawingElement);
-
-                                if (currentDrawingGraphics != null) currentDrawingGraphics.Dispose();
-                                currentDrawingElement = null;
-
-                                endImage = PaintPreview();
-
-                                fillLock = false;
-                            } catch { }
-                    }
+                    if (selectedTool == Tool.Fill)
+                        HandleFill(mouseLoc);
 
                     if (selectedTool == Tool.Text)
                     {
-                        currentDrawingElement = new Elements.Text()
-                        {
-                            X = mouseLoc.X,
-                            Y = mouseLoc.Y,
-                        };
-
-                        ((Text)currentDrawingElement).mainText = Program.mainForm.txtTText.Text;
-                        ((Text)currentDrawingElement).clr = Program.mainForm.clrNorm.BackColor;
-
-                        try
-                        {
-                            FontStyle bold = (BoldSelected) ? FontStyle.Bold : FontStyle.Regular;
-                            FontStyle italic = (ItalicSelected) ? FontStyle.Italic : FontStyle.Regular;
-                            FontStyle underline = (UnderlineSelected) ? FontStyle.Underline : FontStyle.Regular;
-
-                            ((Text)currentDrawingElement).fnt = new Font(Program.mainForm.cmbFont.Text, (Program.mainForm.cmbSize.Text.Length > 0) ? int.Parse(Program.mainForm.cmbSize.Text) : 0, bold | italic | underline);
-                        }
-                        catch
-                        {
-                            Program.mainForm.cmbFont.Text = "Microsoft Sans Serif";
-                            Program.mainForm.cmbSize.Text = "12";
-                            ((Text)currentDrawingElement).fnt = new Font(Program.mainForm.cmbFont.Text, (Program.mainForm.cmbSize.Text.Length > 0) ? int.Parse(Program.mainForm.cmbSize.Text) : 0, FontStyle.Regular);
-                        }
-
-                        Size widthHeight = Elements.Text.MeasureText(Program.mainForm.txtTText.Text, ((Text)currentDrawingElement).fnt);
-                        currentDrawingElement.Width = Convert.ToInt32(Math.Ceiling(widthHeight.Width + ((Text)currentDrawingElement).fnt.Size));
-                        currentDrawingElement.Height = widthHeight.Height;
+                        
                     }
                     #endregion
 
@@ -944,7 +1001,6 @@ namespace ABPaint
                 }
                 
             }
-            eventLock = false;
         }
 
         public static void HandleMouseMove(MouseEventArgs e)
@@ -1020,7 +1076,6 @@ namespace ABPaint
 
                 lastMousePoint = mouseLoc;
             }
-            eventLock = false;
         }
 
         public static void HandleMouseUp(MouseEventArgs e)
@@ -1181,11 +1236,9 @@ namespace ABPaint
                 }
             }
 
-            PaintPreviewAsync();
+            HandlePaint();
 
             GC.Collect();
-
-            eventLock = false;
         }
         #endregion      
     }
