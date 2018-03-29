@@ -5,6 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ABPaint.Tools.Backend
@@ -38,14 +39,10 @@ namespace ABPaint.Tools.Backend
             }
         }
 
-        public static Bitmap ChangeImageColor(Bitmap bmp, Color clr)
+        public static void ChangeGraphicsColor(Bitmap bmp, Graphics g, Color clr, int DrawAtX = 0, int DrawAtY = 0)
         {
-            Bitmap ret = new Bitmap(bmp.Width, bmp.Height);
+            Rectangle rect = new Rectangle(DrawAtX, DrawAtY, bmp.Width, bmp.Height);
 
-            Graphics g = Graphics.FromImage(ret);
-
-            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-            
             ColorMap[] colorMap = new ColorMap[1];
             colorMap[0] = new ColorMap();
             colorMap[0].OldColor = Color.FromArgb(1, 0, 1);
@@ -55,8 +52,21 @@ namespace ABPaint.Tools.Backend
             // Draw using the color map
 
             g.DrawImage(bmp, rect, 0, 0, rect.Width, rect.Height, GraphicsUnit.Pixel, attr);
+        }
 
-            return ret;
+        public static void ChangeGraphicsColorForEvents(Bitmap bmp, Graphics g, Color clr)
+        {
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+
+            ColorMap[] colorMap = new ColorMap[1];
+            colorMap[0] = new ColorMap();
+            colorMap[0].OldColor = Color.FromArgb(1, 0, 1);
+            colorMap[0].NewColor = clr;
+            ImageAttributes attr = new ImageAttributes();
+            attr.SetRemapTable(colorMap);
+            // Draw using the color map
+
+            g.DrawImage(bmp, rect, 0, 0, rect.Width, rect.Height, GraphicsUnit.Pixel, attr);
         }
     }
 }

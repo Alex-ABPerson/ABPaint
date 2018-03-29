@@ -70,7 +70,7 @@ namespace ABPaint.Objects
         /// <summary>
         /// What gets ran when the element is drawn.
         /// The graphics are drawn to a graphics object at the X and Y of the element.
-        /// If you don't want that to happen - change the <see cref="DrawAtLocation"/> property to false.
+        /// If you don't want that to happen at those co-ordinates - change the <see cref="DrawAtLocation"/> property to false.
         /// </summary>
         public abstract void ProcessImage(Graphics g);
 

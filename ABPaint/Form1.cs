@@ -13,7 +13,23 @@ namespace ABPaint
 {
     public partial class Form1 : Form
     {
-        internal int OldMagnificationLevel;
+        public bool paintLock;
+        public int OldMagnificationLevel;
+
+        private Bitmap _backBuffer;
+
+        public Graphics canvaspreG; // The graphics of the canvas.
+        public Graphics BackBufferG; // The graphics of the back-buffer
+
+        public Bitmap BackBuffer
+        { 
+            get { return _backBuffer; }
+            set
+            {
+                _backBuffer = value;
+
+            }
+        } // The back-buffer
 
         public Form1()
         {
@@ -25,6 +41,11 @@ namespace ABPaint
             //    HandleKeyPress(e.KeyCode); });
 
             ReloadImage();
+
+            canvaspreG = canvaspre.CreateGraphics();
+            BackBufferG = Graphics.FromImage(BackBuffer);
+
+            canvaspre.Image = new Bitmap(savedata.imageSize.Width, savedata.imageSize.Height);
         }
         #region General Code
 
@@ -291,6 +312,8 @@ namespace ABPaint
 
             appcenter.AutoScrollMinSize = new Size(canvaspre.Width + 50, canvaspre.Height + 50);
 
+            BackBuffer = new Bitmap(canvaspre.Width, canvaspre.Height);
+
             //if (canvaspre.Width + canvaspre.Left > appcenter.Width) appcenter.HorizontalScroll.Visible = true;
             //else appcenter.HorizontalScroll.Visible = false;
 
@@ -298,23 +321,43 @@ namespace ABPaint
                 //else appcenter.VerticalScroll.Visible = false;
         }
 
+        public void UpdateCanvaspreWithBackBuffer()
+        {
+            canvaspreG.DrawImage(BackBuffer, 0, 0);
+        }
+
         private void canvaspre_MouseMove(object sender, MouseEventArgs e)
         {
             //Point mouseLoc = new Point((int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)), (int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)));
 
-            HandleMouseMove(e);
+            if (!mousemoveLock)
+            {
+                mousemoveLock = true;
+                HandleMouseMove(e);
+                mousemoveLock = false;
+            }
         }
 
         private void canvaspre_MouseDown(object sender, MouseEventArgs e)
         {
             //Point mouseLoc = new Point((int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)), (int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)));
 
-            HandleMouseDown(e);
+            if (!mousedownLock)
+            {
+                mousedownLock = true;
+                HandleMouseDown(e);
+                mousedownLock = false;
+            }
         }
 
         private void canvaspre_MouseUp(object sender, MouseEventArgs e)
         {
-            HandleMouseUp(e);
+            if (!mouseupLock)
+            {
+                mouseupLock = true;
+                HandleMouseUp(e);
+                mouseupLock = false;
+            }
         }
 
         /// <summary>
@@ -468,155 +511,162 @@ namespace ABPaint
 
         private void canvaspre_Paint(object sender, PaintEventArgs e)
         {
-            //if (!actionLock)
-            //    if (!fillLock)
-            //        if (!editLock)
-            //            try { e.Graphics.DrawImage(endImage, 0, 0); } catch { MessageBox.Show("Canvaspre paint error! Check locks!"); } // The try + catch is only there in case of a case where I haven't checked my locks.
-            
-            //try { e.Graphics.DrawImage(canvaspre.Image, 0, 0, canvaspre.Width, canvaspre.Height); } catch { }
-            //if (canvaspre.Image != null) canvaspre.Image = null;
-
-            // This is to preview what you are drawing!
-
-            if (MouseDownOnCanvas)
+            if (!paintLock)
             {
-                if (currentDrawingElement is Pencil)
-                    e.Graphics.DrawPath(new Pen(clrNorm.BackColor), grph);
+                paintLock = true;
+                //if (!actionLock)
+                //    if (!fillLock)
+                //        if (!editLock)
+                //            try { e.Graphics.DrawImage(endImage, 0, 0); } catch { MessageBox.Show("Canvaspre paint error! Check locks!"); } // The try + catch is only there in case of a case where I haven't checked my locks.
 
-                if (currentDrawingElement is Elements.Brush)
-                    e.Graphics.DrawImage(BrushDrawing.ChangeImageColor(((Elements.Brush)currentDrawingElement).brushPoints, clrNorm.BackColor), 0, 0);
+                //try { e.Graphics.DrawImage(canvaspre.Image, 0, 0, canvaspre.Width, canvaspre.Height); } catch { }
+                //if (canvaspre.Image != null) canvaspre.Image = null;
 
-                if (currentDrawingElement is RectangleE)
+                // This is to preview what you are drawing!
+
+                if (MouseDownOnCanvas)
                 {
-                    // Now let's draw this rectangle!
+                    if (currentDrawingElement is Pencil)
+                        e.Graphics.DrawPath(new Pen(clrNorm.BackColor), grph);
 
-                    RectangleE ele = ((RectangleE)currentDrawingElement);
-                    int width = (mousePoint.X - startPoint.X);
-                    int height = (mousePoint.Y - startPoint.Y);
+                    if (currentDrawingElement is Elements.Brush)
+                        BrushDrawing.ChangeGraphicsColor(((Elements.Brush)currentDrawingElement).brushPoints, e.Graphics, clrNorm.BackColor);
 
-                    int heightamount = 0;
-                    int widthamount = 0;
-                    if (width < 0)
-                        widthamount = Math.Abs(width);
-                    else
-                        widthamount = 0;
-
-                    if (height < 0)
-                        heightamount = Math.Abs(height);
-                    else
-                        heightamount = 0;
-
-                    //if (width < 0) currentDrawingElement.Width = 1;
-                    //if (height < 0) currentDrawingElement.Height = 1;
-
-                    int borderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
-
-                    if (ele.IsFilled) e.Graphics.FillRectangle(new SolidBrush(ele.FillColor), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height)); // Fill
-
-                    e.Graphics.DrawRectangle(new Pen(ele.BorderColor, borderSize), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height));
-                    //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, ele.BorderSize, height); // Left border
-                    //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, width, ele.BorderSize); // Top border
-                    //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), (ele.Width - ele.BorderSize) + DrawingMin.X, DrawingMin.Y, ele.BorderSize, Height); // Right border
-                    //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, (ele.Height - ele.BorderSize) + DrawingMin.Y, ele.Width, ele.BorderSize); // Bottom border
-                }
-
-                if (currentDrawingElement is Ellipse)
-                {
-                    // Now let's draw this ellipse! and yes this is pratically the same code as the rectangle one - both of them use the same code for things
-
-                    Ellipse ele = ((Ellipse)currentDrawingElement);
-                    int width = (mousePoint.X - startPoint.X);
-                    int height = (mousePoint.Y - startPoint.Y);
-
-                    int heightamount = 0;
-                    int widthamount = 0;
-                    if (width < 0)
-                        widthamount = Math.Abs(width);
-                    else
-                        widthamount = 0;
-
-                    if (height < 0)
-                        heightamount = Math.Abs(height);
-                    else
-                        heightamount = 0;
-
-                    //if (width < 0) currentDrawingElement.Width = 1;
-                    //if (height < 0) currentDrawingElement.Height = 1;
-
-                    int borderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
-                    if (ele.IsFilled) e.Graphics.FillEllipse(new SolidBrush(ele.FillColor), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height)); // Fill
-
-                    e.Graphics.DrawEllipse(new Pen(ele.BorderColor, borderSize), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height));
-                    //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, ele.BorderSize, height); // Left border
-                    //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, width, ele.BorderSize); // Top border
-                    //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), (ele.Width - ele.BorderSize) + DrawingMin.X, DrawingMin.Y, ele.BorderSize, Height); // Right border
-                    //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, (ele.Height - ele.BorderSize) + DrawingMin.Y, ele.Width, ele.BorderSize); // Bottom border
-                }
-
-                if (currentDrawingElement is Line) {
-                    int thickness = (txtBThick.Text.Length > 0) ? int.Parse(txtBThick.Text) : 0;
-                    e.Graphics.DrawLine(new Pen(clrNorm.BackColor, thickness), startPoint.X, startPoint.Y, mousePoint.X, mousePoint.Y);
-                }
-
-                if (currentDrawingElement is Text)
-                    e.Graphics.DrawString(((Text)currentDrawingElement).mainText, ((Text)currentDrawingElement).fnt, new SolidBrush(((Text)currentDrawingElement).clr), mousePoint.X, mousePoint.Y);
-            }
-
-            // ...or to draw the overlay of the selection tool...
-
-            if (selectedElement != null)
-            {
-                // Check if it hasn't moved
-
-                if (selectedElement.X == IsMovingOld.X && selectedElement.Y == IsMovingOld.Y)
-                {
-                    int width = Math.Abs(selectedElement.Width);
-                    int height = Math.Abs(selectedElement.Height);
-                    
-                    e.Graphics.DrawRectangle(new Pen(Color.Gray, 3), selectedElement.X - 1, selectedElement.Y - 1, width + 1, height + 1);
-                    e.Graphics.DrawRectangle(new Pen(Color.Blue), selectedElement.X - 1, selectedElement.Y - 1, width + 1, height + 1);
-
-                    // The points for scaling
-
-                    if (IsOnSelection)
+                    if (currentDrawingElement is RectangleE)
                     {
-                        if (selectedElement is Line)
+                        // Now let's draw this rectangle!
+
+                        RectangleE ele = ((RectangleE)currentDrawingElement);
+                        int width = (mousePoint.X - startPoint.X);
+                        int height = (mousePoint.Y - startPoint.Y);
+
+                        int heightamount = 0;
+                        int widthamount = 0;
+                        if (width < 0)
+                            widthamount = Math.Abs(width);
+                        else
+                            widthamount = 0;
+
+                        if (height < 0)
+                            heightamount = Math.Abs(height);
+                        else
+                            heightamount = 0;
+
+                        //if (width < 0) currentDrawingElement.Width = 1;
+                        //if (height < 0) currentDrawingElement.Height = 1;
+
+                        int borderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
+
+                        if (ele.IsFilled) e.Graphics.FillRectangle(new SolidBrush(ele.FillColor), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height)); // Fill
+
+                        e.Graphics.DrawRectangle(new Pen(ele.BorderColor, borderSize), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height));
+                        //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, ele.BorderSize, height); // Left border
+                        //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, width, ele.BorderSize); // Top border
+                        //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), (ele.Width - ele.BorderSize) + DrawingMin.X, DrawingMin.Y, ele.BorderSize, Height); // Right border
+                        //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, (ele.Height - ele.BorderSize) + DrawingMin.Y, ele.Width, ele.BorderSize); // Bottom border
+                    }
+
+                    if (currentDrawingElement is Ellipse)
+                    {
+                        // Now let's draw this ellipse! and yes this is pratically the same code as the rectangle one - both of them use the same code for things
+
+                        Ellipse ele = ((Ellipse)currentDrawingElement);
+                        int width = (mousePoint.X - startPoint.X);
+                        int height = (mousePoint.Y - startPoint.Y);
+
+                        int heightamount = 0;
+                        int widthamount = 0;
+                        if (width < 0)
+                            widthamount = Math.Abs(width);
+                        else
+                            widthamount = 0;
+
+                        if (height < 0)
+                            heightamount = Math.Abs(height);
+                        else
+                            heightamount = 0;
+
+                        //if (width < 0) currentDrawingElement.Width = 1;
+                        //if (height < 0) currentDrawingElement.Height = 1;
+
+                        int borderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
+                        if (ele.IsFilled) e.Graphics.FillEllipse(new SolidBrush(ele.FillColor), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height)); // Fill
+
+                        e.Graphics.DrawEllipse(new Pen(ele.BorderColor, borderSize), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height));
+                        //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, ele.BorderSize, height); // Left border
+                        //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, width, ele.BorderSize); // Top border
+                        //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), (ele.Width - ele.BorderSize) + DrawingMin.X, DrawingMin.Y, ele.BorderSize, Height); // Right border
+                        //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, (ele.Height - ele.BorderSize) + DrawingMin.Y, ele.Width, ele.BorderSize); // Bottom border
+                    }
+
+                    if (currentDrawingElement is Line)
+                    {
+                        int thickness = (txtBThick.Text.Length > 0) ? int.Parse(txtBThick.Text) : 0;
+                        e.Graphics.DrawLine(new Pen(clrNorm.BackColor, thickness), startPoint.X, startPoint.Y, mousePoint.X, mousePoint.Y);
+                    }
+
+                    if (currentDrawingElement is Text)
+                        e.Graphics.DrawString(((Text)currentDrawingElement).mainText, ((Text)currentDrawingElement).fnt, new SolidBrush(((Text)currentDrawingElement).clr), mousePoint.X, mousePoint.Y);
+                }
+
+                // ...or to draw the overlay of the selection tool...
+
+                if (selectedElement != null)
+                {
+                    // Check if it hasn't moved
+
+                    if (selectedElement.X == IsMovingOld.X && selectedElement.Y == IsMovingOld.Y)
+                    {
+                        int width = Math.Abs(selectedElement.Width);
+                        int height = Math.Abs(selectedElement.Height);
+
+                        e.Graphics.DrawRectangle(new Pen(Color.Gray, 3), selectedElement.X - 1, selectedElement.Y - 1, width + 1, height + 1);
+                        e.Graphics.DrawRectangle(new Pen(Color.Blue), selectedElement.X - 1, selectedElement.Y - 1, width + 1, height + 1);
+
+                        // The points for scaling
+
+                        if (IsOnSelection)
                         {
-                            if (CornerSelected == Corner.TopLeft) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - 10, ((Line)selectedElement).StartPoint.Y + selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - 10, ((Line)selectedElement).StartPoint.Y + selectedElement.Y - 10, 20, 20);
-                            if (CornerSelected == Corner.TopRight) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - 10, ((Line)selectedElement).EndPoint.Y + selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - 10, ((Line)selectedElement).EndPoint.Y + selectedElement.Y - 10, 20, 20);
-                        } else {
-                            if (!(selectedElement is Pencil) && !(selectedElement is Elements.Brush) && !(selectedElement is Fill))
+                            if (selectedElement is Line)
                             {
-                                if (CornerSelected == Corner.TopLeft) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - 10, selectedElement.Y  - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X  - 10, selectedElement.Y  - 10, 20, 20);
-                                if (CornerSelected == Corner.TopRight) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - 10, selectedElement.Y  - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - 10, selectedElement.Y  - 10, 20, 20);
-                                if (CornerSelected == Corner.BottomLeft) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X  - 10, ((selectedElement.Y) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X  - 10, ((selectedElement.Y ) + selectedElement.Height) - 10, 20, 20);
-                                if (CornerSelected == Corner.BottomRight) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - 10, ((selectedElement.Y ) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X ) + selectedElement.Width) - 10, ((selectedElement.Y ) + selectedElement.Height) - 10, 20, 20);
+                                if (CornerSelected == Corner.TopLeft) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - 10, ((Line)selectedElement).StartPoint.Y + selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - 10, ((Line)selectedElement).StartPoint.Y + selectedElement.Y - 10, 20, 20);
+                                if (CornerSelected == Corner.TopRight) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - 10, ((Line)selectedElement).EndPoint.Y + selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - 10, ((Line)selectedElement).EndPoint.Y + selectedElement.Y - 10, 20, 20);
                             }
-                        }                        
+                            else
+                            {
+                                if (!(selectedElement is Pencil) && !(selectedElement is Elements.Brush) && !(selectedElement is Fill))
+                                {
+                                    if (CornerSelected == Corner.TopLeft) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - 10, selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X - 10, selectedElement.Y - 10, 20, 20);
+                                    if (CornerSelected == Corner.TopRight) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X) + selectedElement.Width) - 10, selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X) + selectedElement.Width) - 10, selectedElement.Y - 10, 20, 20);
+                                    if (CornerSelected == Corner.BottomLeft) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - 10, ((selectedElement.Y) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X - 10, ((selectedElement.Y) + selectedElement.Height) - 10, 20, 20);
+                                    if (CornerSelected == Corner.BottomRight) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X) + selectedElement.Width) - 10, ((selectedElement.Y) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X) + selectedElement.Width) - 10, ((selectedElement.Y) + selectedElement.Height) - 10, 20, 20);
+                                }
+                            }
+                        }
                     }
                 }
+
+                // ...or even for the drag region overlay...
+
+                if (IsInDragRegion)
+                {
+                    int heightamount = 0;
+                    int widthamount = 0;
+                    if (dragRegionSelect.Width < 0)
+                        widthamount = Math.Abs(dragRegionSelect.Width);
+                    else
+                        widthamount = 0;
+
+                    if (dragRegionSelect.Height < 0)
+                        heightamount = Math.Abs(dragRegionSelect.Height);
+                    else
+                        heightamount = 0;
+
+                    e.Graphics.DrawRectangle(new Pen(Color.Gray, 3), dragRegionSelect.X - widthamount, dragRegionSelect.Y - heightamount, Math.Abs(dragRegionSelect.Width) + 1, Math.Abs(dragRegionSelect.Height) + 1);
+                    e.Graphics.DrawRectangle(new Pen(Color.Green), dragRegionSelect.X - widthamount, dragRegionSelect.Y - heightamount, Math.Abs(dragRegionSelect.Width) + 1, Math.Abs(dragRegionSelect.Height) + 1);
+                }
+                paintLock = false;
             }
-
-            // ...or even for the drag region overlay!
-
-            if (IsInDragRegion)
-            {
-                int heightamount = 0;
-                int widthamount = 0;
-                if (dragRegionSelect.Width < 0)
-                    widthamount = Math.Abs(dragRegionSelect.Width);
-                else
-                    widthamount = 0;
-
-                if (dragRegionSelect.Height < 0)
-                    heightamount = Math.Abs(dragRegionSelect.Height);
-                else
-                    heightamount = 0;
-
-                e.Graphics.DrawRectangle(new Pen(Color.Gray, 3), dragRegionSelect.X - widthamount, dragRegionSelect.Y - heightamount, Math.Abs(dragRegionSelect.Width) + 1, Math.Abs(dragRegionSelect.Height) + 1);
-                e.Graphics.DrawRectangle(new Pen(Color.Green), dragRegionSelect.X - widthamount, dragRegionSelect.Y - heightamount, Math.Abs(dragRegionSelect.Width) + 1, Math.Abs(dragRegionSelect.Height) + 1);
-            }
-
         }
 
         #region Properties Panel
@@ -877,7 +927,7 @@ namespace ABPaint
 
         private void movingRefresh_Tick(object sender, EventArgs e)
         {
-            endImage = PaintPreview();
+            canvaspre.Invalidate();
         }
 
         private void CanvasAnywhereClick(object sender, EventArgs e)

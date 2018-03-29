@@ -28,7 +28,6 @@ namespace ABPaint.Objects
         Copy = 9,
         Paste = 10,
         Fill = 11,
-        Text = 12
     }
 
     public struct PerformAction

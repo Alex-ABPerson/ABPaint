@@ -17,7 +17,7 @@ namespace ABPaint.Elements
 
         public override void ProcessImage(Graphics g)
         {
-            g.DrawImage(BrushDrawing.ChangeImageColor(brushPoints, brushColor), DrawAtX, DrawAtY);
+            BrushDrawing.ChangeGraphicsColor(brushPoints, g, brushColor, DrawAtX, DrawAtY);
         }
 
         public override void Resize()
