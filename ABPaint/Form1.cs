@@ -675,9 +675,7 @@ namespace ABPaint
                 }
 
                 paintLock = false;
-            }
-
-            
+            }            
         }
         
         #region Properties Panel
