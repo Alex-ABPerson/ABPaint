@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : ABPaint
+// Author           : Alex
+// Created          : 11-25-2017
+//
+// Last Modified By : Alex
+// Last Modified On : 03-29-2018
+// ***********************************************************************
+// <copyright file="ColorBox.cs" company="">
+//     . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -21,8 +34,8 @@ namespace ABPaint.RightMenu
 
         private void ColorBox_Paint(object sender, PaintEventArgs e)
         {
-            if (Program.mainForm != null)
-                if (Core.selectedPalette == ToSelect)
+            if (Program.MainForm != null)
+                if (Core.SelectedPalette == ToSelect)
                 {
                     // Draw the outline
 
@@ -40,15 +53,15 @@ namespace ABPaint.RightMenu
         private void ColorBox_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
-                Core.selectedPalette = ToSelect;
+                Core.SelectedPalette = ToSelect;
             else
             {
-                if (Program.mainForm.colorDialog1.ShowDialog() == DialogResult.OK)
+                if (Program.MainForm.colorDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    BackColor = Program.mainForm.colorDialog1.Color;
+                    BackColor = Program.MainForm.colorDialog1.Color;
                 }
             }
-            Program.mainForm.Refresh();
+            Program.MainForm.Refresh();
         }
     }
 }

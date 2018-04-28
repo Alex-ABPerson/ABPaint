@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : ABPaint
+// Author           : Alex
+// Created          : 01-03-2018
+//
+// Last Modified By : Alex
+// Last Modified On : 03-16-2018
+// ***********************************************************************
+// <copyright file="CropTool.cs" company="">
+//     . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;

@@ -1,4 +1,17 @@
-﻿using ABPaint.Objects;
+﻿// ***********************************************************************
+// Assembly         : ABPaint
+// Author           : Alex
+// Created          : 12-29-2017
+//
+// Last Modified By : Alex
+// Last Modified On : 03-29-2018
+// ***********************************************************************
+// <copyright file="ImageE.cs" company="">
+//     . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using ABPaint.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,27 +22,75 @@ using ABPaint.Tools.Backend;
 
 namespace ABPaint.Elements
 {
-    public class ImageE : Element
+    public class ImageE : Element, IDisposable
     {
-        public Bitmap mainImage;
+        private Bitmap _mainImage;
+
+        public Bitmap MainImage
+        {
+            get
+            {
+                return _mainImage;
+            }
+            set
+            {
+                _mainImage = value;
+            }
+        }
 
         public ImageE(Bitmap img = null)
         {
-            mainImage = img;
+            MainImage = img;
         }
 
         public override void ProcessImage(Graphics g)
         {
-            g.DrawImage(mainImage, DrawAtX, DrawAtY);
+            g.DrawImage(MainImage, DrawAtX, DrawAtY);
         }
 
         public override void Resize()
         {
-            mainImage = ResizeImage.resizeImage(mainImage, new Size(Width, Height));
+            MainImage = ResizeImage.Resize(MainImage, new Size(Width, Height));
         }
 
         public override void FinishResize()
         {
         }
+
+        #region IDisposable Implementation
+
+        protected bool disposed;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (this)
+            {
+                // Do nothing if the object has already been disposed of.
+                if (disposed)
+                    return;
+
+                if (disposing)
+                {
+                    // Release disposable objects used by this instance here.
+
+                    if (_mainImage != null)
+                        _mainImage.Dispose();
+                }
+
+                // Release unmanaged resources here. Don't access reference type fields.
+
+                // Remember that the object has been disposed of.
+                disposed = true;
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            // Unregister object for finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
 }

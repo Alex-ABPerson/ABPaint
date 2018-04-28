@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : ABPaint
+// Author           : Alex
+// Created          : 11-25-2017
+//
+// Last Modified By : Alex
+// Last Modified On : 03-16-2018
+// ***********************************************************************
+// <copyright file="Sizer.cs" company="">
+//     . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,22 +20,47 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Globalization;
 
 namespace ABPaint
 {
     public partial class Sizer : Form
     {
-        public Size returnSize;
-        public bool Cancelled = true;
+        private Size _returnSize;
+
+        public Size ReturnSize
+        {
+            get
+            {
+                return _returnSize;
+            }
+            set
+            {
+                _returnSize = value;
+            }
+        }
+        private bool _cancelled = true;
+
+        public bool Cancelled
+        {
+            get
+            {
+                return _cancelled;
+            }
+            set
+            {
+                _cancelled = value;
+            }
+        }
 
         public Sizer()
         {
             InitializeComponent();
         }
 
-        public void StartSizer(bool ForNew, Size oldSize)
+        public void StartSizer(bool forNew, Size oldSize)
         {
-            if (ForNew)
+            if (forNew)
             {
                 // Change the UI for "new"
                 Text = "New";
@@ -37,20 +75,20 @@ namespace ABPaint
                     clipboardSize = getSize.Size;
                 }
 
-                txtWidth.Text = (clipboardSize.Width == 0) ? "800" : clipboardSize.Width.ToString();
-                txtHeight.Text = (clipboardSize.Width == 0) ? "600" : clipboardSize.Height.ToString();               
+                txtWidth.Text = (clipboardSize.Width == 0) ? "800" : clipboardSize.Width.ToString(CultureInfo.CurrentCulture);
+                txtHeight.Text = (clipboardSize.Width == 0) ? "600" : clipboardSize.Height.ToString(CultureInfo.CurrentCulture);               
             } else {
                 Text = "Resize";
                 button1.Text = "Resize";
 
-                txtWidth.Text = oldSize.Width.ToString() ?? "800";
-                txtHeight.Text = oldSize.Height.ToString() ?? "600";               
+                txtWidth.Text = oldSize.Width.ToString(CultureInfo.CurrentCulture) ?? "800";
+                txtHeight.Text = oldSize.Height.ToString(CultureInfo.CurrentCulture) ?? "600";               
             }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            returnSize = new Size(Convert.ToInt32(txtWidth.Text), Convert.ToInt32(txtHeight.Text));
+            ReturnSize = new Size(Convert.ToInt32(txtWidth.Text, CultureInfo.CurrentCulture), Convert.ToInt32(txtHeight.Text, CultureInfo.CurrentCulture));
             Cancelled = false;
             this.Close();
         }

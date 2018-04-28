@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : ABPaint
+// Author           : Alex
+// Created          : 11-25-2017
+//
+// Last Modified By : Alex
+// Last Modified On : 12-02-2017
+// ***********************************************************************
+// <copyright file="ImageCropping.cs" company="">
+//     . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -41,66 +54,62 @@ namespace ABPaint.Tools.Backend
         /// <returns>The image cropped to it's contents.</returns>
         public static Bitmap CropToContent(Bitmap oldBmp)
         {
-            try
+            Rectangle currentRect = new Rectangle();
+            bool isFirstOne = true;
+
+            // Get a base color
+
+            for (int y = 0; y < oldBmp.Height; y++)
             {
-                Rectangle currentRect = new Rectangle();
-                bool IsFirstOne = true;
-
-                // Get a base color
-
-                for (int y = 0; y < oldBmp.Height; y++)
+                for (int x = 0; x < oldBmp.Width; x++)
                 {
-                    for (int x = 0; x < oldBmp.Width; x++)
+                    Color debug = oldBmp.GetPixel(x, y);
+                    if (oldBmp.GetPixel(x, y) != Color.Transparent)
                     {
-                        Color debug = oldBmp.GetPixel(x, y);
-                        if (oldBmp.GetPixel(x, y) != Color.Transparent)
+                        // We need to interpret this!
+
+                        // Check if it is the first one!
+
+                        if (isFirstOne)
                         {
-                            // We need to interpret this!
+                            currentRect.X = x;
+                            currentRect.Y = y;
+                            currentRect.Width = 1;
+                            currentRect.Height = 1;
+                            isFirstOne = false;
+                        }
+                        else
+                        {
 
-                            // Check if it is the first one!
-
-                            if (IsFirstOne)
+                            if (!currentRect.Contains(new Point(x, y)))
                             {
-                                currentRect.X = x;
-                                currentRect.Y = y;
-                                currentRect.Width = 1;
-                                currentRect.Height = 1;
-                                IsFirstOne = false;
-                            }
-                            else
-                            {
+                                // This will run if this is out of the current rectangle
 
-                                if (!currentRect.Contains(new Point(x, y)))
+                                if (x > (currentRect.X + currentRect.Width)) currentRect.Width = x - currentRect.X;
+                                if (x < (currentRect.X))
                                 {
-                                    // This will run if this is out of the current rectangle
+                                    // Move the rectangle over there and extend it's width to make the right the same!
+                                    int oldRectLeft = currentRect.Left;
 
-                                    if (x > (currentRect.X + currentRect.Width)) currentRect.Width = x - currentRect.X;
-                                    if (x < (currentRect.X))
-                                    {
-                                        // Move the rectangle over there and extend it's width to make the right the same!
-                                        int oldRectLeft = currentRect.Left;
+                                    currentRect.X = x;
+                                    currentRect.Width += oldRectLeft - x;
+                                }
 
-                                        currentRect.X = x;
-                                        currentRect.Width += oldRectLeft - x;
-                                    }
+                                if (y > (currentRect.Y + currentRect.Height)) currentRect.Height = y - currentRect.Y;
 
-                                    if (y > (currentRect.Y + currentRect.Height)) currentRect.Height = y - currentRect.Y;
+                                if (y < (currentRect.Y + currentRect.Height))
+                                {
+                                    int oldRectTop = currentRect.Top;
 
-                                    if (y < (currentRect.Y + currentRect.Height))
-                                    {
-                                        int oldRectTop = currentRect.Top;
-
-                                        currentRect.Y = y;
-                                        currentRect.Height += oldRectTop - y;
-                                    }
+                                    currentRect.Y = y;
+                                    currentRect.Height += oldRectTop - y;
                                 }
                             }
                         }
                     }
                 }
-                return CropImage(oldBmp, currentRect.X, currentRect.Y, currentRect.Width, currentRect.Height);
             }
-            catch { return oldBmp; }
+            return CropImage(oldBmp, currentRect.X, currentRect.Y, currentRect.Width, currentRect.Height);
         }
     }
 }

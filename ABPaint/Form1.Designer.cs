@@ -1070,6 +1070,7 @@
             // 
             // movingRefresh
             // 
+            this.movingRefresh.Interval = 10;
             this.movingRefresh.Tick += new System.EventHandler(this.movingRefresh_Tick);
             // 
             // openFileDialogOPEN

@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : ABPaint
+// Author           : Alex
+// Created          : 12-03-2017
+//
+// Last Modified By : Alex
+// Last Modified On : 02-16-2018
+// ***********************************************************************
+// <copyright file="ImageFormer.cs" company="">
+//     . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;

@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : ABPaint
+// Author           : Alex
+// Created          : 01-13-2018
+//
+// Last Modified By : Alex
+// Last Modified On : 03-01-2018
+// ***********************************************************************
+// <copyright file="PowerTool.cs" company="">
+//     . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;

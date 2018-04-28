@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : ABPaint
+// Author           : Alex
+// Created          : 11-25-2017
+//
+// Last Modified By : Alex
+// Last Modified On : 03-24-2018
+// ***********************************************************************
+// <copyright file="Element.cs" company="">
+//     . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,9 +36,9 @@ namespace ABPaint.Objects
         public int Width, Height;
 
         /// <summary>
-        /// The zindex, compared to all the other elements, of this element.
+        /// The Zindex, compared to all the other elements, of this element.
         /// </summary>
-        public int zindex;
+        public int Zindex;
 
         /// <summary>
         /// Gets or sets whether you can see this element.

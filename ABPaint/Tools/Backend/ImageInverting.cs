@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : ABPaint
+// Author           : Alex
+// Created          : 12-02-2017
+//
+// Last Modified By : Alex
+// Last Modified On : 12-02-2017
+// ***********************************************************************
+// <copyright file="ImageInverting.cs" company="">
+//     . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;

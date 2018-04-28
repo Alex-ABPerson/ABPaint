@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : ABPaint
+// Author           : Alex
+// Created          : 02-17-2018
+//
+// Last Modified By : Alex
+// Last Modified On : 03-17-2018
+// ***********************************************************************
+// <copyright file="CanvasBox.cs" company="">
+//     . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,14 +22,14 @@ namespace ABPaint
 {
     public class CanvasBox : PictureBox
     {
-        protected override void OnPaint(PaintEventArgs pe)
+        protected override void OnPaint(PaintEventArgs e)
         {
-            pe.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-            pe.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-            pe.Graphics.ScaleTransform(Core.MagnificationLevel, Core.MagnificationLevel); // Transform anything drawn to the zoom!
+            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+            e.Graphics.ScaleTransform(Core.MagnificationLevel, Core.MagnificationLevel); // Transform anything drawn to the zoom!
             
-            base.OnPaint(pe);
+            base.OnPaint(e);
         }
     }
 }

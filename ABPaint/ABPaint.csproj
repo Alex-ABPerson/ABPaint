@@ -47,13 +47,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>logo_small.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ABJson.GDISupport, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -93,7 +97,7 @@
     <Compile Include="Elements\Fill.cs" />
     <Compile Include="Elements\Line.cs" />
     <Compile Include="Elements\Pencil.cs" />
-    <Compile Include="Elements\Rectangle.cs" />
+    <Compile Include="Elements\RectangleE.cs" />
     <Compile Include="Elements\Text.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -319,5 +323,6 @@
     <Content Include="Resources\new_graphics\TextIcon.png" />
     <Content Include="Resources\new_graphics\TrashCan.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

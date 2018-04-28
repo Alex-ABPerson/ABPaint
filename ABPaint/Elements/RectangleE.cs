@@ -6,7 +6,7 @@
 // Last Modified By : Alex
 // Last Modified On : 03-02-2018
 // ***********************************************************************
-// <copyright file="Ellipse.cs" company="">
+// <copyright file="RectangleE.cs" company="">
 //     . All rights reserved.
 // </copyright>
 // <summary></summary>
@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace ABPaint.Elements
 {
-    public class Ellipse : Element
+    public class RectangleE : Element
     {
         private Color _fillColor;
 
@@ -75,14 +75,25 @@ namespace ABPaint.Elements
                 _isFilled = value;
             }
         }
+        private bool _tmpIsRect = true;
 
-        private bool isEllipse = true; // Temp Variable
+        public bool TmpIsRect
+        {
+            get
+            {
+                return _tmpIsRect;
+            }
+            set
+            {
+                _tmpIsRect = value;
+            }
+        } // A temp variable just so the TEMPORARY JSON SERIALIZER will work.
 
         public override void ProcessImage(Graphics g)
         {
-            if (IsFilled) g.FillEllipse(new SolidBrush(FillColor), DrawAtX, DrawAtY, Math.Abs(Width), Math.Abs(Height)); // Fill
+            if (IsFilled) g.FillRectangle(new SolidBrush(FillColor), DrawAtX, DrawAtY, Math.Abs(Width), Math.Abs(Height)); // Fill
 
-            g.DrawEllipse(new Pen(BorderColor, BorderSize), (BorderSize / 2) + DrawAtX, (BorderSize / 2) + DrawAtY, Math.Abs(Width - (BorderSize)), Math.Abs(Height - (BorderSize)));
+            g.DrawRectangle(new Pen(BorderColor, BorderSize), (BorderSize / 2) + DrawAtX, (BorderSize / 2) + DrawAtY, Math.Abs(Width - (BorderSize)), Math.Abs(Height - (BorderSize))); // Border
         }
 
         public override void Resize()

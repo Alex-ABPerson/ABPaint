@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : ABPaint
+// Author           : Alex
+// Created          : 11-24-2017
+//
+// Last Modified By : Alex
+// Last Modified On : 12-30-2017
+// ***********************************************************************
+// <copyright file="ResizeImage.cs" company="">
+//     . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -17,7 +30,7 @@ namespace ABPaint.Tools.Backend
         /// <param name="imgToResize">The old image.</param>
         /// <param name="size">The new size.</param>
         /// <returns>The resized image.</returns>
-        public static Bitmap resizeImage(Bitmap imgToResize, Size size)
+        public static Bitmap Resize(Bitmap imgToResize, Size size)
         {
             //Get the image current width
             int sourceWidth = imgToResize.Width;
@@ -59,7 +72,7 @@ namespace ABPaint.Tools.Backend
         /// <param name="imgToResize">The old image.</param>
         /// <param name="size">The new size.</param>
         /// <returns>The resized image.</returns>
-        public static Bitmap resizeImageNoAntiAlias(Bitmap imgToResize, Size size)
+        public static Bitmap ResizeNoAntiAlias(Bitmap imgToResize, Size size)
         {
             //Get the image current width
             int sourceWidth = imgToResize.Width;

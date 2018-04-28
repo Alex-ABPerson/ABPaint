@@ -1,4 +1,17 @@
-﻿using ABPaint.Tools.Backend;
+﻿// ***********************************************************************
+// Assembly         : ABPaint
+// Author           : Alex
+// Created          : 12-31-2017
+//
+// Last Modified By : Alex
+// Last Modified On : 02-23-2018
+// ***********************************************************************
+// <copyright file="Form2.cs" company="">
+//     . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using ABPaint.Tools.Backend;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

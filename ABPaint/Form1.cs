@@ -1,4 +1,17 @@
-﻿using ABPaint.Elements;
+﻿// ***********************************************************************
+// Assembly         : ABPaint
+// Author           : Alex
+// Created          : 10-08-2017
+//
+// Last Modified By : Alex
+// Last Modified On : 03-29-2018
+// ***********************************************************************
+// <copyright file="Form1.cs" company="">
+//     . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using ABPaint.Elements;
 using ABPaint.Objects;
 using ABPaint.Tools.Backend;
 using System;
@@ -8,18 +21,14 @@ using System.Windows.Forms;
 
 using static ABPaint.Tools.Backend.SaveSystem;
 using static ABPaint.Core;
+using System.Globalization;
 
 namespace ABPaint
 {
     public partial class Form1 : Form
     {
-        public bool paintLock;
-        public int OldMagnificationLevel;
-
         private Bitmap _backBuffer;
-
-        public Graphics canvaspreG; // The graphics of the canvas.
-        public Graphics BackBufferG; // The graphics of the back-buffer
+        private bool paintLock;
 
         public Bitmap BackBuffer
         { 
@@ -42,10 +51,10 @@ namespace ABPaint
 
             ReloadImage();
 
-            canvaspreG = canvaspre.CreateGraphics();
+            CanvaspreG = canvaspre.CreateGraphics();
             BackBufferG = Graphics.FromImage(BackBuffer);
 
-            canvaspre.Image = new Bitmap(savedata.imageSize.Width, savedata.imageSize.Height);
+            canvaspre.Image = new Bitmap(CurrentSave.ImageSize.Width, CurrentSave.ImageSize.Height);
         }
         #region General Code
 
@@ -58,7 +67,7 @@ namespace ABPaint
 
             System.Drawing.Text.InstalledFontCollection allFonts = new System.Drawing.Text.InstalledFontCollection();
 
-            // Get an array of the system's font familiies.
+            // Get an array of the system's font families.
             FontFamily[] fontFamilies = allFonts.Families;
 
             // Display the font families.
@@ -69,19 +78,15 @@ namespace ABPaint
 
             }
 
-            savedata.imageElements = new List<Element>();
-            endImage = new Bitmap(savedata.imageSize.Width, savedata.imageSize.Height);
+            CurrentSave.ImageElements = new List<Element>();
+            EndImage = new Bitmap(CurrentSave.ImageSize.Width, CurrentSave.ImageSize.Height);
         }
 
         public void SelectTool(ref PictureBox toSelect)
         {
             toSelect.BackColor = Color.Black;
-            try
-            {
-                if (toSelect.Tag.ToString() != "selected") // If it isn't selected already
+                if (toSelect.Tag != null && toSelect.Tag.ToString() != "selected") // If it isn't selected already
                     toSelect.Image = ImageInverting.InvertImage((Bitmap)toSelect.Image);
-            }
-            catch { toSelect.Image = ImageInverting.InvertImage((Bitmap)toSelect.Image); }
             toSelect.Tag = "selected";
         }
 
@@ -105,15 +110,11 @@ namespace ABPaint
 
         }
 
-        public void DeSelectTool(ref PictureBox toSelect)
+        public void DESelectTool(ref PictureBox toSelect)
         {
             toSelect.BackColor = Color.White;
-            try
-            {
-                if (toSelect.Tag.ToString() == "selected") // If it isn't selected already
+            if (toSelect.Tag != null && toSelect.Tag.ToString() == "selected") // If it isn't selected already
                     toSelect.Image = ImageInverting.InvertImage((Bitmap)toSelect.Image);
-            }
-            catch { }
             toSelect.Tag = "";
         }
 
@@ -122,165 +123,165 @@ namespace ABPaint
             // Select this tool
 
             SelectTool(ref timgCursorN);
-            DeSelectTool(ref timgCursorS);
-            DeSelectTool(ref timgPencil);
-            DeSelectTool(ref timgBrush);
-            DeSelectTool(ref timgRect);
-            DeSelectTool(ref timgElli);
-            DeSelectTool(ref timgLine);
-            DeSelectTool(ref timgFill);
-            DeSelectTool(ref timgText);
-            selectedTool = 0;
+            DESelectTool(ref timgCursorS);
+            DESelectTool(ref timgPencil);
+            DESelectTool(ref timgBrush);
+            DESelectTool(ref timgRect);
+            DESelectTool(ref timgElli);
+            DESelectTool(ref timgLine);
+            DESelectTool(ref timgFill);
+            DESelectTool(ref timgText);
+            SelectedTool = 0;
 
-            ShowProperties("Selection Tool - Nothing Selected!", false, false, false, false, false, false, GetCurrentColor());
+            ShowProperties("Selection Tool - Nothing Selected!", false, false, false, false, false, false, GetCurrentColor(), GetCurrentColor());
         }
 
         private void timgCursorS_Click(object sender, EventArgs e)
         {
-            DeSelectTool(ref timgCursorN);
+            DESelectTool(ref timgCursorN);
             SelectTool(ref timgCursorS);
-            DeSelectTool(ref timgPencil);
-            DeSelectTool(ref timgBrush);
-            DeSelectTool(ref timgRect);
-            DeSelectTool(ref timgElli);
-            DeSelectTool(ref timgLine);
-            DeSelectTool(ref timgFill);
-            DeSelectTool(ref timgText);
+            DESelectTool(ref timgPencil);
+            DESelectTool(ref timgBrush);
+            DESelectTool(ref timgRect);
+            DESelectTool(ref timgElli);
+            DESelectTool(ref timgLine);
+            DESelectTool(ref timgFill);
+            DESelectTool(ref timgText);
 
-            selectedTool = Tool.BitmapSelection;
+            SelectedTool = Tool.BitmapSelection;
         }
 
         private void timgPencil_Click(object sender, EventArgs e)
         {
-            selectedElement = null;
+            SelectedElement = null;
 
-            DeSelectTool(ref timgCursorN);
-            DeSelectTool(ref timgCursorS);
+            DESelectTool(ref timgCursorN);
+            DESelectTool(ref timgCursorS);
             SelectTool(ref timgPencil);
-            DeSelectTool(ref timgBrush);
-            DeSelectTool(ref timgRect);
-            DeSelectTool(ref timgElli);
-            DeSelectTool(ref timgLine);
-            DeSelectTool(ref timgFill);
-            DeSelectTool(ref timgText);
+            DESelectTool(ref timgBrush);
+            DESelectTool(ref timgRect);
+            DESelectTool(ref timgElli);
+            DESelectTool(ref timgLine);
+            DESelectTool(ref timgFill);
+            DESelectTool(ref timgText);
 
-            selectedTool = Tool.Pencil;
+            SelectedTool = Tool.Pencil;
 
-            ShowProperties("Pencil Tool Settings", false, false, true, false, false, false, GetCurrentColor());
+            ShowProperties("Pencil Tool Settings", false, false, true, false, false, false, GetCurrentColor(), GetCurrentColor());
         }
 
         private void timgBrush_Click(object sender, EventArgs e)
         {
-            selectedElement = null;
+            SelectedElement = null;
 
-            DeSelectTool(ref timgCursorN);
-            DeSelectTool(ref timgCursorS);
-            DeSelectTool(ref timgPencil);
+            DESelectTool(ref timgCursorN);
+            DESelectTool(ref timgCursorS);
+            DESelectTool(ref timgPencil);
             SelectTool(ref timgBrush);
-            DeSelectTool(ref timgRect);
-            DeSelectTool(ref timgElli);
-            DeSelectTool(ref timgLine);
-            DeSelectTool(ref timgFill);
-            DeSelectTool(ref timgText);
+            DESelectTool(ref timgRect);
+            DESelectTool(ref timgElli);
+            DESelectTool(ref timgLine);
+            DESelectTool(ref timgFill);
+            DESelectTool(ref timgText);
 
-            selectedTool = Tool.Brush;
+            SelectedTool = Tool.Brush;
 
-            ShowProperties("Brush Tool Settings", false, false, true, false, true, false, GetCurrentColor());
+            ShowProperties("Brush Tool Settings", false, false, true, false, true, false, GetCurrentColor(), GetCurrentColor());
         }
 
         private void timgRect_Click(object sender, EventArgs e)
         {
-            selectedElement = null;
+            SelectedElement = null;
 
-            DeSelectTool(ref timgCursorN);
-            DeSelectTool(ref timgCursorS);
-            DeSelectTool(ref timgPencil);
-            DeSelectTool(ref timgBrush);
+            DESelectTool(ref timgCursorN);
+            DESelectTool(ref timgCursorS);
+            DESelectTool(ref timgPencil);
+            DESelectTool(ref timgBrush);
             SelectTool(ref timgRect);
-            DeSelectTool(ref timgElli);
-            DeSelectTool(ref timgLine);
-            DeSelectTool(ref timgFill);
-            DeSelectTool(ref timgText);
+            DESelectTool(ref timgElli);
+            DESelectTool(ref timgLine);
+            DESelectTool(ref timgFill);
+            DESelectTool(ref timgText);
 
-            selectedTool = Tool.Rectangle;
+            SelectedTool = Tool.Rectangle;
 
-            ShowProperties("Rectangle Tool Settings", true, true, false, true, false, false, GetCurrentColor());
+            ShowProperties("Rectangle Tool Settings", true, true, false, true, false, false, GetCurrentColor(), GetCurrentColor());
         }
 
         private void timgElli_Click(object sender, EventArgs e)
         {
-            selectedElement = null;
+            SelectedElement = null;
 
-            DeSelectTool(ref timgCursorN);
-            DeSelectTool(ref timgCursorS);
-            DeSelectTool(ref timgPencil);
-            DeSelectTool(ref timgBrush);
-            DeSelectTool(ref timgRect);
+            DESelectTool(ref timgCursorN);
+            DESelectTool(ref timgCursorS);
+            DESelectTool(ref timgPencil);
+            DESelectTool(ref timgBrush);
+            DESelectTool(ref timgRect);
             SelectTool(ref timgElli);
-            DeSelectTool(ref timgLine);
-            DeSelectTool(ref timgFill);
-            DeSelectTool(ref timgText);
+            DESelectTool(ref timgLine);
+            DESelectTool(ref timgFill);
+            DESelectTool(ref timgText);
 
-            selectedTool = Tool.Ellipse;
+            SelectedTool = Tool.Ellipse;
 
-            ShowProperties("Ellipse Tool Settings", true, true, false, true, false, false, GetCurrentColor());
+            ShowProperties("Ellipse Tool Settings", true, true, false, true, false, false, GetCurrentColor(), GetCurrentColor());
         }
 
         private void timgLine_Click(object sender, EventArgs e)
         {
-            selectedElement = null;
+            SelectedElement = null;
 
-            DeSelectTool(ref timgCursorN);
-            DeSelectTool(ref timgCursorS);
-            DeSelectTool(ref timgPencil);
-            DeSelectTool(ref timgBrush);
-            DeSelectTool(ref timgRect);
-            DeSelectTool(ref timgElli);
+            DESelectTool(ref timgCursorN);
+            DESelectTool(ref timgCursorS);
+            DESelectTool(ref timgPencil);
+            DESelectTool(ref timgBrush);
+            DESelectTool(ref timgRect);
+            DESelectTool(ref timgElli);
             SelectTool(ref timgLine);
-            DeSelectTool(ref timgFill);
-            DeSelectTool(ref timgText);
+            DESelectTool(ref timgFill);
+            DESelectTool(ref timgText);
 
-            selectedTool = Tool.Line;
+            SelectedTool = Tool.Line;
 
-            ShowProperties("Line Tool Settings", false, false, true, false, true, false, GetCurrentColor());
+            ShowProperties("Line Tool Settings", false, false, true, false, true, false, GetCurrentColor(), GetCurrentColor());
         }
 
         private void timgFill_Click(object sender, EventArgs e)
         {
-            selectedElement = null;
+            SelectedElement = null;
 
-            DeSelectTool(ref timgCursorN);
-            DeSelectTool(ref timgCursorS);
-            DeSelectTool(ref timgPencil);
-            DeSelectTool(ref timgBrush);
-            DeSelectTool(ref timgRect);
-            DeSelectTool(ref timgElli);
-            DeSelectTool(ref timgLine);
+            DESelectTool(ref timgCursorN);
+            DESelectTool(ref timgCursorS);
+            DESelectTool(ref timgPencil);
+            DESelectTool(ref timgBrush);
+            DESelectTool(ref timgRect);
+            DESelectTool(ref timgElli);
+            DESelectTool(ref timgLine);
             SelectTool(ref timgFill);
-            DeSelectTool(ref timgText);
+            DESelectTool(ref timgText);
 
-            selectedTool = Tool.Fill;
+            SelectedTool = Tool.Fill;
 
-            ShowProperties("Fill Tool Settings", false, false, true, false, false, false, GetCurrentColor());
+            ShowProperties("Fill Tool Settings", false, false, true, false, false, false, GetCurrentColor(), GetCurrentColor());
         }
 
         private void timgText_Click(object sender, EventArgs e)
         {
-            selectedElement = null;
+            SelectedElement = null;
 
-            DeSelectTool(ref timgCursorN);
-            DeSelectTool(ref timgCursorS);
-            DeSelectTool(ref timgPencil);
-            DeSelectTool(ref timgBrush);
-            DeSelectTool(ref timgRect);
-            DeSelectTool(ref timgElli);
-            DeSelectTool(ref timgLine);
-            DeSelectTool(ref timgFill);
+            DESelectTool(ref timgCursorN);
+            DESelectTool(ref timgCursorS);
+            DESelectTool(ref timgPencil);
+            DESelectTool(ref timgBrush);
+            DESelectTool(ref timgRect);
+            DESelectTool(ref timgElli);
+            DESelectTool(ref timgLine);
+            DESelectTool(ref timgFill);
             SelectTool(ref timgText);
 
-            selectedTool = Tool.Text;
+            SelectedTool = Tool.Text;
 
-            ShowProperties("Text Tool Settings", false, false, true, false, false, true, GetCurrentColor(), "");
+            ShowProperties("Text Tool Settings", false, false, true, false, false, true, GetCurrentColor(), GetCurrentColor(), "");
         }
         #endregion
 
@@ -291,8 +292,8 @@ namespace ABPaint
         {
             Point oldScrollOffset = appcenter.AutoScrollOffset;
         
-            canvaspre.Width = (savedata.imageSize.Width * MagnificationLevel);
-            canvaspre.Height = (savedata.imageSize.Height * MagnificationLevel);
+            canvaspre.Width = (CurrentSave.ImageSize.Width * MagnificationLevel);
+            canvaspre.Height = (CurrentSave.ImageSize.Height * MagnificationLevel);
 
             canvaspre.Left = 25;
             canvaspre.Top = 25;
@@ -323,18 +324,18 @@ namespace ABPaint
 
         public void UpdateCanvaspreWithBackBuffer()
         {
-            canvaspreG.DrawImage(BackBuffer, 0, 0);
+            CanvaspreG.DrawImage(BackBuffer, 0, 0);
         }
 
         private void canvaspre_MouseMove(object sender, MouseEventArgs e)
         {
             //Point mouseLoc = new Point((int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)), (int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)));
 
-            if (!mousemoveLock)
+            if (!MouseMoveLock)
             {
-                mousemoveLock = true;
+                MouseMoveLock = true;
                 HandleMouseMove(e);
-                mousemoveLock = false;
+                MouseMoveLock = false;
             }
         }
 
@@ -342,28 +343,28 @@ namespace ABPaint
         {
             //Point mouseLoc = new Point((int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)), (int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)));
 
-            if (!mousedownLock)
+            if (!MouseDownLock)
             {
-                mousedownLock = true;
+                MouseDownLock = true;
                 HandleMouseDown(e);
-                mousedownLock = false;
+                MouseDownLock = false;
             }
         }
 
         private void canvaspre_MouseUp(object sender, MouseEventArgs e)
         {
-            if (!mouseupLock)
+            if (!MouseUpLock)
             {
-                mouseupLock = true;
+                MouseUpLock = true;
                 HandleMouseUp(e);
-                mouseupLock = false;
+                MouseUpLock = false;
             }
         }
 
         /// <summary>
         /// Shows the properties panel with the specified options.
         /// </summary>
-        /// <param name="text">The text to put as the label.</param>
+        /// <param name="title">The text to put as the label.</param>
         /// <param name="showFColor">Show the Fill Color.</param>
         /// <param name="showBColor">Show the Border Color.</param>
         /// <param name="showColor">Show the Color.</param>
@@ -371,13 +372,13 @@ namespace ABPaint
         /// <param name="showThickness">Show the Thickness.</param>
         /// <param name="showText">Show the Text tools.</param>
         /// <param name="objectColor">The color of this object (if this is a selection)</param>
-        /// <param name="Text">The text to put into the "Text" box.</param>
+        /// <param name="text">The text to put into the "Text" box.</param>
         /// <param name="fnt">The font to put into the "Font" box.</param>
-        public void ShowProperties(string text, bool showFColor, bool showBColor, bool showColor, bool showBWidth, bool showThickness, bool showText, Color objectColor, string Text = "", Font fnt = null)
+        public void ShowProperties(string title, bool showFColor, bool showBColor, bool showColor, bool showBWidth, bool showThickness, bool showText, Color objectColor, Color borderColor = new Color(), string text = "", Font fnt = null)
         {
             properties.Show();
 
-            propertiesLbl.Text = text;
+            propertiesLbl.Text = title;
 
             // Below if the selection tool is on then set the object's color otherwise set the palette's color!
 
@@ -399,7 +400,7 @@ namespace ABPaint
                 label5.Show();
                 clrBord.Show();
 
-                clrBord.BackColor = objectColor;
+                clrBord.BackColor = borderColor;
             }
             else
             {
@@ -449,11 +450,11 @@ namespace ABPaint
                 pnlFont.Show();
                 txtTText.Show();
 
-                txtTText.Text = Text;
+                txtTText.Text = text;
                 if (fnt != null)
                 {
                     cmbFont.Text = fnt.FontFamily.Name;
-                    cmbSize.Text = fnt.Size.ToString();
+                    cmbSize.Text = fnt.Size.ToString(CultureInfo.CurrentCulture);
 
                     if (fnt.Bold)
                     {
@@ -526,19 +527,18 @@ namespace ABPaint
 
                 if (MouseDownOnCanvas)
                 {
-                    if (currentDrawingElement is Pencil)
-                        e.Graphics.DrawPath(new Pen(clrNorm.BackColor), grph);
+                    if (CurrentDrawingElement is Pencil)
+                        e.Graphics.DrawPath(new Pen(clrNorm.BackColor), Grph);
 
-                    if (currentDrawingElement is Elements.Brush)
-                        BrushDrawing.ChangeGraphicsColor(((Elements.Brush)currentDrawingElement).brushPoints, e.Graphics, clrNorm.BackColor);
+                    if (CurrentDrawingElement is Elements.Brush asBrush)
+                        BrushDrawing.ChangeGraphicsColor(asBrush.BrushPoint, e.Graphics, clrNorm.BackColor);
 
-                    if (currentDrawingElement is RectangleE)
+                    if (CurrentDrawingElement is RectangleE asRectangle)
                     {
                         // Now let's draw this rectangle!
 
-                        RectangleE ele = ((RectangleE)currentDrawingElement);
-                        int width = (mousePoint.X - startPoint.X);
-                        int height = (mousePoint.Y - startPoint.Y);
+                        int width = (MousePoint.X - StartPoint.X);
+                        int height = (MousePoint.Y - StartPoint.Y);
 
                         int heightamount = 0;
                         int widthamount = 0;
@@ -552,27 +552,26 @@ namespace ABPaint
                         else
                             heightamount = 0;
 
-                        //if (width < 0) currentDrawingElement.Width = 1;
-                        //if (height < 0) currentDrawingElement.Height = 1;
+                        //if (width < 0) CurrentDrawingElement.Width = 1;
+                        //if (height < 0) CurrentDrawingElement.Height = 1;
 
                         int borderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
 
-                        if (ele.IsFilled) e.Graphics.FillRectangle(new SolidBrush(ele.FillColor), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height)); // Fill
+                        if (asRectangle.IsFilled) e.Graphics.FillRectangle(new SolidBrush(asRectangle.FillColor), StartPoint.X - widthamount + (borderSize / 2), StartPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height)); // Fill
 
-                        e.Graphics.DrawRectangle(new Pen(ele.BorderColor, borderSize), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height));
+                        e.Graphics.DrawRectangle(new Pen(asRectangle.BorderColor, borderSize), StartPoint.X - widthamount + (borderSize / 2), StartPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height));
                         //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, ele.BorderSize, height); // Left border
                         //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, width, ele.BorderSize); // Top border
                         //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), (ele.Width - ele.BorderSize) + DrawingMin.X, DrawingMin.Y, ele.BorderSize, Height); // Right border
                         //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, (ele.Height - ele.BorderSize) + DrawingMin.Y, ele.Width, ele.BorderSize); // Bottom border
                     }
 
-                    if (currentDrawingElement is Ellipse)
+                    if (CurrentDrawingElement is Ellipse asEllipse)
                     {
-                        // Now let's draw this ellipse! and yes this is pratically the same code as the rectangle one - both of them use the same code for things
+                        // Now let's draw this ellipse! and yes this is practically the same code as the rectangle one - both of them use the same code for things
 
-                        Ellipse ele = ((Ellipse)currentDrawingElement);
-                        int width = (mousePoint.X - startPoint.X);
-                        int height = (mousePoint.Y - startPoint.Y);
+                        int width = (MousePoint.X - StartPoint.X);
+                        int height = (MousePoint.Y - StartPoint.Y);
 
                         int heightamount = 0;
                         int widthamount = 0;
@@ -586,61 +585,62 @@ namespace ABPaint
                         else
                             heightamount = 0;
 
-                        //if (width < 0) currentDrawingElement.Width = 1;
-                        //if (height < 0) currentDrawingElement.Height = 1;
+                        //if (width < 0) CurrentDrawingElement.Width = 1;
+                        //if (height < 0) CurrentDrawingElement.Height = 1;
 
                         int borderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
-                        if (ele.IsFilled) e.Graphics.FillEllipse(new SolidBrush(ele.FillColor), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height)); // Fill
+                        if (asEllipse.IsFilled) e.Graphics.FillEllipse(new SolidBrush(asEllipse.FillColor), StartPoint.X - widthamount + (borderSize / 2), StartPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height)); // Fill
 
-                        e.Graphics.DrawEllipse(new Pen(ele.BorderColor, borderSize), startPoint.X - widthamount + (borderSize / 2), startPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height));
+                        e.Graphics.DrawEllipse(new Pen(asEllipse.BorderColor, borderSize), StartPoint.X - widthamount + (borderSize / 2), StartPoint.Y - heightamount + (borderSize / 2), Math.Abs(width), Math.Abs(height));
                         //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, ele.BorderSize, height); // Left border
                         //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, DrawingMin.Y, width, ele.BorderSize); // Top border
                         //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), (ele.Width - ele.BorderSize) + DrawingMin.X, DrawingMin.Y, ele.BorderSize, Height); // Right border
                         //e.Graphics.FillRectangle(new SolidBrush(ele.borderColor), DrawingMin.X, (ele.Height - ele.BorderSize) + DrawingMin.Y, ele.Width, ele.BorderSize); // Bottom border
                     }
 
-                    if (currentDrawingElement is Line)
+                    if (CurrentDrawingElement is Line)
                     {
-                        int thickness = (txtBThick.Text.Length > 0) ? int.Parse(txtBThick.Text) : 0;
-                        e.Graphics.DrawLine(new Pen(clrNorm.BackColor, thickness), startPoint.X, startPoint.Y, mousePoint.X, mousePoint.Y);
+                        int thickness = (txtBThick.Text.Length > 0) ? int.Parse(txtBThick.Text, CultureInfo.CurrentCulture) : 0;
+                        e.Graphics.DrawLine(new Pen(clrNorm.BackColor, thickness), StartPoint.X, StartPoint.Y, MousePoint.X, MousePoint.Y);
                     }
 
-                    if (currentDrawingElement is Text)
-                        e.Graphics.DrawString(((Text)currentDrawingElement).mainText, ((Text)currentDrawingElement).fnt, new SolidBrush(((Text)currentDrawingElement).clr), mousePoint.X, mousePoint.Y);
+                    if (CurrentDrawingElement is Text txt)
+                        e.Graphics.DrawString(txt.MainText, txt.Fnt, new SolidBrush(txt.Clr), MousePoint.X, MousePoint.Y);
                 }
 
                 // ...or to draw the overlay of the selection tool...
 
-                if (selectedElement != null)
+                if (SelectedElement != null)
                 {
-                    // Check if it hasn't moved
+                    int width = Math.Abs(SelectedElement.Width);
+                    int height = Math.Abs(SelectedElement.Height);
 
-                    if (selectedElement.X == IsMovingOld.X && selectedElement.Y == IsMovingOld.Y)
+                    e.Graphics.DrawRectangle(new Pen(Color.Gray, 3), SelectedElement.X - 1, SelectedElement.Y - 1, width + 1, height + 1);
+                    e.Graphics.DrawRectangle(new Pen(Color.Blue), SelectedElement.X - 1, SelectedElement.Y - 1, width + 1, height + 1);
+
+                    // The points for scaling
+
+                    if (IsOnSelection)
                     {
-                        int width = Math.Abs(selectedElement.Width);
-                        int height = Math.Abs(selectedElement.Height);
-
-                        e.Graphics.DrawRectangle(new Pen(Color.Gray, 3), selectedElement.X - 1, selectedElement.Y - 1, width + 1, height + 1);
-                        e.Graphics.DrawRectangle(new Pen(Color.Blue), selectedElement.X - 1, selectedElement.Y - 1, width + 1, height + 1);
-
-                        // The points for scaling
-
-                        if (IsOnSelection)
+                        if (SelectedElement is Line lineEle)
                         {
-                            if (selectedElement is Line)
+                            if (CornerSelected == Corner.TopLeft) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), lineEle.StartPoint.X + SelectedElement.X - 10, lineEle.StartPoint.Y + SelectedElement.Y - 10, 20, 20);
+                            else e.Graphics.DrawEllipse(new Pen(Color.Gray), lineEle.StartPoint.X + SelectedElement.X - 10, lineEle.StartPoint.Y + SelectedElement.Y - 10, 20, 20);
+                            if (CornerSelected == Corner.TopRight) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), lineEle.EndPoint.X + SelectedElement.X - 10, lineEle.EndPoint.Y + SelectedElement.Y - 10, 20, 20);
+                            else e.Graphics.DrawEllipse(new Pen(Color.Gray), lineEle.EndPoint.X + SelectedElement.X - 10, lineEle.EndPoint.Y + SelectedElement.Y - 10, 20, 20);
+                        }
+                        else
+                        {
+                            if (!(SelectedElement is Pencil) && !(SelectedElement is Elements.Brush) && !(SelectedElement is Fill))
                             {
-                                if (CornerSelected == Corner.TopLeft) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - 10, ((Line)selectedElement).StartPoint.Y + selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).StartPoint.X + selectedElement.X - 10, ((Line)selectedElement).StartPoint.Y + selectedElement.Y - 10, 20, 20);
-                                if (CornerSelected == Corner.TopRight) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - 10, ((Line)selectedElement).EndPoint.Y + selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((Line)selectedElement).EndPoint.X + selectedElement.X - 10, ((Line)selectedElement).EndPoint.Y + selectedElement.Y - 10, 20, 20);
-                            }
-                            else
-                            {
-                                if (!(selectedElement is Pencil) && !(selectedElement is Elements.Brush) && !(selectedElement is Fill))
-                                {
-                                    if (CornerSelected == Corner.TopLeft) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - 10, selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X - 10, selectedElement.Y - 10, 20, 20);
-                                    if (CornerSelected == Corner.TopRight) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X) + selectedElement.Width) - 10, selectedElement.Y - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X) + selectedElement.Width) - 10, selectedElement.Y - 10, 20, 20);
-                                    if (CornerSelected == Corner.BottomLeft) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), selectedElement.X - 10, ((selectedElement.Y) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), selectedElement.X - 10, ((selectedElement.Y) + selectedElement.Height) - 10, 20, 20);
-                                    if (CornerSelected == Corner.BottomRight) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((selectedElement.X) + selectedElement.Width) - 10, ((selectedElement.Y) + selectedElement.Height) - 10, 20, 20); else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((selectedElement.X) + selectedElement.Width) - 10, ((selectedElement.Y) + selectedElement.Height) - 10, 20, 20);
-                                }
+                                if (CornerSelected == Corner.TopLeft) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), SelectedElement.X - 10, SelectedElement.Y - 10, 20, 20);
+                                else e.Graphics.DrawEllipse(new Pen(Color.Gray), SelectedElement.X - 10, SelectedElement.Y - 10, 20, 20);
+                                if (CornerSelected == Corner.TopRight) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((SelectedElement.X) + SelectedElement.Width) - 10, SelectedElement.Y - 10, 20, 20);
+                                else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((SelectedElement.X) + SelectedElement.Width) - 10, SelectedElement.Y - 10, 20, 20);
+                                if (CornerSelected == Corner.BottomLeft) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), SelectedElement.X - 10, ((SelectedElement.Y) + SelectedElement.Height) - 10, 20, 20);
+                                else e.Graphics.DrawEllipse(new Pen(Color.Gray), SelectedElement.X - 10, ((SelectedElement.Y) + SelectedElement.Height) - 10, 20, 20);
+                                if (CornerSelected == Corner.BottomRight) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), ((SelectedElement.X) + SelectedElement.Width) - 10, ((SelectedElement.Y) + SelectedElement.Height) - 10, 20, 20);
+                                else e.Graphics.DrawEllipse(new Pen(Color.Gray), ((SelectedElement.X) + SelectedElement.Width) - 10, ((SelectedElement.Y) + SelectedElement.Height) - 10, 20, 20);
                             }
                         }
                     }
@@ -652,30 +652,41 @@ namespace ABPaint
                 {
                     int heightamount = 0;
                     int widthamount = 0;
-                    if (dragRegionSelect.Width < 0)
-                        widthamount = Math.Abs(dragRegionSelect.Width);
+                    if (DragRegionSelect.Width < 0)
+                        widthamount = Math.Abs(DragRegionSelect.Width);
                     else
                         widthamount = 0;
 
-                    if (dragRegionSelect.Height < 0)
-                        heightamount = Math.Abs(dragRegionSelect.Height);
+                    if (DragRegionSelect.Height < 0)
+                        heightamount = Math.Abs(DragRegionSelect.Height);
                     else
                         heightamount = 0;
 
-                    e.Graphics.DrawRectangle(new Pen(Color.Gray, 3), dragRegionSelect.X - widthamount, dragRegionSelect.Y - heightamount, Math.Abs(dragRegionSelect.Width) + 1, Math.Abs(dragRegionSelect.Height) + 1);
-                    e.Graphics.DrawRectangle(new Pen(Color.Green), dragRegionSelect.X - widthamount, dragRegionSelect.Y - heightamount, Math.Abs(dragRegionSelect.Width) + 1, Math.Abs(dragRegionSelect.Height) + 1);
+                    e.Graphics.DrawRectangle(new Pen(Color.Gray, 3), DragRegionSelect.X - widthamount, DragRegionSelect.Y - heightamount, Math.Abs(DragRegionSelect.Width) + 1, Math.Abs(DragRegionSelect.Height) + 1);
+                    e.Graphics.DrawRectangle(new Pen(Color.Green), DragRegionSelect.X - widthamount, DragRegionSelect.Y - heightamount, Math.Abs(DragRegionSelect.Width) + 1, Math.Abs(DragRegionSelect.Height) + 1);
                 }
+
+                // ...or for just drawing the element that's moving.
+
+                if (RedrawSelectedElementOnly)
+                {
+                    e.Graphics.DrawImage(BeforeMove, 0, 0);
+                    SelectedElement.ProcessImage(e.Graphics);
+                }
+
                 paintLock = false;
             }
-        }
 
+            
+        }
+        
         #region Properties Panel
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            // Redraw the avalible colours
+            // Redraw the available colors
 
-            if (selectedPalette == 0)
-                selectedPalette = 1;
+            if (SelectedPalette == 0)
+                SelectedPalette = 1;
 
             cl1.Invalidate();
             cl2.Invalidate();
@@ -692,11 +703,8 @@ namespace ABPaint
         {
             Color ret = Color.Black;
 
-            switch (selectedPalette)
-            {
-                case 0:
-                    ret = Color.Black;
-                    break;
+            switch (SelectedPalette)
+            {               
                 case 1:
                     ret = cl1.BackColor;
                     break;
@@ -721,6 +729,9 @@ namespace ABPaint
                 case 8:
                     ret = cl8.BackColor;
                     break;
+                default:
+                    ret = Color.Black;
+                    break;
             }
 
             return ret;
@@ -730,13 +741,13 @@ namespace ABPaint
         {
             clrNorm.BackColor = GetCurrentColor();
 
-            if (selectedElement != null)
+            if (SelectedElement != null)
             {
-                if (selectedElement is Elements.Brush) ((Elements.Brush)selectedElement).brushColor = clrNorm.BackColor;
-                if (selectedElement is Elements.Pencil) ((Elements.Pencil)selectedElement).pencilColor = clrNorm.BackColor;
-                if (selectedElement is Elements.Line) ((Elements.Line)selectedElement).color = clrNorm.BackColor;
-                if (selectedElement is Elements.Fill) ((Elements.Fill)selectedElement).fillColor = clrNorm.BackColor;
-                if (selectedElement is Elements.Text) ((Elements.Text)selectedElement).clr = clrNorm.BackColor;
+                if (SelectedElement is Elements.Brush brush) brush.BrushColor = clrNorm.BackColor;
+                if (SelectedElement is Elements.Pencil pencil) pencil.PencilColor = clrNorm.BackColor;
+                if (SelectedElement is Elements.Line line) line.Color = clrNorm.BackColor;
+                if (SelectedElement is Elements.Fill fill) fill.FillColor = clrNorm.BackColor;
+                if (SelectedElement is Elements.Text text) text.Clr = clrNorm.BackColor;
 
                PaintPreview();
             }
@@ -746,10 +757,10 @@ namespace ABPaint
         {
             clrFill.BackColor = GetCurrentColor();
 
-            if (selectedElement != null)
+            if (SelectedElement != null)
             {
-                if (selectedElement is RectangleE) ((RectangleE)selectedElement).FillColor = clrFill.BackColor;
-                if (selectedElement is Ellipse) ((Ellipse)selectedElement).FillColor = clrFill.BackColor;
+                if (SelectedElement is RectangleE rect) rect.FillColor = clrFill.BackColor;
+                if (SelectedElement is Ellipse elli) elli.FillColor = clrFill.BackColor;
 
                 PaintPreview();
             }
@@ -759,10 +770,10 @@ namespace ABPaint
         {
             clrBord.BackColor = GetCurrentColor();
 
-            if (selectedElement != null)
+            if (SelectedElement != null)
             {
-                if (selectedElement is RectangleE) ((RectangleE)selectedElement).BorderColor = clrBord.BackColor;
-                if (selectedElement is Ellipse) ((Ellipse)selectedElement).BorderColor = clrBord.BackColor;
+                if (SelectedElement is RectangleE rect) rect.BorderColor = clrBord.BackColor;
+                if (SelectedElement is Ellipse elli) elli.BorderColor = clrBord.BackColor;
 
                 PaintPreview();
             }
@@ -773,10 +784,10 @@ namespace ABPaint
             if (string.IsNullOrEmpty(txtBWidth.Text))
                 txtBWidth.Text = "0";
 
-            if (selectedElement != null)
+            if (SelectedElement != null)
             {
-                if (selectedElement is RectangleE) ((RectangleE)selectedElement).BorderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
-                if (selectedElement is Ellipse) ((Ellipse)selectedElement).BorderSize = Convert.ToInt32(string.IsNullOrEmpty(txtBWidth.Text) ? "0" : txtBWidth.Text);
+                if (SelectedElement is RectangleE rect) rect.BorderSize = (txtBWidth.Text.Length > 0) ? int.Parse(txtBWidth.Text, CultureInfo.CurrentCulture) : 0;
+                if (SelectedElement is Ellipse elli) elli.BorderSize = (txtBWidth.Text.Length > 0) ? int.Parse(txtBWidth.Text, CultureInfo.CurrentCulture) : 0;
 
                 PaintPreview();
             }
@@ -784,15 +795,15 @@ namespace ABPaint
 
         private void btnBold_Click(object sender, EventArgs e)
         {
-            if (selectedElement != null)
-            {
-                Font currentFont = ((Text)selectedElement).fnt;
-                if (selectedElement is Text)
+            if (SelectedElement != null)
+            {      
+                if (SelectedElement is Text txt)
                 {
-                    if (((Text)selectedElement).fnt.Bold)
-                        ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, currentFont.Style & ~FontStyle.Bold);
+                    Font currentFont = txt.Fnt;
+                    if (txt.Fnt.Bold)
+                        txt.Fnt = new Font(currentFont.FontFamily, currentFont.Size, currentFont.Style & ~FontStyle.Bold);
                     else
-                        ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Bold | currentFont.Style);
+                        txt.Fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Bold | currentFont.Style);
                 }
 
                 PaintPreview();
@@ -814,23 +825,23 @@ namespace ABPaint
 
         private void txtTText_TextChanged(object sender, EventArgs e)
         {
-            if (selectedElement != null)
-                ((Text)selectedElement).mainText = txtTText.Text;
+            if (SelectedElement != null)
+                ((Text)SelectedElement).MainText = txtTText.Text;
 
             PaintPreview();
         }
 
         private void btnItl_Click(object sender, EventArgs e)
         {
-            if (selectedElement != null)
-            {
-                Font currentFont = ((Text)selectedElement).fnt;
-                if (selectedElement is Text)
+            if (SelectedElement != null)
+            {           
+                if (SelectedElement is Text txt)
                 {
-                    if (((Text)selectedElement).fnt.Italic)
-                        ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, currentFont.Style & ~FontStyle.Italic);
+                    Font currentFont = txt.Fnt;
+                    if (txt.Fnt.Italic)
+                        txt.Fnt = new Font(currentFont.FontFamily, currentFont.Size, currentFont.Style & ~FontStyle.Italic);
                     else
-                        ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Italic | currentFont.Style);
+                        txt.Fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Italic | currentFont.Style);
                 }
 
                 PaintPreview();
@@ -852,15 +863,15 @@ namespace ABPaint
 
         private void btnUline_Click(object sender, EventArgs e)
         {
-            if (selectedElement != null)
-            {
-                Font currentFont = ((Text)selectedElement).fnt;
-                if (selectedElement is Text)
+            if (SelectedElement != null)
+            {        
+                if (SelectedElement is Text txt)
                 {
-                    if (((Text)selectedElement).fnt.Underline)
-                        ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, currentFont.Style & ~FontStyle.Underline);
+                    Font currentFont = txt.Fnt;
+                    if (txt.Fnt.Underline)
+                        txt.Fnt = new Font(currentFont.FontFamily, currentFont.Size, currentFont.Style & ~FontStyle.Underline);
                     else
-                        ((Text)selectedElement).fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Underline | currentFont.Style);
+                        txt.Fnt = new Font(currentFont.FontFamily, currentFont.Size, FontStyle.Underline | currentFont.Style);
                 }
 
                 PaintPreview();
@@ -882,16 +893,17 @@ namespace ABPaint
 
         private void cmbFont_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (selectedElement != null)
-                if (selectedElement is Text)
+            if (SelectedElement != null)
+                if (SelectedElement is Text txt)
                     try
                     {
-                        ((Text)selectedElement).fnt = new Font(cmbFont.Text, ((Text)selectedElement).fnt.Size, ((Text)selectedElement).fnt.Style);
+                        txt.Fnt = new Font(cmbFont.Text, txt.Fnt.Size, txt.Fnt.Style);
                     }
-                    catch
+                    catch (ArgumentException ex)
                     {
                         cmbFont.Text = "Microsoft Sans Serif";
-                        ((Text)selectedElement).fnt = new Font(cmbFont.Text, ((Text)selectedElement).fnt.Size, ((Text)selectedElement).fnt.Style);
+                        txt.Fnt = new Font(cmbFont.Text, txt.Fnt.Size, txt.Fnt.Style);
+                        Console.WriteLine("AN EXCEPTION OCCURED: " + ex.Message);
                     }
 
             PaintPreview();
@@ -907,16 +919,14 @@ namespace ABPaint
             if (string.IsNullOrEmpty(txtBThick.Text))
                 txtBThick.Text = "0";
 
-            if (selectedElement != null)
+            if (SelectedElement != null)
             {
-                if (selectedElement is Elements.Brush) ((Elements.Brush)selectedElement).Width = Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
-                if (selectedElement is Line)
+                if (SelectedElement is Elements.Brush asBrush) asBrush.Width = (txtBThick.Text.Length > 0) ? int.Parse(txtBThick.Text, CultureInfo.CurrentCulture) : 0;
+                if (SelectedElement is Line asLine)
                 {
-                    Line lineEle = ((Line)selectedElement);
-
-                    lineEle.Thickness = Convert.ToInt32(string.IsNullOrEmpty(txtBThick.Text) ? "0" : txtBThick.Text);
+                    asLine.Thickness = (txtBThick.Text.Length > 0) ? int.Parse(txtBThick.Text, CultureInfo.CurrentCulture) : 0;
                     
-                    LineResizing.Resize(ref lineEle);
+                    LineResizing.Resize(ref asLine);
                 }
 
                 PaintPreview();
@@ -964,11 +974,11 @@ namespace ABPaint
 
             if (!sz.Cancelled)
             {
-                savedata.imageSize = sz.returnSize;
+                CurrentSave.ImageSize = sz.ReturnSize;
 
                 ReloadImage();
 
-                savedata.imageElements = new List<Element>();
+                CurrentSave.ImageElements = new List<Element>();
 
                 PaintPreview();
             }
@@ -1012,13 +1022,13 @@ namespace ABPaint
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (currentFile == "")
+            if (string.IsNullOrEmpty(CurrentFile))
             {
                 if (saveFileDialogSAVE.ShowDialog() == DialogResult.OK)
                     SaveFile(saveFileDialogSAVE.FileName, true);
             }
             else
-                SaveFile(currentFile);
+                SaveFile(CurrentFile);
 
             ReloadImage();
             PaintPreview();
@@ -1046,7 +1056,7 @@ namespace ABPaint
 
         private void redrawToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            endImage = PaintPreview();
+            EndImage = PaintPreview();
         }
         #endregion
 
@@ -1055,7 +1065,7 @@ namespace ABPaint
             HandleKeyPress(keyData);
             canvaspre.Invalidate();
 
-            if ((currentTool == null || !currentTool.UseRegionDrag) && keyData != Keys.Enter)
+            if ((CurrentTool == null || !CurrentTool.UseRegionDrag) && keyData != Keys.Enter)
                 return base.ProcessCmdKey(ref msg, keyData);
             return true;
         }
@@ -1072,22 +1082,23 @@ namespace ABPaint
 
         public void HandleChangeTextSize()
         {
-            if (selectedElement != null)
-                if (selectedElement is Text)
+            if (SelectedElement != null)
+                if (SelectedElement is Text txt)
                     try
                     {
-                        ((Text)selectedElement).fnt = new Font(((Text)selectedElement).fnt.FontFamily, (float.Parse(cmbSize.Text) > 999) ? float.Parse(cmbSize.Text) : 12, ((Text)selectedElement).fnt.Style);
-                        SizeF RealSize = Elements.Text.MeasureText(((Text)selectedElement).mainText, ((Text)selectedElement).fnt);
-                        selectedElement.Width = Convert.ToInt32(RealSize.Width);
-                        selectedElement.Height = Convert.ToInt32(RealSize.Height);
+                        txt.Fnt = new Font(txt.Fnt.FontFamily, (float.Parse(cmbSize.Text, CultureInfo.CurrentCulture) > 999) ? float.Parse(cmbSize.Text, CultureInfo.CurrentCulture) : 12, txt.Fnt.Style);
+                        SizeF realSize = Elements.Text.MeasureText(txt.MainText, txt.Fnt);
+                        SelectedElement.Width = Convert.ToInt32(realSize.Width);
+                        SelectedElement.Height = Convert.ToInt32(realSize.Height);
                     }
-                    catch
+                    catch (ArgumentException ex)
                     {
+                        Console.WriteLine(ex.Message);
                         cmbSize.Text = "12";
-                        ((Text)selectedElement).fnt = new Font(((Text)selectedElement).fnt.FontFamily, float.Parse(cmbSize.Text), ((Text)selectedElement).fnt.Style);
-                        SizeF RealSize = Elements.Text.MeasureText(((Text)selectedElement).mainText, ((Text)selectedElement).fnt);
-                        selectedElement.Width = Convert.ToInt32(RealSize.Width);
-                        selectedElement.Height = Convert.ToInt32(RealSize.Height);
+                        txt.Fnt = new Font(txt.Fnt.FontFamily, float.Parse(cmbSize.Text, CultureInfo.CurrentCulture), txt.Fnt.Style);
+                        SizeF realSize = Elements.Text.MeasureText(txt.MainText, txt.Fnt);
+                        SelectedElement.Width = Convert.ToInt32(realSize.Width);
+                        SelectedElement.Height = Convert.ToInt32(realSize.Height);
                     }
 
             PaintPreview();
