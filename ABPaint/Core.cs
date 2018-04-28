@@ -43,7 +43,8 @@ namespace ABPaint
         public static bool MouseMoveLock; // A lock for the MouseMove - stops you from triggering MouseMove twice while it's in progress.
         public static bool MouseUpLock; // A lock for the MouseUp - stops you from triggering MouseUp twice while it's in progress.
         private static bool queueLock; // A lock for the queue - stops the queue from being looped through twice at the same time
-
+        private static bool editLock; // A lock for anything that modifies the ImageElements. Stops it from being modified while looping etc.
+        
         // All of the main variables go below, I recommend you hide them.
         #region Main Variables
         private static Bitmap endimg; // Just because you have to...
@@ -257,7 +258,7 @@ namespace ABPaint
         public static bool LimitMouse;
 
         /// <summary>
-        /// Whether the program needs to draw the SelectedElement only repeatedly - used for moving and resizing.
+        /// Whether the program needs to draw the SelectedElement only repeatedly (that's what RapidRedraw is) - used for moving and resizing.
         /// </summary>
         public static bool RedrawSelectedElementOnly;
 
@@ -310,9 +311,6 @@ namespace ABPaint
                                     Program.MainForm.canvaspre.Image = endimg;
                                 } catch { }
                             });
-                            break;
-                        case PerformableAction.SelectionToolSelect:
-                            tsk = new Task(() => { SelectElementByLocation((int)paction.Param1, (int)paction.Param2); });
                             break;
                         case PerformableAction.Delete:
                             tsk = new Task(PerformDelete);
@@ -373,25 +371,31 @@ namespace ABPaint
         /// <returns>An image for the result.</returns>
         public static Bitmap PaintPreview()
         {
-            Bitmap endResult = new Bitmap(CurrentSave.ImageSize.Width, CurrentSave.ImageSize.Height);
-
-            Graphics g = Graphics.FromImage(endResult);
-
-            g.FillRectangle(Brushes.White, 0, 0, CurrentSave.ImageSize.Width, CurrentSave.ImageSize.Height);
-            // Order them by Zindex:
-            CurrentSave.ImageElements = CurrentSave.ImageElements.OrderBy(o => o.Zindex).ToList();
-
-            // Now draw them all!
-
-            for (int i = 0; i < CurrentSave.ImageElements.Count; i++)
+            if (!editLock)
             {
-                if (CurrentSave.ImageElements[i].Visible)
-                    CurrentSave.ImageElements[i].ProcessImage(g);
+                editLock = true;
+                Bitmap endResult = new Bitmap(CurrentSave.ImageSize.Width, CurrentSave.ImageSize.Height);
+
+                Graphics g = Graphics.FromImage(endResult);
+
+                g.FillRectangle(Brushes.White, 0, 0, CurrentSave.ImageSize.Width, CurrentSave.ImageSize.Height);
+                // Order them by Zindex:
+                CurrentSave.ImageElements = CurrentSave.ImageElements.OrderBy(o => o.Zindex).ToList();
+
+                // Now draw them all!
+
+                for (int i = 0; i < CurrentSave.ImageElements.Count; i++)
+                {
+                    if (CurrentSave.ImageElements[i].Visible)
+                        CurrentSave.ImageElements[i].ProcessImage(g);
+                }
+
+                EndImage = endResult;
+
+                editLock = false;
+                return endResult;              
             }
-
-            EndImage = endResult;
-
-            return endResult;
+            return null;
         }
 
         /// <summary>
@@ -402,27 +406,33 @@ namespace ABPaint
         /// <returns>The element found at the location.</returns>
         public static Element SelectElementByLocation(int x, int y)
         {
-            Element ret = null;
-
-            // Order the list based on the Zindexs! But backwards so that the foreach picks up the top one!
-            CurrentSave.ImageElements = CurrentSave.ImageElements.OrderBy(o => o.Zindex).Reverse().ToList();
-
-            foreach (Element ele in CurrentSave.ImageElements)
+            if (!editLock)
             {
-                if (new Rectangle(ele.X - 10, ele.Y - 10, ele.Width + 20, ele.Height + 20).Contains(new Point(x, y)))
+                editLock = true;
+                Element ret = null;
+
+                // Order the list based on the Zindexs! But backwards so that the foreach picks up the top one!
+                CurrentSave.ImageElements = CurrentSave.ImageElements.OrderBy(o => o.Zindex).Reverse().ToList();
+
+                foreach (Element ele in CurrentSave.ImageElements)
                 {
-                    // The mouse is in this element!
+                    if (new Rectangle(ele.X - 10, ele.Y - 10, ele.Width + 20, ele.Height + 20).Contains(new Point(x, y)))
+                    {
+                        // The mouse is in this element!
 
-                    ele.Zindex = CurrentSave.TopZindex++; // Brings to front
-                    ret = ele;
-                    break;
+                        ele.Zindex = CurrentSave.TopZindex++; // Brings to front
+                        ret = ele;
+                        break;
+                    }
                 }
+
+                // Order the list based on the Zindexs!
+                CurrentSave.ImageElements = CurrentSave.ImageElements.OrderBy(o => o.Zindex).ToList();
+
+                editLock = false;
+                return ret;
             }
-
-            // Order the list based on the Zindexs!
-            CurrentSave.ImageElements = CurrentSave.ImageElements.OrderBy(o => o.Zindex).ToList();
-
-            return ret;
+            return null;
         }
 
         /// <summary>
@@ -771,6 +781,7 @@ namespace ABPaint
 
         public static void PerformFill(Point mouseLoc)
         {
+            if (isFilling) MessageBox.Show("That's impossible.");
             isFilling = true;
 
             CurrentDrawingElement = new Fill()
@@ -791,12 +802,6 @@ namespace ABPaint
 
             CurrentDrawingElement.X = DrawingMin.X - 1;
             CurrentDrawingElement.Y = DrawingMin.Y - 1;
-
-            if (DrawingMin.Y > DrawingMax.Y)
-                return;
-
-            if (DrawingMin.Y > DrawingMax.Y)
-                return;
 
             CurrentDrawingElement.Width = (DrawingMax.X - DrawingMin.X) + 1;
             CurrentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y) + 1;
@@ -1020,15 +1025,17 @@ namespace ABPaint
         /// <param name="mouseLoc">The Mouse Location when this event was triggered.</param>
         public static void HandleMouseUpSelection()
         {
-            IsMoving = false;
-            RedrawSelectedElementOnly = false;
-            Program.MainForm.movingRefresh.Stop();
-
             if (CornerSelected != Corner.None)
             {
                 SelectedElement.FinishResize();
                 CornerSelected = Corner.None;
             }
+
+            IsMoving = false;
+
+            PaintPreview();
+            RedrawSelectedElementOnly = false;
+            Program.MainForm.movingRefresh.Stop();
         }
         #endregion
 
@@ -1185,7 +1192,7 @@ namespace ABPaint
                     }
                     #endregion
 
-                    if (SelectedTool != Tool.Fill) MouseDownOnCanvas = true;
+                    if (!isFilling) MouseDownOnCanvas = true;
                 }
                 
             }

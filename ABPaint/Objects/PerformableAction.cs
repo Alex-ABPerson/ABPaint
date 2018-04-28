@@ -23,7 +23,7 @@ namespace ABPaint.Objects
     {
         // General Program Events
         Paint = 0,
-        SelectionToolSelect = 1,
+        //SelectionToolSelect = 1,
         UpdatePreview = 2,
         
         Delete = 3,
