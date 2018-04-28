@@ -668,7 +668,7 @@ namespace ABPaint
 
                 // ...or for just drawing the element that's moving.
 
-                if (RedrawSelectedElementOnly)
+                if (RedrawSelectedElementOnly && SelectedElement != null)
                 {
                     e.Graphics.DrawImage(BeforeMove, 0, 0);
                     SelectedElement.ProcessImage(e.Graphics);

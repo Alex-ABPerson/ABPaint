@@ -189,6 +189,11 @@ namespace ABPaint
         /// </summary>
         public static Point StartPoint;
 
+        /// <summary>
+        /// Whether the program is in the process of filling.
+        /// </summary>
+        public static bool isFilling;
+
 
         // ==================
         // SELECTION TOOL VARIABLES
@@ -258,7 +263,7 @@ namespace ABPaint
 
 
         // ========================================================================
-        // Text Variables
+        // TEXT VARIABLES
         // ========================================================================
 
 
@@ -766,7 +771,7 @@ namespace ABPaint
 
         public static void PerformFill(Point mouseLoc)
         {
-            StartPoint = new Point(mouseLoc.X, mouseLoc.Y);
+            isFilling = true;
 
             CurrentDrawingElement = new Fill()
             {
@@ -776,28 +781,36 @@ namespace ABPaint
                 Height = CurrentSave.ImageSize.Height
             };
 
-            DrawingMin.X = mouseLoc.X;
-            DrawingMin.Y = mouseLoc.Y;
-            DrawingMax.X = mouseLoc.X;
-            DrawingMax.Y = mouseLoc.Y;
+            Fill asFill = CurrentDrawingElement as Fill;
 
-            ((Fill)CurrentDrawingElement).FillPoints = ImageFilling.SafeFloodFill(ImageFormer.ImageToByteArray(Core.PaintPreview()), mouseLoc.X, mouseLoc.Y, Color.FromArgb(1, 0, 1));
-            ((Fill)CurrentDrawingElement).FillColor = Program.MainForm.clrNorm.BackColor;
+            DrawingMin = mouseLoc;
+            DrawingMax = mouseLoc;
+
+            asFill.FillPoints = ImageFilling.SafeFloodFill(ImageFormer.ImageToByteArray(PaintPreview()), mouseLoc.X, mouseLoc.Y, Color.FromArgb(1, 0, 1));
+            asFill.FillColor = Program.MainForm.clrNorm.BackColor;
 
             CurrentDrawingElement.X = DrawingMin.X - 1;
             CurrentDrawingElement.Y = DrawingMin.Y - 1;
+
+            if (DrawingMin.Y > DrawingMax.Y)
+                return;
+
+            if (DrawingMin.Y > DrawingMax.Y)
+                return;
 
             CurrentDrawingElement.Width = (DrawingMax.X - DrawingMin.X) + 1;
             CurrentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y) + 1;
             CurrentDrawingElement.Zindex = CurrentSave.TopZindex++;
 
-            ((Fill)CurrentDrawingElement).FillPoints = ImageCropping.CropImage(((Fill)CurrentDrawingElement).FillPoints, CurrentDrawingElement.X, CurrentDrawingElement.Y, CurrentDrawingElement.Width, CurrentDrawingElement.Height);
-            AddElement(CurrentDrawingElement);
+            asFill.FillPoints = ImageCropping.CropImage(asFill.FillPoints, CurrentDrawingElement.X, CurrentDrawingElement.Y, CurrentDrawingElement.Width, CurrentDrawingElement.Height);
+            PerformAddElement(CurrentDrawingElement);
 
             if (CurrentDrawingGraphics != null) CurrentDrawingGraphics.Dispose();
             CurrentDrawingElement = null;
 
             EndImage = PaintPreview();
+
+            isFilling = false;
         }
 
         // It is recommended that you hide the lower two regions
@@ -1363,12 +1376,16 @@ namespace ABPaint
                         if (CurrentDrawingElement.Height < 0) CurrentDrawingElement.Height = 1;
 
                         CurrentDrawingElement.Zindex = CurrentSave.TopZindex++;
-                        AddElement(CurrentDrawingElement);
+                        if (!isFilling) 
+                        {
+                            AddElement(CurrentDrawingElement);
 
-                        // Dispose some stuff.
+                            // Dispose some stuff.
 
-                        if (CurrentDrawingGraphics != null) CurrentDrawingGraphics.Dispose();
-                        CurrentDrawingElement = null;            
+                        
+                            if (CurrentDrawingGraphics != null) CurrentDrawingGraphics.Dispose();
+                            CurrentDrawingElement = null;
+                        }
                     }
                 }
 
