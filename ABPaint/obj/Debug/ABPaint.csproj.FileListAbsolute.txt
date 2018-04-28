@@ -42,7 +42,6 @@ I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.Form1.resource
 I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.Form2.resources
 I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.Properties.Resources.resources
 I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.RightMenu.ColorBox.resources
-I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.Tools.Windows.CropTool.resources
 I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.Windows.About.resources
 I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.Sizer.resources
 I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.csproj.GenerateResource.Cache
@@ -65,3 +64,4 @@ C:\Users\alexb\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\bin\Debug\ABPaint.pd
 C:\Users\alexb\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.csproj.CoreCompileInputs.cache
 C:\Users\alexb\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.csprojResolveAssemblyReference.cache
 I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.csprojResolveAssemblyReference.cache
+I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.Tools.Windows.CropToolWnd.resources

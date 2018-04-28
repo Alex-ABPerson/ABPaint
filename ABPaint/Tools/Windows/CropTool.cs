@@ -23,9 +23,9 @@ using System.Windows.Forms;
 
 namespace ABPaint.Tools.Windows
 {
-    public partial class CropTool : Form
+    public partial class CropToolWnd : Form
     {
-        public CropTool()
+        public CropToolWnd()
         {
             InitializeComponent();
         }

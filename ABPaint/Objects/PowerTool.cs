@@ -38,7 +38,7 @@ namespace ABPaint.Objects
         public abstract void Prepare();
 
         /// <summary>
-        /// The code that cancelled the tool when the user requests it.
+        /// The code that canceled the tool when the user requests it.
         /// </summary>
         public abstract void Cancel();
 

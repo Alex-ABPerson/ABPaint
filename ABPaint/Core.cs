@@ -104,7 +104,7 @@ namespace ABPaint
         public static Graphics CurrentDrawingGraphics;
 
         /// <summary>
-        /// Where the mouse is held down or not.
+        /// Whether the mouse is held down or not.
         /// </summary>
         public static bool MouseDownOnCanvas;
 
@@ -580,7 +580,7 @@ namespace ABPaint
         /// <param name="tool">The PowerTool to use.</param>
         public static void UseTool(PowerTool tool)
         {
-            ActionQueue.Enqueue(new PerformAction(PerformableAction.CancelTool, tool));
+            ActionQueue.Enqueue(new PerformAction(PerformableAction.UseTool, tool));
             ProcessQueueAsync();
         }
 
@@ -1192,10 +1192,10 @@ namespace ABPaint
                     }
                     #endregion
 
-                    if (!isFilling) MouseDownOnCanvas = true;
+                    
                 }
-                
             }
+            if (!isFilling) MouseDownOnCanvas = true;
         }
 
         /// <summary>
@@ -1216,6 +1216,8 @@ namespace ABPaint
                 {
                     DragRegionSelect.Width = mouseLoc.X - StartPoint.X;
                     DragRegionSelect.Height = mouseLoc.Y - StartPoint.Y;
+
+                    Program.MainForm.canvaspre.Invalidate();
                 }
       
                 if (CurrentDrawingElement is Pencil)

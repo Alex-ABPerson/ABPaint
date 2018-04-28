@@ -22,6 +22,7 @@ using System.Windows.Forms;
 using static ABPaint.Tools.Backend.SaveSystem;
 using static ABPaint.Core;
 using System.Globalization;
+using ABPaint.Tools.Windows;
 
 namespace ABPaint
 {
@@ -29,6 +30,7 @@ namespace ABPaint
     {
         private Bitmap _backBuffer;
         private bool paintLock;
+        public CropToolWnd wnd; // Temp thing
 
         public Bitmap BackBuffer
         { 
@@ -90,6 +92,200 @@ namespace ABPaint
             toSelect.Tag = "selected";
         }
 
+        public void DESelectTool(ref PictureBox toSelect)
+        {
+            toSelect.BackColor = Color.White;
+            if (toSelect.Tag != null && toSelect.Tag.ToString() == "selected") // If it isn't selected already
+                    toSelect.Image = ImageInverting.InvertImage((Bitmap)toSelect.Image);
+            toSelect.Tag = "";
+        }
+
+        /// <summary>
+        /// Shows the properties panel with the specified options.
+        /// </summary>
+        /// <param name="title">The text to put as the label.</param>
+        /// <param name="showFColor">Show the Fill Color.</param>
+        /// <param name="showBColor">Show the Border Color.</param>
+        /// <param name="showColor">Show the Color.</param>
+        /// <param name="showBWidth">Show the Border Size.</param>
+        /// <param name="showThickness">Show the Thickness.</param>
+        /// <param name="showText">Show the Text tools.</param>
+        /// <param name="objectColor">The color of this object (if this is a selection)</param>
+        /// <param name="text">The text to put into the "Text" box.</param>
+        /// <param name="fnt">The font to put into the "Font" box.</param>
+        public void ShowProperties(string title, bool showFColor, bool showBColor, bool showColor, bool showBWidth, bool showThickness, bool showText, Color objectColor, Color borderColor = new Color(), string text = "", Font fnt = null)
+        {
+            properties.Show();
+
+            propertiesLbl.Text = title;
+
+            // Below if the selection tool is on then set the object's color otherwise set the palette's color!
+
+            if (showFColor)
+            {
+                label4.Show();
+                clrFill.Show();
+
+                clrFill.BackColor = objectColor;
+            }
+            else
+            {
+                label4.Hide();
+                clrFill.Hide();
+            }
+
+            if (showBColor)
+            {
+                label5.Show();
+                clrBord.Show();
+
+                clrBord.BackColor = borderColor;
+            }
+            else
+            {
+                label5.Hide();
+                clrBord.Hide();
+            }
+
+            if (showColor)
+            {
+                label6.Show();
+                clrNorm.Show();
+
+                clrNorm.BackColor = objectColor;
+            }
+            else
+            {
+                label6.Hide();
+                clrNorm.Hide();
+            }
+
+            if (showBWidth)
+            {
+                label7.Show();
+                txtBWidth.Show();
+            }
+            else
+            {
+                label7.Hide();
+                txtBWidth.Hide();
+            }
+
+            if (showThickness)
+            {
+                label8.Show();
+                txtBThick.Show();
+            }
+            else
+            {
+                label8.Hide();
+                txtBThick.Hide();
+            }
+
+            if (showText)
+            {
+                label2.Show();
+                label10.Show();
+                pnlFont.Show();
+                txtTText.Show();
+
+                txtTText.Text = text;
+                if (fnt != null)
+                {
+                    cmbFont.Text = fnt.FontFamily.Name;
+                    cmbSize.Text = fnt.Size.ToString(CultureInfo.CurrentCulture);
+
+                    if (fnt.Bold)
+                    {
+                        BoldSelected = true;
+                        btnBold.BackColor = Color.Black;
+                        btnBold.Image = ImageInverting.InvertImage((Bitmap)btnBold.Image);
+                    }
+                    else
+                    {
+                        BoldSelected = false;
+                        btnBold.BackColor = SystemColors.Control;
+                        btnBold.Image = Properties.Resources.bold;
+                    }
+
+                    if (fnt.Italic)
+                    {
+                        ItalicSelected = true;
+                        btnItl.BackColor = Color.Black;
+                        btnItl.Image = ImageInverting.InvertImage((Bitmap)btnItl.Image);
+                    }
+                    else
+                    {
+                        ItalicSelected = false;
+                        btnItl.BackColor = SystemColors.Control;
+                        btnItl.Image = Properties.Resources.italic;
+                    }
+
+                    if (fnt.Underline)
+                    {
+                        UnderlineSelected = true;
+                        btnUline.BackColor = Color.Black;
+                        btnUline.Image = ImageInverting.InvertImage((Bitmap)btnUline.Image);
+                    }
+                    else
+                    {
+                        UnderlineSelected = false;
+                        btnUline.BackColor = SystemColors.Control;
+                        btnUline.Image = Properties.Resources.underline;
+                    }
+                }
+            }
+            else
+            {
+                label2.Hide();
+                label10.Hide();
+                pnlFont.Hide();
+                txtTText.Hide();
+            }
+        }
+
+        /// <summary>
+        /// Resizes and repositions the canvaspre.
+        /// </summary>
+        public void ReloadImage()
+        {
+            Point oldScrollOffset = appcenter.AutoScrollOffset;
+        
+            canvaspre.Width = (CurrentSave.ImageSize.Width * MagnificationLevel);
+            canvaspre.Height = (CurrentSave.ImageSize.Height * MagnificationLevel);
+
+            canvaspre.Left = 25;
+            canvaspre.Top = 25;
+
+            if (canvaspre.Width < appcenter.Width)
+                canvaspre.Left = (appcenter.Width / 2 - canvaspre.Width / 2);
+
+            if (canvaspre.Height < appcenter.Height)
+                canvaspre.Top = (appcenter.Height / 2 - canvaspre.Height / 2);
+
+            canvaspre.Invalidate();
+
+            if (MagnificationLevel > OldMagnificationLevel)
+                appcenter.AutoScrollOffset = new Point((oldScrollOffset.X * (MagnificationLevel - OldMagnificationLevel)) + (25 * MagnificationLevel), (oldScrollOffset.Y * (MagnificationLevel - OldMagnificationLevel)) + (25 * MagnificationLevel));
+            else
+                appcenter.AutoScrollOffset = new Point((oldScrollOffset.X / (MagnificationLevel - OldMagnificationLevel)) + (25 * MagnificationLevel), (oldScrollOffset.Y / (MagnificationLevel - OldMagnificationLevel)) + (25 * MagnificationLevel));
+
+            appcenter.AutoScrollMinSize = new Size(canvaspre.Width + 50, canvaspre.Height + 50);
+
+            BackBuffer = new Bitmap(canvaspre.Width, canvaspre.Height);
+
+            //if (canvaspre.Width + canvaspre.Left > appcenter.Width) appcenter.HorizontalScroll.Visible = true;
+            //else appcenter.HorizontalScroll.Visible = false;
+
+                //if (canvaspre.Height + canvaspre.Top > appcenter.Height) appcenter.VerticalScroll.Visible = true;
+                //else appcenter.VerticalScroll.Visible = false;
+        }
+
+        private void CanvasAnywhereClick(object sender, EventArgs e)
+        {
+            welcomeScreen.Hide();
+        }
+
         private void NumbersOnlyKeyPress(Object sender, KeyPressEventArgs e)
         {
             if (((dynamic)sender).Text.Length > 2)
@@ -110,12 +306,9 @@ namespace ABPaint
 
         }
 
-        public void DESelectTool(ref PictureBox toSelect)
+        private void Form1_Resize(object sender, EventArgs e)
         {
-            toSelect.BackColor = Color.White;
-            if (toSelect.Tag != null && toSelect.Tag.ToString() == "selected") // If it isn't selected already
-                    toSelect.Image = ImageInverting.InvertImage((Bitmap)toSelect.Image);
-            toSelect.Tag = "";
+            ReloadImage();
         }
 
         private void timgCursorN_Click(object sender, EventArgs e)
@@ -283,60 +476,10 @@ namespace ABPaint
 
             ShowProperties("Text Tool Settings", false, false, true, false, false, true, GetCurrentColor(), GetCurrentColor(), "");
         }
-        #endregion
 
-        /// <summary>
-        /// Resizes and repositions the canvaspre.
-        /// </summary>
-        public void ReloadImage()
+        private void timer1_Tick(object sender, EventArgs e)
         {
-            Point oldScrollOffset = appcenter.AutoScrollOffset;
-        
-            canvaspre.Width = (CurrentSave.ImageSize.Width * MagnificationLevel);
-            canvaspre.Height = (CurrentSave.ImageSize.Height * MagnificationLevel);
-
-            canvaspre.Left = 25;
-            canvaspre.Top = 25;
-
-            if (canvaspre.Width < appcenter.Width)
-                canvaspre.Left = (appcenter.Width / 2 - canvaspre.Width / 2);
-
-            if (canvaspre.Height < appcenter.Height)
-                canvaspre.Top = (appcenter.Height / 2 - canvaspre.Height / 2);
-
-            canvaspre.Invalidate();
-
-            if (MagnificationLevel > OldMagnificationLevel)
-                appcenter.AutoScrollOffset = new Point((oldScrollOffset.X * (MagnificationLevel - OldMagnificationLevel)) + (25 * MagnificationLevel), (oldScrollOffset.Y * (MagnificationLevel - OldMagnificationLevel)) + (25 * MagnificationLevel));
-            else
-                appcenter.AutoScrollOffset = new Point((oldScrollOffset.X / (MagnificationLevel - OldMagnificationLevel)) + (25 * MagnificationLevel), (oldScrollOffset.Y / (MagnificationLevel - OldMagnificationLevel)) + (25 * MagnificationLevel));
-
-            appcenter.AutoScrollMinSize = new Size(canvaspre.Width + 50, canvaspre.Height + 50);
-
-            BackBuffer = new Bitmap(canvaspre.Width, canvaspre.Height);
-
-            //if (canvaspre.Width + canvaspre.Left > appcenter.Width) appcenter.HorizontalScroll.Visible = true;
-            //else appcenter.HorizontalScroll.Visible = false;
-
-                //if (canvaspre.Height + canvaspre.Top > appcenter.Height) appcenter.VerticalScroll.Visible = true;
-                //else appcenter.VerticalScroll.Visible = false;
-        }
-
-        public void UpdateCanvaspreWithBackBuffer()
-        {
-            CanvaspreG.DrawImage(BackBuffer, 0, 0);
-        }
-
-        private void canvaspre_MouseMove(object sender, MouseEventArgs e)
-        {
-            //Point mouseLoc = new Point((int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)), (int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)));
-
-            if (!MouseMoveLock)
-            {
-                MouseMoveLock = true;
-                HandleMouseMove(e);
-                MouseMoveLock = false;
-            }
+            HandlePaint();
         }
 
         private void canvaspre_MouseDown(object sender, MouseEventArgs e)
@@ -359,155 +502,6 @@ namespace ABPaint
                 HandleMouseUp(e);
                 MouseUpLock = false;
             }
-        }
-
-        /// <summary>
-        /// Shows the properties panel with the specified options.
-        /// </summary>
-        /// <param name="title">The text to put as the label.</param>
-        /// <param name="showFColor">Show the Fill Color.</param>
-        /// <param name="showBColor">Show the Border Color.</param>
-        /// <param name="showColor">Show the Color.</param>
-        /// <param name="showBWidth">Show the Border Size.</param>
-        /// <param name="showThickness">Show the Thickness.</param>
-        /// <param name="showText">Show the Text tools.</param>
-        /// <param name="objectColor">The color of this object (if this is a selection)</param>
-        /// <param name="text">The text to put into the "Text" box.</param>
-        /// <param name="fnt">The font to put into the "Font" box.</param>
-        public void ShowProperties(string title, bool showFColor, bool showBColor, bool showColor, bool showBWidth, bool showThickness, bool showText, Color objectColor, Color borderColor = new Color(), string text = "", Font fnt = null)
-        {
-            properties.Show();
-
-            propertiesLbl.Text = title;
-
-            // Below if the selection tool is on then set the object's color otherwise set the palette's color!
-
-            if (showFColor)
-            {
-                label4.Show();
-                clrFill.Show();
-
-                clrFill.BackColor = objectColor;
-            }
-            else
-            {
-                label4.Hide();
-                clrFill.Hide();
-            }
-
-            if (showBColor)
-            {
-                label5.Show();
-                clrBord.Show();
-
-                clrBord.BackColor = borderColor;
-            }
-            else
-            {
-                label5.Hide();
-                clrBord.Hide();
-            }
-
-            if (showColor)
-            {
-                label6.Show();
-                clrNorm.Show();
-
-                clrNorm.BackColor = objectColor;
-            }
-            else
-            {
-                label6.Hide();
-                clrNorm.Hide();
-            }
-
-            if (showBWidth)
-            {
-                label7.Show();
-                txtBWidth.Show();
-            }
-            else
-            {
-                label7.Hide();
-                txtBWidth.Hide();
-            }
-
-            if (showThickness)
-            {
-                label8.Show();
-                txtBThick.Show();
-            }
-            else
-            {
-                label8.Hide();
-                txtBThick.Hide();
-            }
-
-            if (showText)
-            {
-                label2.Show();
-                label10.Show();
-                pnlFont.Show();
-                txtTText.Show();
-
-                txtTText.Text = text;
-                if (fnt != null)
-                {
-                    cmbFont.Text = fnt.FontFamily.Name;
-                    cmbSize.Text = fnt.Size.ToString(CultureInfo.CurrentCulture);
-
-                    if (fnt.Bold)
-                    {
-                        BoldSelected = true;
-                        btnBold.BackColor = Color.Black;
-                        btnBold.Image = ImageInverting.InvertImage((Bitmap)btnBold.Image);
-                    }
-                    else
-                    {
-                        BoldSelected = false;
-                        btnBold.BackColor = SystemColors.Control;
-                        btnBold.Image = Properties.Resources.bold;
-                    }
-
-                    if (fnt.Italic)
-                    {
-                        ItalicSelected = true;
-                        btnItl.BackColor = Color.Black;
-                        btnItl.Image = ImageInverting.InvertImage((Bitmap)btnItl.Image);
-                    }
-                    else
-                    {
-                        ItalicSelected = false;
-                        btnItl.BackColor = SystemColors.Control;
-                        btnItl.Image = Properties.Resources.italic;
-                    }
-
-                    if (fnt.Underline)
-                    {
-                        UnderlineSelected = true;
-                        btnUline.BackColor = Color.Black;
-                        btnUline.Image = ImageInverting.InvertImage((Bitmap)btnUline.Image);
-                    }
-                    else
-                    {
-                        UnderlineSelected = false;
-                        btnUline.BackColor = SystemColors.Control;
-                        btnUline.Image = Properties.Resources.underline;
-                    }
-                }
-            }
-            else
-            {
-                label2.Hide();
-                label10.Hide();
-                pnlFont.Hide();
-                txtTText.Hide();
-            }
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            HandlePaint();
         }
 
         private void canvaspre_Paint(object sender, PaintEventArgs e)
@@ -677,6 +671,41 @@ namespace ABPaint
                 paintLock = false;
             }            
         }
+
+        private void movingRefresh_Tick(object sender, EventArgs e)
+        {
+            canvaspre.Invalidate();
+        }
+
+        private void canvaspre_MouseMove(object sender, MouseEventArgs e)
+        {
+            //Point mouseLoc = new Point((int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)), (int)Math.Round((decimal)((e.X - (MagnificationLevel / 2)) / MagnificationLevel)));
+
+            if (!MouseMoveLock)
+            {
+                MouseMoveLock = true;
+                HandleMouseMove(e);
+                MouseMoveLock = false;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            (new Windows.About()).Show();
+        }
+
+        private void zoomDown_Click(object sender, EventArgs e)
+        {
+            HandleZoomOut();
+        }
+
+        private void zoomUp_Click(object sender, EventArgs e)
+        {
+            HandleZoomIn();
+        }
+        #endregion
+        
+
         
         #region Properties Panel
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -931,38 +960,12 @@ namespace ABPaint
                 canvaspre.Invalidate();
             }
         }
+
+        private void cmbSize_TextUpdate(object sender, EventArgs e)
+        {
+            HandleChangeTextSize();
+        }
         #endregion
-
-        private void movingRefresh_Tick(object sender, EventArgs e)
-        {
-            canvaspre.Invalidate();
-        }
-
-        private void CanvasAnywhereClick(object sender, EventArgs e)
-        {
-            welcomeScreen.Hide();
-        }
-
-        private void Form1_Resize(object sender, EventArgs e)
-        {
-            ReloadImage();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            (new Windows.About()).Show();
-        }
-
-        private void zoomDown_Click(object sender, EventArgs e)
-        {
-            HandleZoomOut();
-        }
-
-        private void zoomUp_Click(object sender, EventArgs e)
-        {
-            HandleZoomIn();
-        }
-
         #region MenuStrip
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1056,6 +1059,16 @@ namespace ABPaint
         {
             EndImage = PaintPreview();
         }
+
+        private void cropToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UseTool(new Tools.CropTool());
+        }
+
+        private void polygonTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new Form2().Show();
+        }
         #endregion
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -1066,16 +1079,6 @@ namespace ABPaint
             if ((CurrentTool == null || !CurrentTool.UseRegionDrag) && keyData != Keys.Enter)
                 return base.ProcessCmdKey(ref msg, keyData);
             return true;
-        }
-
-        private void polygonTestToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            new Form2().Show();
-        }
-
-        private void cropToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UseTool(new Tools.CropTool());
         }
 
         public void HandleChangeTextSize()
@@ -1100,11 +1103,6 @@ namespace ABPaint
                     }
 
             PaintPreview();
-        }
-
-        private void cmbSize_TextUpdate(object sender, EventArgs e)
-        {
-            HandleChangeTextSize();
         }
     }
 }

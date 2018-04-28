@@ -1,6 +1,6 @@
 ﻿namespace ABPaint.Tools.Windows
 {
-    partial class CropTool
+    partial class CropToolWnd
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CropTool));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CropToolWnd));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
@@ -54,9 +54,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(329, 100);
             this.label2.TabIndex = 0;
-            this.label2.Text = "Please drag on the region you wish to crop to.\r\nOr use \"Exact\" co-ordinates.\r\n\r\nO" +
-    "nce you have chosen your region you can\r\nhit \'Enter\' to apply the selected regio" +
-    "n.";
+            this.label2.Text = "Please drag on the region you wish to crop to.\r\nOr use \"Exact\" co-ordinates.\r\n\r\nOnce you have chosen your region you can\r\nhit \'Enter\' to apply the selected region.";
             // 
             // button1
             // 
@@ -65,7 +63,6 @@
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
             this.button1.Text = "Cancel";
-            this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
@@ -75,7 +72,6 @@
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 1;
             this.button2.Text = "Exact";
-            this.button2.UseVisualStyleBackColor = true;
             // 
             // button3
             // 
@@ -84,10 +80,9 @@
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 1;
             this.button3.Text = "Apply";
-            this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // CropTool
+            // CropToolWnd
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -98,7 +93,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "CropTool";
+            this.Name = "CropToolWnd";
             this.Text = "Crop Tool";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CropTool_FormClosing);
             this.ResumeLayout(false);
