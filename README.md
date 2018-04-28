@@ -32,7 +32,7 @@ Here are some bitmap tools the program has:
 - Bitmap Selection Tool - which allows you to drag a selection
 - Magic Wand Tool - which allows you to select an area with a certain colour in one click
 
-You don't have to use Bitmaps but if you have to (or want to for a certain effect) you can do so.
+You don't have to use Bitmaps but if you have to (or want to for a certain effect), you can do so.
 
 #### Advantages of bitmaps over vectors:
 
