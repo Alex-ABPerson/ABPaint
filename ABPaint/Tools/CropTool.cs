@@ -35,13 +35,12 @@ namespace ABPaint.Tools
 
         public override void Apply(Rectangle region)
         {
-            Program.MainForm.wnd.Close();
             // Do Stuff
         }
 
         public override void Cancel()
         {
-            Program.MainForm.wnd.Close();
+            // Do Stuff
         }
     }
 }

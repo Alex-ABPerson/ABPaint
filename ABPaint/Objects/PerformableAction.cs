@@ -36,11 +36,7 @@ namespace ABPaint.Objects
         CancelTool = 7,
 
         // Other
-
-        Cut = 8,
-        Copy = 9,
-        Paste = 10,
-        Fill = 11,
+        Fill = 8,
     }
 
     public struct PerformAction

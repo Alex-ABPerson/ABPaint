@@ -33,11 +33,12 @@ namespace ABPaint.Tools.Windows
         private void button3_Click(object sender, EventArgs e)
         {
             Core.HandleApply();
+            Close();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Core.CancelTool();
+            Close();
         }
 
         private void CropTool_FormClosing(object sender, FormClosingEventArgs e)

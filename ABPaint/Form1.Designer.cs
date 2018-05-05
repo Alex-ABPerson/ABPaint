@@ -78,7 +78,6 @@
             this.polygonTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cropToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.appcenter = new System.Windows.Forms.Panel();
-            this.canvaspre = new ABPaint.CanvasBox();
             this.welcomeScreen = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -107,6 +106,14 @@
             this.btnUline = new System.Windows.Forms.Button();
             this.propertiesLbl = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.movingRefresh = new System.Windows.Forms.Timer(this.components);
+            this.openFileDialogOPEN = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialogSAVE = new System.Windows.Forms.SaveFileDialog();
+            this.openFileDialogIMPORT = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialogEXPORT = new System.Windows.Forms.SaveFileDialog();
+            this.canvaspre = new ABPaint.CanvasBox();
             this.cl8 = new ABPaint.RightMenu.ColorBox();
             this.cl4 = new ABPaint.RightMenu.ColorBox();
             this.cl7 = new ABPaint.RightMenu.ColorBox();
@@ -115,13 +122,6 @@
             this.cl5 = new ABPaint.RightMenu.ColorBox();
             this.cl2 = new ABPaint.RightMenu.ColorBox();
             this.cl1 = new ABPaint.RightMenu.ColorBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.movingRefresh = new System.Windows.Forms.Timer(this.components);
-            this.openFileDialogOPEN = new System.Windows.Forms.OpenFileDialog();
-            this.saveFileDialogSAVE = new System.Windows.Forms.SaveFileDialog();
-            this.openFileDialogIMPORT = new System.Windows.Forms.OpenFileDialog();
-            this.saveFileDialogEXPORT = new System.Windows.Forms.SaveFileDialog();
             this.toolbox.SuspendLayout();
             this.toolCursorN.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timgCursorN)).BeginInit();
@@ -145,7 +145,6 @@
             this.panel4.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.appcenter.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).BeginInit();
             this.welcomeScreen.SuspendLayout();
             this.panel2.SuspendLayout();
             this.properties.SuspendLayout();
@@ -155,6 +154,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.clrNorm)).BeginInit();
             this.pnlFont.SuspendLayout();
             this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).BeginInit();
             this.SuspendLayout();
             // 
             // toolbox
@@ -459,7 +459,7 @@
             this.menuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(131, 41);
+            this.menuStrip1.Size = new System.Drawing.Size(223, 41);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -483,33 +483,36 @@
             // 
             this.newToolStripMenuItem.Image = global::ABPaint.Properties.Resources.NewImage;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.newToolStripMenuItem.Text = "New...";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(120, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Image = global::ABPaint.Properties.Resources.Open;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.openToolStripMenuItem.Text = "Open...";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(120, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Image = global::ABPaint.Properties.Resources.SaveIcon;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -517,20 +520,22 @@
             // 
             this.saveAsToolStripMenuItem.Image = global::ABPaint.Properties.Resources.SaveAsIcon;
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.S)));
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.saveAsToolStripMenuItem.Text = "Save As...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(120, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
             // 
             // importToolStripMenuItem
             // 
             this.importToolStripMenuItem.Image = global::ABPaint.Properties.Resources.Import;
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.importToolStripMenuItem.Text = "Import...";
             this.importToolStripMenuItem.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
             // 
@@ -538,7 +543,7 @@
             // 
             this.exportToolStripMenuItem.Image = global::ABPaint.Properties.Resources.Export;
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exportToolStripMenuItem.Text = "Export...";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
@@ -560,8 +565,7 @@
             // 
             this.cutToolStripMenuItem.Image = global::ABPaint.Properties.Resources.CutIcon;
             this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
-            this.cutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.cutToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.cutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.cutToolStripMenuItem.Text = "Cut";
             this.cutToolStripMenuItem.Click += new System.EventHandler(this.cutToolStripMenuItem_Click);
             // 
@@ -570,7 +574,7 @@
             this.copyToolStripMenuItem.Image = global::ABPaint.Properties.Resources.Copy;
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
             this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
@@ -579,34 +583,34 @@
             this.pasteToolStripMenuItem.Image = global::ABPaint.Properties.Resources.Paste;
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
             this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.pasteToolStripMenuItem.Text = "Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(141, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Image = global::ABPaint.Properties.Resources.TrashCan;
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
             this.deleteToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(141, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(149, 6);
             // 
             // redrawToolStripMenuItem
             // 
             this.redrawToolStripMenuItem.Image = global::ABPaint.Properties.Resources.RefreshIcon;
             this.redrawToolStripMenuItem.Name = "redrawToolStripMenuItem";
-            this.redrawToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.redrawToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.redrawToolStripMenuItem.Text = "Redraw";
             this.redrawToolStripMenuItem.Click += new System.EventHandler(this.redrawToolStripMenuItem_Click);
             // 
@@ -646,21 +650,6 @@
             this.appcenter.Size = new System.Drawing.Size(724, 471);
             this.appcenter.TabIndex = 3;
             this.appcenter.Click += new System.EventHandler(this.CanvasAnywhereClick);
-            // 
-            // canvaspre
-            // 
-            this.canvaspre.BackColor = System.Drawing.Color.Transparent;
-            this.canvaspre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.canvaspre.Location = new System.Drawing.Point(150, 54);
-            this.canvaspre.Name = "canvaspre";
-            this.canvaspre.Size = new System.Drawing.Size(426, 303);
-            this.canvaspre.TabIndex = 1;
-            this.canvaspre.TabStop = false;
-            this.canvaspre.Click += new System.EventHandler(this.CanvasAnywhereClick);
-            this.canvaspre.Paint += new System.Windows.Forms.PaintEventHandler(this.canvaspre_Paint);
-            this.canvaspre.MouseDown += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseDown);
-            this.canvaspre.MouseMove += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseMove);
-            this.canvaspre.MouseUp += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseUp);
             // 
             // welcomeScreen
             // 
@@ -986,6 +975,60 @@
             this.panel3.Size = new System.Drawing.Size(139, 117);
             this.panel3.TabIndex = 0;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(9, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(65, 25);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Color:";
+            // 
+            // movingRefresh
+            // 
+            this.movingRefresh.Interval = 10;
+            this.movingRefresh.Tick += new System.EventHandler(this.movingRefresh_Tick);
+            // 
+            // openFileDialogOPEN
+            // 
+            this.openFileDialogOPEN.FileName = "*";
+            this.openFileDialogOPEN.Filter = "ABPaint File (*.abpt)|*.abpt|All files|*.*";
+            this.openFileDialogOPEN.Title = "Open...";
+            // 
+            // saveFileDialogSAVE
+            // 
+            this.saveFileDialogSAVE.FileName = "*";
+            this.saveFileDialogSAVE.Filter = "ABPaint File (*.abpt)|*.abpt|All files|*.*";
+            this.saveFileDialogSAVE.Title = "Save...";
+            // 
+            // openFileDialogIMPORT
+            // 
+            this.openFileDialogIMPORT.FileName = "*";
+            this.openFileDialogIMPORT.Filter = resources.GetString("openFileDialogIMPORT.Filter");
+            this.openFileDialogIMPORT.Title = "Import...";
+            // 
+            // saveFileDialogEXPORT
+            // 
+            this.saveFileDialogEXPORT.FileName = "*";
+            this.saveFileDialogEXPORT.Filter = resources.GetString("saveFileDialogEXPORT.Filter");
+            this.saveFileDialogEXPORT.Title = "Export...";
+            // 
+            // canvaspre
+            // 
+            this.canvaspre.BackColor = System.Drawing.Color.Transparent;
+            this.canvaspre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.canvaspre.Location = new System.Drawing.Point(150, 54);
+            this.canvaspre.Name = "canvaspre";
+            this.canvaspre.Size = new System.Drawing.Size(426, 303);
+            this.canvaspre.TabIndex = 1;
+            this.canvaspre.TabStop = false;
+            this.canvaspre.Click += new System.EventHandler(this.CanvasAnywhereClick);
+            this.canvaspre.Paint += new System.Windows.Forms.PaintEventHandler(this.canvaspre_Paint);
+            this.canvaspre.MouseDown += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseDown);
+            this.canvaspre.MouseMove += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseMove);
+            this.canvaspre.MouseUp += new System.Windows.Forms.MouseEventHandler(this.canvaspre_MouseUp);
+            // 
             // cl8
             // 
             this.cl8.BackColor = System.Drawing.Color.Blue;
@@ -1058,45 +1101,6 @@
             this.cl1.TabIndex = 2;
             this.cl1.ToSelect = 1;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(9, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(65, 25);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Color:";
-            // 
-            // movingRefresh
-            // 
-            this.movingRefresh.Interval = 10;
-            this.movingRefresh.Tick += new System.EventHandler(this.movingRefresh_Tick);
-            // 
-            // openFileDialogOPEN
-            // 
-            this.openFileDialogOPEN.FileName = "*";
-            this.openFileDialogOPEN.Filter = "ABPaint File (*.abpt)|*.abpt|All files|*.*";
-            this.openFileDialogOPEN.Title = "Open...";
-            // 
-            // saveFileDialogSAVE
-            // 
-            this.saveFileDialogSAVE.FileName = "*";
-            this.saveFileDialogSAVE.Filter = "ABPaint File (*.abpt)|*.abpt|All files|*.*";
-            this.saveFileDialogSAVE.Title = "Save...";
-            // 
-            // openFileDialogIMPORT
-            // 
-            this.openFileDialogIMPORT.FileName = "*";
-            this.openFileDialogIMPORT.Filter = resources.GetString("openFileDialogIMPORT.Filter");
-            this.openFileDialogIMPORT.Title = "Import...";
-            // 
-            // saveFileDialogEXPORT
-            // 
-            this.saveFileDialogEXPORT.FileName = "*";
-            this.saveFileDialogEXPORT.Filter = resources.GetString("saveFileDialogEXPORT.Filter");
-            this.saveFileDialogEXPORT.Title = "Export...";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1141,7 +1145,6 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.appcenter.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).EndInit();
             this.welcomeScreen.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.properties.ResumeLayout(false);
@@ -1153,6 +1156,7 @@
             this.pnlFont.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.canvaspre)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -327,15 +327,6 @@ namespace ABPaint
                         case PerformableAction.UseTool:
                             tsk = new Task(() => { PerformUseTool(paction.Param1 as PowerTool); });
                             break;                    
-                        case PerformableAction.Cut:
-                            tsk = new Task(PerformCut);
-                            break;
-                        case PerformableAction.Copy:
-                            tsk = new Task(PerformCopy);
-                            break;
-                        case PerformableAction.Paste:
-                            tsk = new Task(PerformPaste);
-                            break;
                         case PerformableAction.Fill:
                             tsk = new Task(() => { PerformFill((Point)paction.Param1); });
                             break;
@@ -455,22 +446,7 @@ namespace ABPaint
                     HandleDelete();
 
                     break;
-                case Keys.X:
-                    if (Control.ModifierKeys == Keys.Control)
-                        HandleCut();
-
-                    break;
-                case Keys.C:
-                    if (Control.ModifierKeys == Keys.Control)
-                        HandleCopy();
-
-                    break;
-                case Keys.V:
-                    if (Control.ModifierKeys == Keys.Control)
-                        HandlePaste();
-
-                    break;
-                case Keys.Enter:
+                case Keys.Enter: // Apply PowerTool
                     HandleApply();
 
                     break;
@@ -605,13 +581,16 @@ namespace ABPaint
 
         public static void PerformCancelTool()
         {
-            if (CurrentTool.UseRegionDrag)
-                IsInDragRegion = false;
+            if (CurrentTool != null)
+            {
+                if (CurrentTool.UseRegionDrag)
+                    IsInDragRegion = false;
 
-            CurrentTool.Cancel();
-            CurrentTool = null;
+                CurrentTool.Cancel();
+                CurrentTool = null;
 
-            Program.MainForm.canvaspre.Invalidate();
+                Program.MainForm.canvaspre.Invalidate();
+            }
         }
 
         /// <summary>
@@ -662,20 +641,66 @@ namespace ABPaint
         }
 
         /// <summary>
+        /// Creates a new image.
+        /// </summary>
+        public static void HandleNew()
+        {
+            Sizer sz = new Sizer();
+            sz.StartSizer(true, new Size());
+            sz.ShowDialog();
+
+            if (!sz.Cancelled)
+            {
+                CurrentSave.ImageSize = sz.ReturnSize;
+
+                Program.MainForm.ReloadImage();
+
+                CurrentSave.ImageElements = new List<Element>();
+
+                PaintPreview();
+            }
+        }
+
+        public static void HandleOpen()
+        {
+            if (Program.MainForm.openFileDialogOPEN.ShowDialog() == DialogResult.OK)
+                LoadFile(Program.MainForm.openFileDialogOPEN.FileName);
+
+            Program.MainForm.ReloadImage();
+            PaintPreview();
+        }
+
+        public static void HandleSave()
+        {
+            if (string.IsNullOrEmpty(CurrentFile))
+            {
+                if (Program.MainForm.saveFileDialogSAVE.ShowDialog() == DialogResult.OK)
+                    SaveFile(Program.MainForm.saveFileDialogSAVE.FileName, true);
+            }
+            else
+                SaveFile(CurrentFile);
+
+            Program.MainForm.ReloadImage();
+            PaintPreview();
+        }
+
+        public static void HandleSaveAs()
+        {
+            if (Program.MainForm.saveFileDialogSAVE.ShowDialog() == DialogResult.OK)
+                SaveFile(Program.MainForm.saveFileDialogSAVE.FileName, true);
+
+            Program.MainForm.ReloadImage();
+            PaintPreview();
+        }
+
+        /// <summary>
         /// Cuts the SelectedElement.
         /// </summary>
         public static void HandleCut()
         {
-            ActionQueue.Enqueue(new PerformAction(PerformableAction.Cut));
-            ProcessQueueAsync();
-        }
+            HandleCopy();
 
-        public static void PerformCut()
-        {
-            PerformCopy();
-
-            CurrentSave.ImageElements.Remove(SelectedElement);
-            SelectedElement = null;
+            HandleDelete();
 
             Program.MainForm.canvaspre.Invalidate();
         }
@@ -685,12 +710,6 @@ namespace ABPaint
         /// </summary>
         public static void HandleCopy()
         {
-            ActionQueue.Enqueue(new PerformAction(PerformableAction.Copy));
-            ProcessQueueAsync();
-        }
-
-        public static void PerformCopy()
-        {
             Clipboard.SetDataObject("ABPELE" + ABJson.GDISupport.JsonSerializer.Serialize("", SelectedElement, ABJson.GDISupport.JsonFormatting.Compact, 0, true).TrimEnd(','), true);
         }
 
@@ -698,12 +717,6 @@ namespace ABPaint
         /// Pastes the SelectedElement.
         /// </summary>
         public static void HandlePaste()
-        {
-            ActionQueue.Enqueue(new PerformAction(PerformableAction.Paste));
-            ProcessQueueAsync();
-        }
-
-        public static void PerformPaste()
         {
             IDataObject data = Clipboard.GetDataObject();
 

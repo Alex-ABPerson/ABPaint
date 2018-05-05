@@ -969,38 +969,17 @@ namespace ABPaint
         #region MenuStrip
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Sizer sz = new Sizer();
-            sz.StartSizer(true, new Size());
-            sz.ShowDialog();
-
-            if (!sz.Cancelled)
-            {
-                CurrentSave.ImageSize = sz.ReturnSize;
-
-                ReloadImage();
-
-                CurrentSave.ImageElements = new List<Element>();
-
-                PaintPreview();
-            }
+            HandleNew();
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (openFileDialogOPEN.ShowDialog() == DialogResult.OK)
-                LoadFile(openFileDialogOPEN.FileName);
-
-            ReloadImage();
-            PaintPreview();
+            HandleOpen();
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (saveFileDialogSAVE.ShowDialog() == DialogResult.OK)
-                SaveFile(saveFileDialogSAVE.FileName, true);
-
-            ReloadImage();
-            PaintPreview();
+            HandleSaveAs();
         }
 
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1087,7 +1066,7 @@ namespace ABPaint
                 if (SelectedElement is Text txt)
                     try
                     {
-                        txt.Fnt = new Font(txt.Fnt.FontFamily, (float.Parse(cmbSize.Text, CultureInfo.CurrentCulture) > 999) ? float.Parse(cmbSize.Text, CultureInfo.CurrentCulture) : 12, txt.Fnt.Style);
+                        txt.Fnt = new Font(txt.Fnt.FontFamily, (float.Parse(cmbSize.GetItemText(cmbSize.SelectedItem), CultureInfo.CurrentCulture) > 999) ? float.Parse(cmbSize.GetItemText(cmbSize.SelectedItem), CultureInfo.CurrentCulture) : 12, txt.Fnt.Style);
                         SizeF realSize = Elements.Text.MeasureText(txt.MainText, txt.Fnt);
                         SelectedElement.Width = Convert.ToInt32(realSize.Width);
                         SelectedElement.Height = Convert.ToInt32(realSize.Height);
@@ -1096,7 +1075,7 @@ namespace ABPaint
                     {
                         Console.WriteLine(ex.Message);
                         cmbSize.Text = "12";
-                        txt.Fnt = new Font(txt.Fnt.FontFamily, float.Parse(cmbSize.Text, CultureInfo.CurrentCulture), txt.Fnt.Style);
+                        txt.Fnt = new Font(txt.Fnt.FontFamily, float.Parse(cmbSize.GetItemText(cmbSize.SelectedItem), CultureInfo.CurrentCulture), txt.Fnt.Style);
                         SizeF realSize = Elements.Text.MeasureText(txt.MainText, txt.Fnt);
                         SelectedElement.Width = Convert.ToInt32(realSize.Width);
                         SelectedElement.Height = Convert.ToInt32(realSize.Height);

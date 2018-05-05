@@ -87,7 +87,6 @@ namespace ABPaint.Tools.Backend
 
         public static void SaveFile(string path, bool newFile = false)
         {
-
             if (File.Exists(path))
                 SaveFilePrivate(path);
             else if (newFile)

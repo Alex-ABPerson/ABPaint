@@ -50,7 +50,8 @@ namespace ABPaint.Elements
 
         public override void Resize()
         {
-            MainImage = ResizeImage.Resize(MainImage, new Size(Width, Height));
+            //MainImage = ResizeImage.Resize(MainImage, new Size(Width, Height));
+            // TODO: Add Resizing On Pencil, Brush, Fill and Images!
         }
 
         public override void FinishResize()
