@@ -442,10 +442,10 @@ namespace ABPaint
         {
             switch (key)
             {
-                case Keys.Delete:
-                    HandleDelete();
+                //case Keys.Delete:
+                //    HandleDelete();
 
-                    break;
+                //    break;
                 case Keys.Enter: // Apply PowerTool
                     HandleApply();
 
@@ -638,6 +638,8 @@ namespace ABPaint
 
                     Program.MainForm.canvaspre.Invalidate();
                 }
+
+            PaintPreview();
         }
 
         /// <summary>

@@ -855,6 +855,7 @@ namespace ABPaint
             if (SelectedElement != null)
                 ((Text)SelectedElement).MainText = txtTText.Text;
 
+            HandleChangeTextSize();
             PaintPreview();
         }
 
@@ -1066,16 +1067,16 @@ namespace ABPaint
                 if (SelectedElement is Text txt)
                     try
                     {
-                        txt.Fnt = new Font(txt.Fnt.FontFamily, (float.Parse(cmbSize.GetItemText(cmbSize.SelectedItem), CultureInfo.CurrentCulture) > 999) ? float.Parse(cmbSize.GetItemText(cmbSize.SelectedItem), CultureInfo.CurrentCulture) : 12, txt.Fnt.Style);
+                        float fntSize = float.Parse(cmbSize.Text, CultureInfo.CurrentCulture);
+                        txt.Fnt = new Font(txt.Fnt.FontFamily, (fntSize < 999) ? fntSize : 12, txt.Fnt.Style);
                         SizeF realSize = Elements.Text.MeasureText(txt.MainText, txt.Fnt);
-                        SelectedElement.Width = Convert.ToInt32(realSize.Width);
-                        SelectedElement.Height = Convert.ToInt32(realSize.Height);
+                        SelectedElement.Width = Convert.ToInt32(realSize.Width + fntSize);
+                        SelectedElement.Height = Convert.ToInt32(realSize.Height + fntSize);
                     }
                     catch (ArgumentException ex)
                     {
                         Console.WriteLine(ex.Message);
-                        cmbSize.Text = "12";
-                        txt.Fnt = new Font(txt.Fnt.FontFamily, float.Parse(cmbSize.GetItemText(cmbSize.SelectedItem), CultureInfo.CurrentCulture), txt.Fnt.Style);
+                        txt.Fnt = new Font(txt.Fnt.FontFamily, 12, txt.Fnt.Style);
                         SizeF realSize = Elements.Text.MeasureText(txt.MainText, txt.Fnt);
                         SelectedElement.Width = Convert.ToInt32(realSize.Width);
                         SelectedElement.Height = Convert.ToInt32(realSize.Height);
