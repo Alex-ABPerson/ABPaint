@@ -59,6 +59,9 @@
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ABJson.GDISupport, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -302,6 +305,9 @@
   <ItemGroup>
     <Content Include="logo_small.ico" />
     <Content Include="Resources\new_graphics\Copy.png" />
+    <Content Include="ABJson.GDISupport.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Resources\new_graphics\Crop.png" />
     <Content Include="Resources\new_graphics\CutIcon.png" />
     <Content Include="Resources\new_graphics\EllipseIcon.png" />

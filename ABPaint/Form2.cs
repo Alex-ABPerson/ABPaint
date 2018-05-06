@@ -54,5 +54,10 @@ namespace ABPaint
             e.Graphics.DrawPolygon(new Pen(Color.Black, 3), pointArray);
             e.Graphics.DrawPolygon(new Pen(Color.Red), pointArray);
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Hello world!");
+        }
     }
 }

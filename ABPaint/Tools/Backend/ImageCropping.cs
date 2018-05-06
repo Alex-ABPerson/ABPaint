@@ -35,9 +35,8 @@ namespace ABPaint.Tools.Backend
         {
             Rectangle crop = new Rectangle(x, y, width, height);
 
-            if (crop.Width == 0)
-                crop.Width = 1;
-            if (crop.Height == 0) crop.Height = 1;
+            if (crop.Width <= 0) crop.Width = 1;
+            if (crop.Height <= 0) crop.Height = 1;
 
             var bmp = new Bitmap(crop.Width, crop.Height);
             using (var gr = Graphics.FromImage(bmp))

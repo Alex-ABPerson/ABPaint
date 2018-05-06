@@ -63,5 +63,6 @@ C:\Users\alexb\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\bin\Debug\ABPaint.ex
 C:\Users\alexb\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\bin\Debug\ABPaint.pdb
 C:\Users\alexb\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.csproj.CoreCompileInputs.cache
 C:\Users\alexb\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.csprojResolveAssemblyReference.cache
-I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.csprojResolveAssemblyReference.cache
 I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.Tools.Windows.CropToolWnd.resources
+I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\obj\Debug\ABPaint.csprojResolveAssemblyReference.cache
+I:\Desktop\Main Code\ABSoftware\ABPaint\ABPaint\bin\Debug\ABJson.GDISupport.dll
