@@ -1,9 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABPaint", "ABPaint\ABPaint.csproj", "{4D7B45E0-4987-43A6-BAAB-0019FE278208}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABPaint.UI", "ABPaint\ABPaint.UI.csproj", "{4D7B45E0-4987-43A6-BAAB-0019FE278208}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABPaint.Engine", "ABPaint.Engine\ABPaint.Engine.csproj", "{DE02A479-F456-4B6F-AB72-AF0E09726EA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABPaint.Objects", "ABPaint.Objects\ABPaint.Objects.csproj", "{307ADF7E-D27B-4101-BF56-C05BCE0956A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABPaint.Core", "Core\ABPaint.Core.csproj", "{9B3BDC4A-E9BB-4D5E-B5B2-F29720030AB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABPaint.Objects.Elements", "ABPaint.Objects.Elements\ABPaint.Objects.Elements.csproj", "{D44D5061-BC35-4E60-BB75-187E7EFD0CB5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +23,27 @@ Global
 		{4D7B45E0-4987-43A6-BAAB-0019FE278208}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D7B45E0-4987-43A6-BAAB-0019FE278208}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D7B45E0-4987-43A6-BAAB-0019FE278208}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE02A479-F456-4B6F-AB72-AF0E09726EA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE02A479-F456-4B6F-AB72-AF0E09726EA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE02A479-F456-4B6F-AB72-AF0E09726EA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE02A479-F456-4B6F-AB72-AF0E09726EA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{307ADF7E-D27B-4101-BF56-C05BCE0956A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{307ADF7E-D27B-4101-BF56-C05BCE0956A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{307ADF7E-D27B-4101-BF56-C05BCE0956A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{307ADF7E-D27B-4101-BF56-C05BCE0956A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B3BDC4A-E9BB-4D5E-B5B2-F29720030AB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B3BDC4A-E9BB-4D5E-B5B2-F29720030AB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B3BDC4A-E9BB-4D5E-B5B2-F29720030AB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B3BDC4A-E9BB-4D5E-B5B2-F29720030AB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D44D5061-BC35-4E60-BB75-187E7EFD0CB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D44D5061-BC35-4E60-BB75-187E7EFD0CB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D44D5061-BC35-4E60-BB75-187E7EFD0CB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D44D5061-BC35-4E60-BB75-187E7EFD0CB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {68D1E2D9-2491-40EA-B273-9A5CB0D91BB7}
 	EndGlobalSection
 EndGlobal

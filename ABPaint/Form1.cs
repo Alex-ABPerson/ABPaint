@@ -11,18 +11,17 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using ABPaint.Elements;
-using ABPaint.Objects;
-using ABPaint.Tools.Backend;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-
-using static ABPaint.Tools.Backend.SaveSystem;
-using static ABPaint.Core;
 using System.Globalization;
-using ABPaint.Tools.Windows;
+using ABPaint.Objects;
+using ABPaint.Objects.Elements;
+using ABPaint.Engine;
+
+using static ABPaint.Engine.SaveSystem;
+using static ABPaint.Core.Core;
 
 namespace ABPaint
 {
@@ -30,7 +29,6 @@ namespace ABPaint
     {
         private Bitmap _backBuffer;
         private bool paintLock;
-        public CropToolWnd wnd; // Temp thing
 
         public Bitmap BackBuffer
         { 
@@ -52,10 +50,6 @@ namespace ABPaint
             //    HandleKeyPress(e.KeyCode); });
 
             ReloadImage();
-
-            CanvaspreG = canvaspre.CreateGraphics();
-            BackBufferG = Graphics.FromImage(BackBuffer);
-
             canvaspre.Image = new Bitmap(CurrentSave.ImageSize.Width, CurrentSave.ImageSize.Height);
         }
         #region General Code
@@ -81,7 +75,7 @@ namespace ABPaint
             }
 
             CurrentSave.ImageElements = new List<Element>();
-            EndImage = new Bitmap(CurrentSave.ImageSize.Width, CurrentSave.ImageSize.Height);
+            Core.Core.EndImage = new Bitmap(CurrentSave.ImageSize.Width, CurrentSave.ImageSize.Height);
         }
 
         public void SelectTool(ref PictureBox toSelect)
@@ -265,10 +259,10 @@ namespace ABPaint
 
             canvaspre.Invalidate();
 
-            if (MagnificationLevel > OldMagnificationLevel)
-                appcenter.AutoScrollOffset = new Point((oldScrollOffset.X * (MagnificationLevel - OldMagnificationLevel)) + (25 * MagnificationLevel), (oldScrollOffset.Y * (MagnificationLevel - OldMagnificationLevel)) + (25 * MagnificationLevel));
+            if (MagnificationLevel > LastMagnificationLevel)
+                appcenter.AutoScrollOffset = new Point((oldScrollOffset.X * (MagnificationLevel - LastMagnificationLevel)) + (25 * MagnificationLevel), (oldScrollOffset.Y * (MagnificationLevel - LastMagnificationLevel)) + (25 * MagnificationLevel));
             else
-                appcenter.AutoScrollOffset = new Point((oldScrollOffset.X / (MagnificationLevel - OldMagnificationLevel)) + (25 * MagnificationLevel), (oldScrollOffset.Y / (MagnificationLevel - OldMagnificationLevel)) + (25 * MagnificationLevel));
+                appcenter.AutoScrollOffset = new Point((oldScrollOffset.X / (MagnificationLevel - LastMagnificationLevel)) + (25 * MagnificationLevel), (oldScrollOffset.Y / (MagnificationLevel - LastMagnificationLevel)) + (25 * MagnificationLevel));
 
             appcenter.AutoScrollMinSize = new Size(canvaspre.Width + 50, canvaspre.Height + 50);
 
@@ -524,7 +518,7 @@ namespace ABPaint
                     if (CurrentDrawingElement is Pencil)
                         e.Graphics.DrawPath(new Pen(clrNorm.BackColor), Grph);
 
-                    if (CurrentDrawingElement is Elements.Brush asBrush)
+                    if (CurrentDrawingElement is Objects.Elements.Brush asBrush)
                         BrushDrawing.ChangeGraphicsColor(asBrush.BrushPoint, e.Graphics, clrNorm.BackColor);
 
                     if (CurrentDrawingElement is RectangleE asRectangle)
@@ -625,7 +619,7 @@ namespace ABPaint
                         }
                         else
                         {
-                            if (!(SelectedElement is Pencil) && !(SelectedElement is Elements.Brush) && !(SelectedElement is Fill))
+                            if (!(SelectedElement is Pencil) && !(SelectedElement is Objects.Elements.Brush) && !(SelectedElement is Fill))
                             {
                                 if (CornerSelected == Corner.TopLeft) e.Graphics.FillEllipse(new SolidBrush(Color.Gray), SelectedElement.X - 10, SelectedElement.Y - 10, 20, 20);
                                 else e.Graphics.DrawEllipse(new Pen(Color.Gray), SelectedElement.X - 10, SelectedElement.Y - 10, 20, 20);
@@ -770,11 +764,11 @@ namespace ABPaint
 
             if (SelectedElement != null)
             {
-                if (SelectedElement is Elements.Brush brush) brush.BrushColor = clrNorm.BackColor;
-                if (SelectedElement is Elements.Pencil pencil) pencil.PencilColor = clrNorm.BackColor;
-                if (SelectedElement is Elements.Line line) line.Color = clrNorm.BackColor;
-                if (SelectedElement is Elements.Fill fill) fill.FillColor = clrNorm.BackColor;
-                if (SelectedElement is Elements.Text text) text.Clr = clrNorm.BackColor;
+                if (SelectedElement is Objects.Elements.Brush brush) brush.BrushColor = clrNorm.BackColor;
+                if (SelectedElement is Objects.Elements.Pencil pencil) pencil.PencilColor = clrNorm.BackColor;
+                if (SelectedElement is Objects.Elements.Line line) line.Color = clrNorm.BackColor;
+                if (SelectedElement is Objects.Elements.Fill fill) fill.FillColor = clrNorm.BackColor;
+                if (SelectedElement is Objects.Elements.Text text) text.Clr = clrNorm.BackColor;
 
                PaintPreview();
             }
@@ -949,9 +943,10 @@ namespace ABPaint
 
             if (SelectedElement != null)
             {
-                if (SelectedElement is Elements.Brush asBrush) asBrush.Width = (txtBThick.Text.Length > 0) ? int.Parse(txtBThick.Text, CultureInfo.CurrentCulture) : 0;
-                if (SelectedElement is Line asLine)
+                if (SelectedElement is Objects.Elements.Brush asBrush) asBrush.Width = (txtBThick.Text.Length > 0) ? int.Parse(txtBThick.Text, CultureInfo.CurrentCulture) : 0;
+                if (SelectedElement is Line)
                 {
+                    dynamic asLine = SelectedElement as dynamic;
                     asLine.Thickness = (txtBThick.Text.Length > 0) ? int.Parse(txtBThick.Text, CultureInfo.CurrentCulture) : 0;
                     
                     LineResizing.Resize(ref asLine);
@@ -1069,7 +1064,7 @@ namespace ABPaint
                     {
                         float fntSize = float.Parse(cmbSize.Text, CultureInfo.CurrentCulture);
                         txt.Fnt = new Font(txt.Fnt.FontFamily, (fntSize < 999) ? fntSize : 12, txt.Fnt.Style);
-                        SizeF realSize = Elements.Text.MeasureText(txt.MainText, txt.Fnt);
+                        SizeF realSize = Objects.Elements.Text.MeasureText(txt.MainText, txt.Fnt);
                         SelectedElement.Width = Convert.ToInt32(realSize.Width + fntSize);
                         SelectedElement.Height = Convert.ToInt32(realSize.Height + fntSize);
                     }
@@ -1077,7 +1072,7 @@ namespace ABPaint
                     {
                         Console.WriteLine(ex.Message);
                         txt.Fnt = new Font(txt.Fnt.FontFamily, 12, txt.Fnt.Style);
-                        SizeF realSize = Elements.Text.MeasureText(txt.MainText, txt.Fnt);
+                        SizeF realSize = Objects.Elements.Text.MeasureText(txt.MainText, txt.Fnt);
                         SelectedElement.Width = Convert.ToInt32(realSize.Width);
                         SelectedElement.Height = Convert.ToInt32(realSize.Height);
                     }

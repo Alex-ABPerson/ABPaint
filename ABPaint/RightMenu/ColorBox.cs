@@ -11,15 +11,10 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
+using static ABPaint.Core.Core;
 
 namespace ABPaint.RightMenu
 {
@@ -35,7 +30,7 @@ namespace ABPaint.RightMenu
         private void ColorBox_Paint(object sender, PaintEventArgs e)
         {
             if (Program.MainForm != null)
-                if (Core.SelectedPalette == ToSelect)
+                if (SelectedPalette == ToSelect)
                 {
                     // Draw the outline
 
@@ -53,7 +48,7 @@ namespace ABPaint.RightMenu
         private void ColorBox_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
-                Core.SelectedPalette = ToSelect;
+                SelectedPalette = ToSelect;
             else
             {
                 if (Program.MainForm.colorDialog1.ShowDialog() == DialogResult.OK)

@@ -11,11 +11,6 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ABPaint
@@ -27,7 +22,7 @@ namespace ABPaint
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
             e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-            e.Graphics.ScaleTransform(Core.MagnificationLevel, Core.MagnificationLevel); // Transform anything drawn to the zoom!
+            e.Graphics.ScaleTransform(Core.Core.MagnificationLevel, Core.Core.MagnificationLevel); // Transform anything drawn to the zoom!
             
             base.OnPaint(e);
         }

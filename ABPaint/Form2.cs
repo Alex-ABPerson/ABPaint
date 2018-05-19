@@ -11,7 +11,6 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using ABPaint.Tools.Backend;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
