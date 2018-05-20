@@ -4,12 +4,12 @@ Welcome! These are the rules of the Quality Control Program of all of ABSoftware
 
 Code that doesn't follow these rules, will not be accepted. This was added because the code base of ABPaint has become unmanageable and has to change. For now, all the rules will be listed here, until they can be transferred to the website.
 
-Here is a summary of all the rules, these are explained in more depth later:
+Here is a summary of all the rules, these are explained in more depth below:
 - Always use "var" everywhere possible.
 - Always use reverse logic. Reverse logic must have the "return" on a new line to make it clear that it is reverse logic (single-line "if" is fine everywhere else).
 - Every one or two lines ***must*** be commented - you cannot have three lines on their own without any comments.
 - In Extension, All methods ***must*** have at least one comment - and must be documented (with a \<summary>)
-- When defining an object, ***always*** use the "object initialiser syntax" (explained later)
+- When defining an object, ***always*** use the "object initialiser syntax" (explained below)
 - Always use "!bool" or "bool", never use "== true".
 - Don't use C# Type Names.
 - Use PascalCasing and camelCasing when needed.
@@ -195,6 +195,6 @@ Commits ***must*** be titled using a certain rule. You should be able to take `W
 
 This means that a name like `Added CropTool` is not good enough. You get `When applied this will Added CropTool`, which doesn't make any sense. Instead, you should say: `Add CropTool`, now it makes sense with `When applied this will`.
 
-### End
+-------
 
 There you go! That's it, alright, ***now*** you are ready to start contributing to ABSoftware! As long as you follow these rules, your code should be clean, clear and readable

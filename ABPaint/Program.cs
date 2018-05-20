@@ -25,10 +25,17 @@ namespace ABPaint
         [STAThread]
         static void Main()
         {
+            // General WinForms code
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            // Initialize the core
+            Core.Core.InitCore();
+
+            // Store the main form in a variable for easy access.
             MainForm = new Form1();
+
+            // Run the form
             Application.Run(MainForm);
         }
     }

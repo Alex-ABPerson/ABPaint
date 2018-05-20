@@ -54,17 +54,17 @@ namespace ABPaint.Core
         public static event ABPaintStartRapidRedrawEventHandler OnStartRapidRedraw = () => { };
         public static event ABPaintStopRapidRedrawEventHandler OnStopRapidRedraw = () => { };
         public static event ABPaintChangePropertiesEventHandler OnChangeProperties = (title, showFColor, showBColor, showColor, showBWidth, showThickness, showText, objectColor, borderColor, text, fnt) => { };
-
         #endregion
 
+        // All the locks within the program
         #region Locks
-        
         public static bool MouseDownLock; // A lock for the MouseDown - stops you from triggering MouseDown twice while it's in progress.
         public static bool MouseMoveLock; // A lock for the MouseMove - stops you from triggering MouseMove twice while it's in progress.
         public static bool MouseUpLock; // A lock for the MouseUp - stops you from triggering MouseUp twice while it's in progress.
         private static bool queueLock; // A lock for the queue - stops the queue from being looped through twice at the same time
         private static bool editLock; // A lock for anything that modifies the ImageElements. Stops it from being modified while looping etc.
         #endregion
+
         // All of the main variables go below, I recommend you hide them.
         #region Main Variables
         private static Bitmap endimg; // Just because you have to...
@@ -315,16 +315,16 @@ namespace ABPaint.Core
 
         // General Properties
         public static int BorderSize = 10;
-        public static int Thickness = 10;
+        public static int Thickness = 20;
 
         // Text
         public static string CurrentText;
         public static string CurrentTextFont;
         public static float CurrentTextSize;
 
-        public static Color MainColor;
-        public static Color BorderColor;
-        public static Color FillColor;
+        public static Color MainColor = Color.Black;
+        public static Color BorderColor = Color.Black;
+        public static Color FillColor = Color.Black;
         #endregion
 
         /// <summary>
@@ -332,9 +332,11 @@ namespace ABPaint.Core
         /// </summary>
         public static void InitCore()
         {
-            // SaveSystem can't access the elements and so the Core helps by adding some code that runs when importing an image.
+            // SaveSystem can't access the elements and so the Core helps by adding some code that runs when importing/exporting an image.
             ImageImported += (path) =>
             {
+                // TODO: MAKE ALL CODE PART OF QUALITY CODE PROGRAM
+                // Create a new image created from the data imported from a file
                 ImageE newElement = new ImageE(ImportData(path));
 
                 newElement.Width = newElement.MainImage.Size.Width;
@@ -1403,7 +1405,7 @@ namespace ABPaint.Core
                             CurrentDrawingElement.Height = (DrawingMax.Y - DrawingMin.Y) + Thickness;
 
                             asBrush.BrushPoint = ImageCropping.CropImage(asBrush.BrushPoint, x, y, DrawingMax.X + Thickness, DrawingMax.Y + Thickness);
-                            asBrush.BrushColor = BorderColor;
+                            asBrush.BrushColor = MainColor;
                         }
 
                         // Rectangle + Ellipse

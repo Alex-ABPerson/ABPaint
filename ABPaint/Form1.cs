@@ -42,20 +42,91 @@ namespace ABPaint
 
         public Form1()
         {
+            // Initialize The UI
             InitializeComponent();
 
-            //canvaspre.PreviewKeyDown += new PreviewKeyDownEventHandler((sender, e) => {
-            //    HandleKeyPress(e.KeyCode); });
-            //this.KeyDown += new KeyEventHandler((sender, e) => {
-            //    HandleKeyPress(e.KeyCode); });
-
+            // Replace the canvas
             ReloadImage();
+
+            // Set the image on the canvas to a blank image.
             canvaspre.Image = new Bitmap(CurrentSave.ImageSize.Width, CurrentSave.ImageSize.Height);
+
+            // Add the UI code for creating a new image
+            OnNewImage += () =>
+            {
+                // Open the sizer window
+                Sizer wndSizer = new Sizer();
+                wndSizer.StartSizer(true, CurrentSave.ImageSize);
+
+                // Don't bother is the sizer was cancelled.
+                if (wndSizer.Cancelled)
+                    return;
+
+                // Reset all the image elements
+                CurrentSave.ImageElements = new List<Element>();
+
+                // Change the size
+                CurrentSave.ImageSize = wndSizer.ReturnSize;
+            };
+
+            // Add the UI code for opening an image
+            OnOpenImage += () =>
+            {
+                // Open the Open File Dialog Box, and if it managed to select a file, load it.
+                if (openFileDialogOPEN.ShowDialog() == DialogResult.OK)
+                    LoadFile(openFileDialogOPEN.FileName);
+            };
+
+            // Add the UI code for saving an image
+            OnSaveImage += () =>
+            {
+                // Check if the current string is null
+                if (string.IsNullOrEmpty(CurrentFile))
+                {
+                    // Execute the code for when saving an image as (found below)
+                    HandleSaveAs();
+                }
+                else
+                    SaveFile(CurrentFile);
+            };
+
+            // Add the UI code for saving an image as...
+            OnSaveAsImage += () =>
+            {
+                // Open the Save File Dialog Box, and if it managed to select a file, load it.
+                if (saveFileDialogSAVE.ShowDialog() == DialogResult.OK)
+                    SaveFile(saveFileDialogSAVE.FileName);
+            };
+
+            // Add the UI code for scrolling
+            OnScrollChanged += () =>
+            {
+                // Set the location of the current scroll point to the correct location
+                appcenter.HorizontalScroll.Value = ScrollLeft;
+                appcenter.VerticalScroll.Value = ScrollTop;
+
+                // Update the maximum locations of the current scroll point
+                ScrollLeftMax = appcenter.HorizontalScroll.Maximum;
+                ScrollTopMax = appcenter.VerticalScroll.Maximum;
+            };
+
+            // Add the UI code for refreshing the preview
+            OnRefreshPreview += () => canvaspre.Image = EndImage;
+
+            // Add the UI code for starting "RapidRedraw"
+            OnStartRapidRedraw += () => movingRefresh.Start();
+
+            // Add the UI code for stopping "RapidRedraw"
+            OnStopRapidRedraw += () => movingRefresh.Stop();
+
+            // Add the UI code for changing the properties
+            OnChangeProperties += (title, showFColor, showBColor, showColor, showBWidth, showThickness, showText, objectColor, borderColor, text, fnt) => ShowProperties(title, showFColor, showBColor, showColor, showBWidth, showThickness, showText, objectColor, borderColor, text, fnt);
         }
         #region General Code
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // Allows for touch-screen support
             System.Windows.Automation.AutomationElement.FromHandle(Handle);
 
             properties.Hide();
@@ -761,14 +832,15 @@ namespace ABPaint
         private void clrNorm_MouseClick(object sender, MouseEventArgs e)
         {
             clrNorm.BackColor = GetCurrentColor();
+            MainColor = clrNorm.BackColor;
 
             if (SelectedElement != null)
             {
                 if (SelectedElement is Objects.Elements.Brush brush) brush.BrushColor = clrNorm.BackColor;
-                if (SelectedElement is Objects.Elements.Pencil pencil) pencil.PencilColor = clrNorm.BackColor;
-                if (SelectedElement is Objects.Elements.Line line) line.Color = clrNorm.BackColor;
-                if (SelectedElement is Objects.Elements.Fill fill) fill.FillColor = clrNorm.BackColor;
-                if (SelectedElement is Objects.Elements.Text text) text.Clr = clrNorm.BackColor;
+                if (SelectedElement is Pencil pencil) pencil.PencilColor = clrNorm.BackColor;
+                if (SelectedElement is Line line) line.Color = clrNorm.BackColor;
+                if (SelectedElement is Fill fill) fill.FillColor = clrNorm.BackColor;
+                if (SelectedElement is Text text) text.Clr = clrNorm.BackColor;
 
                PaintPreview();
             }
@@ -777,6 +849,7 @@ namespace ABPaint
         private void clrFill_MouseClick(object sender, MouseEventArgs e)
         {
             clrFill.BackColor = GetCurrentColor();
+            FillColor = clrFill.BackColor;
 
             if (SelectedElement != null)
             {
@@ -790,6 +863,7 @@ namespace ABPaint
         private void clrBord_MouseClick(object sender, MouseEventArgs e)
         {
             clrBord.BackColor = GetCurrentColor();
+            BorderColor = clrBord.BackColor;
 
             if (SelectedElement != null)
             {
@@ -805,10 +879,12 @@ namespace ABPaint
             if (string.IsNullOrEmpty(txtBWidth.Text))
                 txtBWidth.Text = "0";
 
+            BorderSize = (txtBWidth.Text.Length > 0) ? int.Parse(txtBWidth.Text, CultureInfo.CurrentCulture) : 0;
+
             if (SelectedElement != null)
             {
-                if (SelectedElement is RectangleE rect) rect.BorderSize = (txtBWidth.Text.Length > 0) ? int.Parse(txtBWidth.Text, CultureInfo.CurrentCulture) : 0;
-                if (SelectedElement is Ellipse elli) elli.BorderSize = (txtBWidth.Text.Length > 0) ? int.Parse(txtBWidth.Text, CultureInfo.CurrentCulture) : 0;
+                if (SelectedElement is RectangleE rect) rect.BorderSize = BorderSize;
+                if (SelectedElement is Ellipse elli) elli.BorderSize = BorderSize;
 
                 PaintPreview();
             }
@@ -846,9 +922,12 @@ namespace ABPaint
 
         private void txtTText_TextChanged(object sender, EventArgs e)
         {
+            CurrentText = txtTText.Text;
+
             if (SelectedElement != null)
                 ((Text)SelectedElement).MainText = txtTText.Text;
 
+            
             HandleChangeTextSize();
             PaintPreview();
         }
@@ -927,6 +1006,8 @@ namespace ABPaint
                         txt.Fnt = new Font(cmbFont.Text, txt.Fnt.Size, txt.Fnt.Style);
                         Console.WriteLine("AN EXCEPTION OCCURED: " + ex.Message);
                     }
+
+            CurrentTextFont = cmbFont.Text;
 
             PaintPreview();
         }
@@ -1058,15 +1139,17 @@ namespace ABPaint
 
         public void HandleChangeTextSize()
         {
+            CurrentTextSize = float.Parse(cmbSize.Text, CultureInfo.CurrentCulture);
+            CurrentTextSize = (CurrentTextSize < 999) ? CurrentTextSize : 12;
+
             if (SelectedElement != null)
                 if (SelectedElement is Text txt)
                     try
                     {
-                        float fntSize = float.Parse(cmbSize.Text, CultureInfo.CurrentCulture);
-                        txt.Fnt = new Font(txt.Fnt.FontFamily, (fntSize < 999) ? fntSize : 12, txt.Fnt.Style);
+                        txt.Fnt = new Font(txt.Fnt.FontFamily, CurrentTextSize, txt.Fnt.Style);
                         SizeF realSize = Objects.Elements.Text.MeasureText(txt.MainText, txt.Fnt);
-                        SelectedElement.Width = Convert.ToInt32(realSize.Width + fntSize);
-                        SelectedElement.Height = Convert.ToInt32(realSize.Height + fntSize);
+                        SelectedElement.Width = Convert.ToInt32(realSize.Width + CurrentTextSize);
+                        SelectedElement.Height = Convert.ToInt32(realSize.Height + CurrentTextSize);
                     }
                     catch (ArgumentException ex)
                     {
@@ -1076,7 +1159,6 @@ namespace ABPaint
                         SelectedElement.Width = Convert.ToInt32(realSize.Width);
                         SelectedElement.Height = Convert.ToInt32(realSize.Height);
                     }
-
             PaintPreview();
         }
     }
