@@ -1,8 +1,6 @@
 # Testing
 
-
-
-This is a guide on how to test **ABPaint**. Very commonly, **ABPaint** gets tested slightly... however... sometiems, it isn't tested enough and certain things fail to be tested.
+This is a guide on how to test **ABPaint**. Very commonly, **ABPaint** gets tested slightly... however... sometimes, it isn't tested enough and certain things fail to be tested - resulting in a very buggy release.
 
 Here are is the summary of things that should be tested when testing **ABPaint**:
 
@@ -16,6 +14,7 @@ Here are is the summary of things that should be tested when testing **ABPaint**
 - **New Image** - Make sure you can create a new image.
 - **Opening/Saving** - The Open/Save/Save As should all be tested.
 - **Importing/Exporting** - Importing and exporting must be tested and the final result of the export must also be tested.
+- **Zooming** - You need to make sure that you can zoom in and out, without any bugs.
 - **Cut/Copy/Paste** - Make sure you can copy/paste (and cut)
 - **Keyboard Shortcuts** - Make sure that keyboard shortcuts work.
 
@@ -46,6 +45,34 @@ It is also important to to make sure ***creating a new image*** works. You shoul
 
 ### Clipboard
 
-Make sure you can copy/paste elements. If you go to Edit -> Copy, the element should be copied into the clipboard. And make sure that you can paste the element back in. Also, make sure you can paste it into an external program - it should paste as an image.
+Make sure you can copy/paste elements. If you go to <kbd>Edit -> Copy</kbd>, the element should be copied into the clipboard. And make sure that you can paste the element back in. Also, make sure you can paste it into an external program - it should paste as an image.
 
-Also, make sure you can paste an image from the clipboard into *ABPaint*.
+Also, make sure you can paste an image from the clipboard into *ABPaint* - and that it keeps all vector data in *ABPaint*.
+
+### Zooming
+
+Make sure that you can zoom in/out... without any bugs. ***Make sure you can still select and resize elements when zoomed in.***
+
+Not only that, but you shouldn't be able to zoom in beyond "x16".
+
+Please also make sure that an even bigger margin isn't placed around the canvas after zooming in and back out again - *this is a well-known bug in the Alpha 2 stages*.
+
+### Keyboard Shortcuts
+
+It's also important to make sure that keyboard shortcuts work. Below are some of the keyboard shortcuts that should work:
+
+- **Ctrl+N** - New
+- **Ctrl+O** - Open
+- **Ctrl+S** - Save
+- **Ctrl+I** - Import
+- **Ctrl+E** - Export
+- **Ctrl+C**- Copy
+- **Ctrl+V** - Paste
+- **Ctrl+X** - Cut
+- **Ctrl+Plus** - Zoom In
+- **Ctrl+Minus** - Zoom Out
+- **Del** - Delete
+
+Also, after you have checked that, it's also important that you attempt to move something by 1 pixel, using the **arrow keys**. You should also try to use **Alt + Arrow Keys** to move 10 pixels... As well as **Ctrl + Arrow Keys** to scroll by 1 pixel or **Ctrl + Alt + Arrow Keys** to scroll up by 10 pixels.
+
+Please make sure the above all work.
